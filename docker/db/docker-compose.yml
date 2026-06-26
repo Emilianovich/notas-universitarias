@@ -1,0 +1,28 @@
+services:
+  mongodb:
+    image: mongo:8
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongodb-data:/data/db
+      - ./init-code:/docker-entrypoint-initdb.d:ro
+    restart: unless-stopped
+
+  db-gui:
+    image: huggingface/mongoku
+    platform: linux/amd64
+    ports:
+      - "3100:3100"
+    environment:
+      - MONGOKU_DEFAULT_HOST=mongodb://admin:password@mongodb:27017/?authSource=admin
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+volumes:
+  mongodb-data:
+

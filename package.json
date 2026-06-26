@@ -1,0 +1,23 @@
+{
+	"name": "notas-universitarias",
+	"private": true,
+	"version": "1.0.0",
+	"type": "module",
+	"packageManager": "pnpm@11.9.0",
+	"scripts": {
+		"dev": "turbo run dev",
+		"build": "turbo run build",
+		"typecheck": "turbo run typecheck",
+		"test": "turbo run test",
+		"lint": "biome lint .",
+		"format": "biome format --write .",
+		"check": "biome check .",
+		"check:fix": "biome check --write .",
+		"ci": "pnpm check && pnpm typecheck && pnpm build"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.5.0",
+		"turbo": "^2.9.18",
+		"typescript": "5.7.3"
+	}
+}
