@@ -1,5 +1,6 @@
 import { serve } from "@hono/node-server"
 import { Hono } from "hono"
+import { requestId } from "hono/request-id"
 import type { ObjectId } from "mongodb"
 import generalMiddleware from "./middlewares/general.js"
 import type { MongoService } from "./modules/db/MongoService.js"
@@ -19,6 +20,7 @@ export type Env = {
 const app = new Hono<Env>().basePath("/api/v1")
 
 // Middlewares
+app.use(requestId())
 app.use(generalMiddleware)
 
 app.get("/", (c) => {
@@ -37,6 +39,6 @@ serve(
 		port: 3035
 	},
 	(info) => {
-		console.log(`Server is running on http://localhost:${info.port}`)
+		console.log(`Server is running on http://localhost:${info.port}/api/v1`)
 	}
 )
