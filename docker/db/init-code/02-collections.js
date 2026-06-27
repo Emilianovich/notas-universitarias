@@ -45,7 +45,7 @@ db.createCollection("courses", {
 					description: "A course name must be a string and its required"
 				},
 				averageGrade: {
-					bsonType: "double",
+					bsonType: "number",
 					minimum: 0,
 					maximum: 100,
 					description:
@@ -151,7 +151,7 @@ db.createCollection("courseInstances", {
 							description: "A profesor name is required for a course instance"
 						},
 						finalGrade: {
-							bsonType: "double",
+							bsonType: "number",
 							minimum: 0,
 							maximum: 100,
 							description: "A Grade is required for a course instance"
@@ -192,9 +192,9 @@ db.createCollection("courseInstances", {
 													bsonType: ["null", "string"]
 												},
 												rawScore: {
-													bsonType: "double",
+													bsonType: "number",
 													description:
-														"Course Breakdown Entry raw score is double and required"
+														"Course Breakdown Entry raw score is number and required"
 												},
 												maxScore: {
 													bsonType: "int",
@@ -205,18 +205,18 @@ db.createCollection("courseInstances", {
 										}
 									},
 									percentage: {
-										bsonType: "double",
+										bsonType: "number",
 										minimum: 0,
 										maximum: 1,
 										description:
-											"Course Breakdown Entry percentage is double, required and must be between 0 and 1"
+											"Course Breakdown Entry percentage is number, required and must be between 0 and 1"
 									},
 									grade: {
-										bsonType: "double",
+										bsonType: "number",
 										minimum: 0,
 										maximum: 100,
 										description:
-											"Course Breakdown grade is double, required and must be between 0 and 100"
+											"Course Breakdown grade is number, required and must be between 0 and 100"
 									},
 									type: {
 										enum: ["STANDALONE", "NESTED", "NOT-NESTED"],
