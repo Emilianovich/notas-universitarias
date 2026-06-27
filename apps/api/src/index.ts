@@ -1,26 +1,35 @@
 import { serve } from "@hono/node-server"
 import { Hono } from "hono"
 import type { ObjectId } from "mongodb"
-import { MongoService } from "./modules/db/MongoService.js"
+import generalMiddleware from "./middlewares/general.js"
+import type { MongoService } from "./modules/db/MongoService.js"
+import academicPeriodsRoutes from "./routes/academicPeriods.js"
+import authRoutes from "./routes/auth.js"
+import courseInstancesRoutes from "./routes/courseInstances.js"
+import coursesRoutes from "./routes/courses.js"
+import usersRoutes from "./routes/users.js"
 
-type MiddlewareVars = {
-	mongoService: MongoService
-	sessionId: ObjectId
+export type Env = {
+	Variables: {
+		mongoService: MongoService
+		sessionId: ObjectId
+	}
 }
 
-const app = new Hono<{ Variables: MiddlewareVars }>()
+const app = new Hono<Env>().basePath("/api/v1")
 
-// TODO move middlewares to another file
-app.use(async (ctx, next) => {
-	const mongoService = new MongoService()
-	await mongoService.connect()
-	ctx.set("mongoService", mongoService)
-	await next()
-})
+// Middlewares
+app.use(generalMiddleware)
 
 app.get("/", (c) => {
 	return c.text(`DB connection works wonders!`)
 })
+
+app.route("/", authRoutes)
+app.route("/", usersRoutes)
+app.route("", coursesRoutes)
+app.route("/", courseInstancesRoutes)
+app.route("/", academicPeriodsRoutes)
 
 serve(
 	{
