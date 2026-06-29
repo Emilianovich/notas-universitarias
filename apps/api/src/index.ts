@@ -1,6 +1,5 @@
 import { serve } from "@hono/node-server"
-import { Hono } from "hono"
-import { requestId } from "hono/request-id"
+import {Context, Hono} from "hono"
 import type { ObjectId } from "mongodb"
 import generalMiddleware from "./middlewares/general.js"
 import type { MongoService } from "./modules/db/MongoService.js"
@@ -9,6 +8,9 @@ import authRoutes from "./routes/auth.js"
 import courseInstancesRoutes from "./routes/courseInstances.js"
 import coursesRoutes from "./routes/courses.js"
 import usersRoutes from "./routes/users.js"
+import {customLog} from "./services/logging/LogService.js";
+import {formatDate} from "@notas-universitarias/helpers";
+import {HTTPException} from "hono/http-exception";
 
 export type Env = {
 	Variables: {
@@ -16,17 +18,32 @@ export type Env = {
 		sessionId: ObjectId
 	}
 }
-
 const app = new Hono<Env>().basePath("/api/v1")
 
 // Middlewares
-app.use(requestId())
 app.use(generalMiddleware)
-
-app.get("/", (c) => {
-	return c.text(`DB connection works wonders!`)
+app.onError((err, c) => {
+	if (err instanceof HTTPException) {
+		customLog({level: "error", message: err.message})
+		return c.json({
+			statusCode: err.status,
+			errors: err.message,
+			issuedAt: formatDate(new Date()),
+		}, err.status)
+	}
+	c.status(500)
+	customLog({level: "error", message: `${err.message}`})
+	return c.json({
+		statusCode: 500,
+		errors: "Something unexpected happened",
+		issuedAt: formatDate(new Date()),
+	})
 })
 
+// Routes
+app.get("/", (ctx) => {
+	return ctx.json("Welcome to my API for Notas Universitarias")
+})
 app.route("/", authRoutes)
 app.route("/", usersRoutes)
 app.route("", coursesRoutes)
