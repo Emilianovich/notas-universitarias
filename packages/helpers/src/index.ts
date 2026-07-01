@@ -88,3 +88,72 @@ export const gradeToLetter = (grade: number): GradeLetter => {
 	if (grade < 91) return "B"
 	return "A"
 }
+
+export type DatesParams = {
+	date: number
+	units: DateUnits
+	amount: number
+}
+export type DateUnits = "days" | "hour" | "min" | "s" | "ms"
+export type ConvertTimeUnits = {
+	amount: number
+	from: DateUnits
+	to: DateUnits
+}
+export const convertToMillis = ({
+	amount,
+	units
+}: {
+	amount: number
+	units: DateUnits
+}): number => {
+	switch (units) {
+		case "days":
+			return amount * 24 * 60 * 60 * 1000
+		case "hour":
+			return amount * 60 * 60 * 1000
+		case "min":
+			return amount * 60 * 1000
+		case "s":
+			return amount * 1000
+		case "ms":
+			return amount
+	}
+}
+export const convertToSeconds = ({
+	amount,
+	units
+}: {
+	amount: number
+	units: DateUnits
+}) => {
+	switch (units) {
+		case "days":
+			return amount * 24 * 60 * 60
+		case "hour":
+			return amount * 60 * 60
+		case "min":
+			return amount * 60
+		case "s":
+			return amount
+		case "ms":
+			return amount / 1000
+	}
+}
+export const addDate = ({ date, amount, units }: DatesParams): number => {
+	switch (units) {
+		case "days":
+			return date + convertToMillis({ amount, units: "days" })
+		case "hour":
+			return date + convertToMillis({ amount, units: "hour" })
+		case "min":
+			return date + convertToMillis({ amount, units: "min" })
+		case "s":
+			return date + convertToMillis({ amount, units: "s" })
+		case "ms":
+			return date + convertToMillis({ amount, units: "ms" })
+	}
+}
+// export const convertTimeUnits = ( { amount, from, to } : ConvertTimeUnits ) : number => {
+// 	if (from === "min" && to === "s") {}
+// }
