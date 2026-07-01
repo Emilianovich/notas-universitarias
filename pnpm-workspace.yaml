@@ -2,5 +2,7 @@ packages:
   - "apps/*"
   - "packages/*"
 allowBuilds:
+  argon2: false
+  bcrypt: false
   esbuild: true
   lightningcss: true

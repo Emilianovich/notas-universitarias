@@ -21,14 +21,16 @@ const getPino = () =>
 		}
 	})
 const getMessage = (params: LogMessageParams): string => {
-	let { message, path, requestId, date } = params
-	if (!path) path = ""
-	if (!requestId) requestId = ""
+	const { message, path, requestId, date } = params
 	return whiteSpaceReducer(`${path} [${date}] ${requestId}: ${message}`)
 }
 
-export const customLog = (params: LogParams) => {
-	const { level, message, path, requestId } = params
+export const log = (
+	level: LogLevel,
+	message: string,
+	path: string | undefined = "",
+	requestId: string | undefined = ""
+) => {
 	const now = new Date()
 	const rawFormattedDate = new Intl.DateTimeFormat("es", {
 		year: "numeric",

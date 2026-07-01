@@ -1,5 +1,7 @@
 import { serve } from "@hono/node-server"
-import {Context, Hono} from "hono"
+import { formatDate } from "@notas-universitarias/helpers"
+import { Hono } from "hono"
+import { HTTPException } from "hono/http-exception"
 import type { ObjectId } from "mongodb"
 import generalMiddleware from "./middlewares/general.js"
 import type { MongoService } from "./modules/db/MongoService.js"
@@ -8,35 +10,37 @@ import authRoutes from "./routes/auth.js"
 import courseInstancesRoutes from "./routes/courseInstances.js"
 import coursesRoutes from "./routes/courses.js"
 import usersRoutes from "./routes/users.js"
-import {customLog} from "./services/logging/LogService.js";
-import {formatDate} from "@notas-universitarias/helpers";
-import {HTTPException} from "hono/http-exception";
+import { log } from "./services/logging/LogService.js"
 
-export type Env = {
+export type MiddlewareVars = {
 	Variables: {
 		mongoService: MongoService
-		sessionId: ObjectId
+		userId: ObjectId
+		user_session: string
 	}
 }
-const app = new Hono<Env>().basePath("/api/v1")
+const app = new Hono<MiddlewareVars>().basePath("/api/v1")
 
 // Middlewares
 app.use(generalMiddleware)
 app.onError((err, c) => {
 	if (err instanceof HTTPException) {
-		customLog({level: "error", message: err.message})
-		return c.json({
-			statusCode: err.status,
-			errors: err.message,
-			issuedAt: formatDate(new Date()),
-		}, err.status)
+		log("error", err.message)
+		return c.json(
+			{
+				statusCode: err.status,
+				errors: err.cause ? err.cause : err.message,
+				issuedAt: formatDate(new Date())
+			},
+			err.status
+		)
 	}
 	c.status(500)
-	customLog({level: "error", message: `${err.message}`})
+	log("error", `${err.message}`)
 	return c.json({
 		statusCode: 500,
 		errors: "Something unexpected happened",
-		issuedAt: formatDate(new Date()),
+		issuedAt: formatDate(new Date())
 	})
 })
 

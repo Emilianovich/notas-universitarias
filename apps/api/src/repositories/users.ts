@@ -1,5 +1,6 @@
 import type { ObjectId } from "mongodb"
 import type { UserDocument } from "../collection-schema/users.js"
+import type { CreateUserDTO } from "../dtos/users/createUsers.js"
 import type { MongoService } from "../modules/db/MongoService.js"
 import { Repository } from "./repository.js"
 
@@ -16,5 +17,12 @@ export class UsersRepository extends Repository<UserDocument> {
 	}
 	async findByEmail(email: string): Promise<UserDocument | null> {
 		return this.getCollection().findOne({ email })
+	}
+	async insertOne(user: CreateUserDTO) {
+		return this.getCollection().insertOne({
+			name: user.name,
+			email: user.email,
+			password: user.password
+		})
 	}
 }
