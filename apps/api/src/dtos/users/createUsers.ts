@@ -8,12 +8,12 @@ export type CreateUserDTO = {
 export const createUserDto = z.object({
 	name: z
 		.string()
-		.min(1, "Your username should have at least 1 character")
-		.max(100, "Your username should have between 1 and 100 characters"),
+		.min(1, "Tu apodo debería tener por lo menos un caracter")
+		.max(100, "Tu apodo debería tener entre 1 a 100 caracteres"),
 	email: z.email({
 		pattern:
 			/^(?!.*\.\.)(?!\.)(?!.*\.$)[A-Za-z0-9._%+-]{1,64}@(?:[A-Za-z](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,}$/,
-		error: "Please enter valid email address"
+		error: "Ingrese un correo electrónico válido"
 	}),
-	password: z.string().min(1, "Password is required")
+	password: z.string().min(1, "Su contraseña debe tener al menos un caracter")
 })
