@@ -1,6 +1,7 @@
 import { Hono } from "hono"
 import { deleteCookie, getCookie, setCookie } from "hono/cookie"
 import { type LoginDTO, loginDTO } from "../dtos/auth/login.js"
+import { getContextVars } from "../helpers/helpers.js"
 import type { MiddlewareVars } from "../index.js"
 import authMiddleware from "../middlewares/auth.js"
 import { ZodMiddleware } from "../middlewares/zod.js"
@@ -10,7 +11,8 @@ import { log } from "../services/logging/LogService.js"
 const authRoutes = new Hono<MiddlewareVars>().basePath("/auth")
 
 authRoutes.post("/login", ZodMiddleware("json", loginDTO), async (ctx) => {
-	const authService = new AuthService(ctx.get("mongoService"))
+	const [mongoService] = getContextVars(ctx)
+	const authService = new AuthService(mongoService)
 	const dto: LoginDTO = ctx.req.valid("json")
 	const [sessionId, hash, maxAge] = await authService.login(dto)
 	const sessionCookie = `${sessionId.toString()}.${hash}`
@@ -25,8 +27,9 @@ authRoutes.post("/login", ZodMiddleware("json", loginDTO), async (ctx) => {
 })
 
 authRoutes.post("/logout", authMiddleware, async (ctx) => {
-	const authService = new AuthService(ctx.get("mongoService"))
-	await authService.logout(ctx.get("userId"))
+	const [mongoService, userId] = getContextVars(ctx)
+	const authService = new AuthService(mongoService)
+	await authService.logout(userId)
 	if (getCookie(ctx, "user_session")) {
 		log("info", "Got a cookie")
 		deleteCookie(ctx, "user_session")

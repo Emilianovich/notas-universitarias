@@ -25,4 +25,7 @@ export class UsersRepository extends Repository<UserDocument> {
 			password: user.password
 		})
 	}
+	async updateOne(userId: ObjectId, dto: CreateUserDTO) {
+		await this.getCollection().replaceOne({ _id: userId }, dto)
+	}
 }
