@@ -8,7 +8,7 @@ import type { MongoService } from "../../modules/db/MongoService.js"
 import { UsersRepository } from "../../repositories/users.js"
 
 export class UserService {
-	private userRepository: UsersRepository
+	private readonly userRepository: UsersRepository
 	constructor(mongoService: MongoService) {
 		this.userRepository = new UsersRepository(mongoService)
 	}
@@ -29,6 +29,7 @@ export class UserService {
 			throw new HTTPException(400, {
 				message: "Ya existe un usuario con ese correo"
 			})
+		dto.email = dto.email.toLowerCase()
 		dto.password = await argon2.hash(dto.password, { type: argon2.argon2id })
 		await this.userRepository.insertOne(dto)
 		return dto.name

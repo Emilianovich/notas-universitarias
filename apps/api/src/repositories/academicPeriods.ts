@@ -1,15 +1,52 @@
-import type { Collection } from "mongodb"
+import type { Collection, ObjectId } from "mongodb"
 import type { AcademicPeriodDocument } from "../collection-schema/academicPeriods.js"
-import type { MongoService } from "../modules/db/MongoService.js"
+import type { CreateAcademicPeriodsDto } from "../dtos/academicPeriods/createAcademicPeriods.js"
 import { Repository } from "./repository.js"
 
 export class AcademicPeriodsRepository extends Repository<AcademicPeriodDocument> {
-	constructor(mongoService: MongoService) {
-		super(mongoService)
-	}
 	getCollection(): Collection<AcademicPeriodDocument> {
 		return this.mongoService.collection<AcademicPeriodDocument>(
 			"academicPeriods"
 		)
+	}
+	async insertOne(academicPeriod: CreateAcademicPeriodsDto, userId: ObjectId) {
+		const { name, startDate, endDate } = academicPeriod
+		return await this.getCollection().insertOne({
+			name,
+			startDate,
+			endDate,
+			userId,
+			isActive: true
+		})
+	}
+	async getOneById(id: ObjectId): Promise<AcademicPeriodDocument | null> {
+		return this.getCollection().findOne({ _id: id })
+	}
+	async getCurrentAcademicPeriod(
+		userId: ObjectId
+	): Promise<AcademicPeriodDocument | null> {
+		await this.finalizeUnactive(userId)
+		return this.getCollection().findOne({ isActive: true, userId })
+	}
+	private async finalizeUnactive(userId: ObjectId) {
+		await this.getCollection().updateMany(
+			{ endDate: { $lt: new Date() }, userId },
+			{
+				$set: {
+					isActive: false
+				}
+			}
+		)
+	}
+	async getAllUnactive(userId: ObjectId): Promise<AcademicPeriodDocument[]> {
+		await this.finalizeUnactive(userId)
+		const cursor = this.getCollection()
+			.find({ isActive: false, userId })
+			.sort({ endDate: -1 })
+		const academicPeriods: AcademicPeriodDocument[] = []
+		for await (const document of cursor) {
+			academicPeriods.push(document)
+		}
+		return academicPeriods
 	}
 }

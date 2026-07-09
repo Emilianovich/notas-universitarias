@@ -8,9 +8,11 @@ const generalMiddleware = createMiddleware<MiddlewareVars>(
 	async (ctx, next) => {
 		const start = Date.now()
 		const mongoService = new MongoService()
+		// OPTIMIZE surely this a better way to do this
 		await mongoService.connect()
 		ctx.set("mongoService", mongoService)
 		await next()
+		// REVIEW check the amount of time we wait for checking db
 		const end = Date.now()
 		if (ctx.res.status <= 299) {
 			ctx.res = ctx.json({

@@ -20,7 +20,6 @@ export type MiddlewareVars = {
 	}
 }
 const app = new Hono<MiddlewareVars>().basePath("/api/v1")
-
 // Middlewares
 app.use(generalMiddleware)
 app.onError((err, c) => {

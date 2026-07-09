@@ -1,7 +1,50 @@
 import { Hono } from "hono"
+import { createAcademicPeriodsDTO } from "../dtos/academicPeriods/createAcademicPeriods.js"
+import { getContextVars } from "../helpers/helpers.js"
+import authMiddleware from "../middlewares/auth.js"
+import { ZodMiddleware } from "../middlewares/zod.js"
+import { AcademicPeriodService } from "../services/academic-periods/AcademicPeriodService.js"
+import { log } from "../services/logging/LogService.js"
 
-const academicPeriodsRoutes = new Hono().basePath("/academic-periods")
-academicPeriodsRoutes.get("/", (ctx) => {
-	return ctx.text("Welcome to the academic periods route!")
+const academicPeriodsRoutes = new Hono()
+	.basePath("/academic-periods")
+	.use(authMiddleware)
+academicPeriodsRoutes.get("/", async (ctx) => {
+	const [mongoService, userId] = getContextVars(ctx)
+	const academicPeriodService = new AcademicPeriodService(mongoService)
+	const currentAcademicPeriod =
+		await academicPeriodService.getCurrentAcademicPeriod(userId)
+	return ctx.json(currentAcademicPeriod)
+})
+
+academicPeriodsRoutes.post(
+	"/",
+	ZodMiddleware("json", createAcademicPeriodsDTO),
+	async (ctx) => {
+		const [mongoService, userId] = getContextVars(ctx)
+		log("info", `User id ${userId}`)
+		const academicPeriodService = new AcademicPeriodService(mongoService)
+		const rawDTO = ctx.req.valid("json")
+		const { name, startDate, endDate } = rawDTO
+		const dto = {
+			name,
+			startDate: new Date(startDate),
+			endDate: new Date(endDate)
+		}
+		const content = await academicPeriodService.createAcademicPeriod(
+			dto,
+			userId
+		)
+		return ctx.json(
+			`Registro del periodo académico exitoso. El ${content.name} comienza el ${content.startDate} y termina el ${content.endDate}`
+		)
+	}
+)
+academicPeriodsRoutes.get("/history", async (ctx) => {
+	const [mongoService, userId] = getContextVars(ctx)
+	const academicPeriodService = new AcademicPeriodService(mongoService)
+	return ctx.json(
+		await academicPeriodService.getUnactiveAcademicPeriods(userId)
+	)
 })
 export default academicPeriodsRoutes
