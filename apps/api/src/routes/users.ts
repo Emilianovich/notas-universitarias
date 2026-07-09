@@ -1,4 +1,4 @@
-import { Context, Hono } from "hono"
+import { Hono } from "hono"
 import { type CreateUserDTO, createUserDto } from "../dtos/users/createUsers.js"
 import { updateUserDTO } from "../dtos/users/updateUsers.js"
 import { getContextVars } from "../helpers/helpers.js"

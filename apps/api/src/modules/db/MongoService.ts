@@ -1,24 +1,51 @@
 import * as process from "node:process"
 import type { ValidCollections } from "@notas-universitarias/types"
-import { type Db, type Document, MongoClient } from "mongodb"
+import { HTTPException } from "hono/http-exception"
+import {
+	type Db,
+	type Document,
+	MongoClient,
+	MongoServerSelectionError
+} from "mongodb"
 import ConfigService from "../config/ConfigService.js"
 
 export class MongoService {
 	private client: MongoClient
 	// @ts-expect-error
 	public db: Db
+	private tryConnect = async () => {
+		const connection = await this.client.connect()
+		this.db = connection.db()
+	}
 	constructor() {
 		const config = new ConfigService()
 		if (process.env.NODE_ENV !== "production") {
-			this.client = new MongoClient(config.getConfig("DB_URI_DEV"))
+			this.client = new MongoClient(config.getConfig("DB_URI_DEV"), {
+				serverSelectionTimeoutMS: 2000
+			})
 		} else {
 			this.client = new MongoClient(config.getConfig("DB_URI_PROD"))
 		}
 	}
 
+	private async handleMongoErrors(fn: () => Promise<void>) {
+		try {
+			await fn()
+		} catch (err) {
+			if (err instanceof MongoServerSelectionError) {
+				throw new HTTPException(500, {
+					message:
+						"No se logró la conexión a MongoDB. Asegúrate que tu contenedor Docker esté corriendo"
+				})
+			} else {
+				throw new HTTPException(500, {
+					message: `Ocurrió algo inesperado : ${err}`
+				})
+			}
+		}
+	}
 	async connect() {
-		const connection = await this.client.connect()
-		this.db = connection.db()
+		await this.handleMongoErrors(this.tryConnect)
 	}
 	collection<T extends Document>(name: ValidCollections) {
 		return this.db.collection<T>(name)

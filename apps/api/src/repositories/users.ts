@@ -1,14 +1,9 @@
 import type { ObjectId } from "mongodb"
 import type { UserDocument } from "../collection-schema/users.js"
 import type { CreateUserDTO } from "../dtos/users/createUsers.js"
-import type { MongoService } from "../modules/db/MongoService.js"
 import { Repository } from "./repository.js"
 
 export class UsersRepository extends Repository<UserDocument> {
-	constructor(mongoService: MongoService) {
-		super(mongoService)
-	}
-
 	getCollection() {
 		return this.mongoService.collection<UserDocument>("users")
 	}

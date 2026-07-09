@@ -27,7 +27,7 @@ const getMessage = (params: LogMessageParams): string => {
 
 export const log = (
 	level: LogLevel,
-	message: string,
+	message: any,
 	path: string | undefined = "",
 	requestId: string | undefined = ""
 ) => {
