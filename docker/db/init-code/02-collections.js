@@ -105,7 +105,7 @@ db.createCollection("academicPeriods", {
 				$jsonSchema: {
 					bsonType: "object",
 					title: "Academic Period Validations",
-					required: ["name", "startDate", "endDate", "isActive"],
+					required: ["name", "startDate", "endDate", "isActive", "userId"],
 					properties: {
 						name: {
 							bsonType: "string",
@@ -122,12 +122,16 @@ db.createCollection("academicPeriods", {
 						},
 						courseInstances: {
 							bsonType: ["null", "array"],
-							items: { bsonType: "objectId" }
+							items: { bsonType: "object" }
 						},
 						isActive: {
 							bsonType: "bool",
 							description:
 								"The academic period must be a boolean and is required"
+						},
+						userId: {
+							bsonType: "objectId",
+							description: "An user id is required for each academic period"
 						}
 					}
 				}
