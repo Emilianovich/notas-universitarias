@@ -10,10 +10,13 @@ const academicPeriodsRoutes = new Hono()
 	.basePath("/academic-periods")
 	.use(authMiddleware)
 academicPeriodsRoutes.get("/", async (ctx) => {
-	const [mongoService, userId] = getContextVars(ctx)
-	const academicPeriodService = new AcademicPeriodService(mongoService)
+	const academicPeriodService = new AcademicPeriodService(
+		getContextVars(ctx).mongoService
+	)
 	const currentAcademicPeriod =
-		await academicPeriodService.getCurrentAcademicPeriod(userId)
+		await academicPeriodService.getCurrentAcademicPeriod(
+			getContextVars(ctx).userId
+		)
 	return ctx.json(currentAcademicPeriod)
 })
 
@@ -21,9 +24,11 @@ academicPeriodsRoutes.post(
 	"/",
 	ZodMiddleware("json", createAcademicPeriodsDTO),
 	async (ctx) => {
-		const [mongoService, userId] = getContextVars(ctx)
+		const { userId } = getContextVars(ctx)
 		log("info", `User id ${userId}`)
-		const academicPeriodService = new AcademicPeriodService(mongoService)
+		const academicPeriodService = new AcademicPeriodService(
+			getContextVars(ctx).mongoService
+		)
 		const rawDTO = ctx.req.valid("json")
 		const { name, startDate, endDate } = rawDTO
 		const dto = {
@@ -41,10 +46,13 @@ academicPeriodsRoutes.post(
 	}
 )
 academicPeriodsRoutes.get("/history", async (ctx) => {
-	const [mongoService, userId] = getContextVars(ctx)
-	const academicPeriodService = new AcademicPeriodService(mongoService)
+	const academicPeriodService = new AcademicPeriodService(
+		getContextVars(ctx).mongoService
+	)
 	return ctx.json(
-		await academicPeriodService.getUnactiveAcademicPeriods(userId)
+		await academicPeriodService.getUnactiveAcademicPeriods(
+			getContextVars(ctx).userId
+		)
 	)
 })
 export default academicPeriodsRoutes

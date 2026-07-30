@@ -12,16 +12,18 @@ const usersRoutes = new Hono<MiddlewareVars>().basePath("/users")
 
 // Get user profile
 usersRoutes.get("/", authMiddleware, async (ctx) => {
-	const [mongoService, userId] = getContextVars(ctx)
-	const user = await new UserService(mongoService).getUser(userId)
+	const user = await new UserService(getContextVars(ctx).mongoService).getUser(
+		getContextVars(ctx).userId
+	)
 	return ctx.json({ user })
 })
 
 // Create user
 usersRoutes.post("/", ZodMiddleware("json", createUserDto), async (ctx) => {
-	const [mongoService] = getContextVars(ctx)
 	const dto: CreateUserDTO = ctx.req.valid("json")
-	const username = await new UserService(mongoService).createUser(dto)
+	const username = await new UserService(
+		getContextVars(ctx).mongoService
+	).createUser(dto)
 	log("info", `New user created!`)
 	ctx.status(201)
 	return ctx.json(`Bienvenido ${username}`)
@@ -33,9 +35,11 @@ usersRoutes.put(
 	authMiddleware,
 	ZodMiddleware("json", updateUserDTO),
 	async (ctx) => {
-		const [mongoService, userId] = getContextVars(ctx)
 		const dto = ctx.req.valid("json")
-		await new UserService(mongoService).updateUser(userId, dto)
+		await new UserService(getContextVars(ctx).mongoService).updateUser(
+			getContextVars(ctx).userId,
+			dto
+		)
 		return ctx.json(`Sus datos fueron actualizados exitosamente`)
 	}
 )

@@ -1,6 +1,9 @@
+import { updateCourseInstanceFinalGrade } from "@notas-universitarias/helpers"
 import type { Collection, ObjectId } from "mongodb"
 import type { AcademicPeriodDocument } from "../collection-schema/academicPeriods.js"
+import type { CourseInstanceDocument } from "../collection-schema/courseInstances.js"
 import type { CreateAcademicPeriodsDto } from "../dtos/academicPeriods/createAcademicPeriods.js"
+import { log } from "../services/logging/LogService.js"
 import { Repository } from "./repository.js"
 
 export class AcademicPeriodsRepository extends Repository<AcademicPeriodDocument> {
@@ -47,6 +50,48 @@ export class AcademicPeriodsRepository extends Repository<AcademicPeriodDocument
 		for await (const document of cursor) {
 			academicPeriods.push(document)
 		}
+		// const courseInstances: CourseInstanceDocument[] = []
+		academicPeriods.forEach((academicPeriod) => {
+			academicPeriod.courseInstances?.forEach((courseInstance) => {
+				// const { _id, ...rest } = courseInstance
+				updateCourseInstanceFinalGrade(courseInstance)
+			})
+		})
 		return academicPeriods
+	}
+
+	async addCourseInstance(
+		academicPeriod: AcademicPeriodDocument,
+		courseInstance: CourseInstanceDocument
+	): Promise<void> {
+		try {
+			const update = await this.getCollection().updateOne(
+				{ _id: academicPeriod._id },
+				{ $push: { courseInstances: courseInstance } }
+			)
+			log(
+				"error",
+				`Was acknowledged: ${update.acknowledged}, amount updated: ${update.matchedCount}`
+			)
+		} catch (error) {
+			log("error", error)
+		}
+	}
+	async registerCourse(
+		academicPeriod: AcademicPeriodDocument,
+		courseId: ObjectId
+	): Promise<void> {
+		try {
+			const update = await this.getCollection().updateOne(
+				{ _id: academicPeriod._id },
+				{ $push: { registeredCourses: courseId } }
+			)
+			log(
+				"error",
+				`Was acknowledged: ${update.acknowledged}, amount updated: ${update.modifiedCount}`
+			)
+		} catch (error) {
+			log("error", error)
+		}
 	}
 }

@@ -38,7 +38,7 @@ db.createCollection("courses", {
 		$jsonSchema: {
 			bsonType: "object",
 			title: "Course Validations",
-			required: ["name", "averageGrade", "courseInstances"],
+			required: ["name", "averageGrade", "courseInstances", "userId"],
 			properties: {
 				name: {
 					bsonType: "string",
@@ -55,6 +55,10 @@ db.createCollection("courses", {
 					bsonType: "array",
 					items: { bsonType: "objectId" },
 					minItems: 1
+				},
+				userId: {
+					bsonType: "objectId",
+					description: "An user id is required for each academic period"
 				}
 			}
 		}
@@ -124,6 +128,10 @@ db.createCollection("academicPeriods", {
 							bsonType: ["null", "array"],
 							items: { bsonType: "object" }
 						},
+						registeredCourses: {
+							bsonType: ["null", "array"],
+							items: { bsonType: "objectId" }
+						},
 						isActive: {
 							bsonType: "bool",
 							description:
@@ -157,7 +165,7 @@ db.createCollection("courseInstances", {
 						finalGrade: {
 							bsonType: "number",
 							minimum: 0,
-							maximum: 100,
+							maximum: 1,
 							description: "A Grade is required for a course instance"
 						},
 						breakdown: {
@@ -171,7 +179,6 @@ db.createCollection("courseInstances", {
 									"name",
 									"entries",
 									"percentage",
-									"grade",
 									"type"
 								],
 								properties: {
@@ -187,7 +194,6 @@ db.createCollection("courseInstances", {
 									},
 									entries: {
 										bsonType: "array",
-										minItems: 1,
 										items: {
 											bsonType: "object",
 											required: ["rawScore", "maxScore"],
@@ -214,13 +220,6 @@ db.createCollection("courseInstances", {
 										maximum: 1,
 										description:
 											"Course Breakdown Entry percentage is number, required and must be between 0 and 1"
-									},
-									grade: {
-										bsonType: "number",
-										minimum: 0,
-										maximum: 100,
-										description:
-											"Course Breakdown grade is number, required and must be between 0 and 100"
 									},
 									type: {
 										enum: ["STANDALONE", "NESTED", "NOT-NESTED"],

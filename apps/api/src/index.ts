@@ -35,7 +35,7 @@ app.onError((err, c) => {
 		)
 	}
 	c.status(500)
-	log("error", `${err.message}`)
+	log("error", `${err.message} ${err.cause}`)
 	return c.json({
 		statusCode: 500,
 		errors: "Something unexpected happened",
