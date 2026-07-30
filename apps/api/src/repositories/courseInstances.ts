@@ -1,8 +1,8 @@
 import { updateCourseInstanceFinalGrade } from "@notas-universitarias/helpers"
 import type { CourseInstance } from "@notas-universitarias/types"
 import type { Collection, ObjectId } from "mongodb"
+import type { UpdateCourseInstanceDto } from "../../../../packages/types/src/dtos/courseInstances/updateCourseInstances.js"
 import type { CourseInstanceDocument } from "../collection-schema/courseInstances.js"
-import type { UpdateCourseInstanceDto } from "../dtos/courseInstances/updateCourseInstances.js"
 import { mapUpdateCourseInstance } from "../helpers/helpers.js"
 import { Repository } from "./repository.js"
 

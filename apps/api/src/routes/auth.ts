@@ -1,6 +1,9 @@
 import { Hono } from "hono"
 import { deleteCookie, getCookie, setCookie } from "hono/cookie"
-import { type LoginDTO, loginDTO } from "../dtos/auth/login.js"
+import {
+	type LoginDTO,
+	loginDTO
+} from "../../../../packages/types/src/dtos/auth/login.js"
 import { getContextVars } from "../helpers/helpers.js"
 import type { MiddlewareVars } from "../index.js"
 import authMiddleware from "../middlewares/auth.js"

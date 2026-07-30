@@ -1,8 +1,8 @@
 import { updateCourseInstanceFinalGrade } from "@notas-universitarias/helpers"
 import type { Collection, ObjectId } from "mongodb"
+import type { CreateAcademicPeriodsDto } from "../../../../packages/types/src/dtos/academicPeriods/createAcademicPeriods.js"
 import type { AcademicPeriodDocument } from "../collection-schema/academicPeriods.js"
 import type { CourseInstanceDocument } from "../collection-schema/courseInstances.js"
-import type { CreateAcademicPeriodsDto } from "../dtos/academicPeriods/createAcademicPeriods.js"
 import { log } from "../services/logging/LogService.js"
 import { Repository } from "./repository.js"
 
