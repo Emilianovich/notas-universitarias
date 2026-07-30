@@ -1,4 +1,4 @@
-import type { BreakdownCategory } from "@notas-universitarias/types"
+import type { BreakdownCategory } from "src/index"
 import { z } from "zod"
 
 export type CourseInstanceToBeCreated = {

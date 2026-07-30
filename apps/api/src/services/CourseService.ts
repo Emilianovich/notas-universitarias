@@ -2,10 +2,10 @@ import { updateCourseAverageGrade } from "@notas-universitarias/helpers"
 import type { Course, CourseInstance } from "@notas-universitarias/types"
 import { HTTPException } from "hono/http-exception"
 import type { ObjectId } from "mongodb"
+import type { CourseInstanceToBeCreated } from "../../../../packages/types/src/dtos/courseInstances/createCourseInstances.js"
+import type { UpdateCourseInstanceDto } from "../../../../packages/types/src/dtos/courseInstances/updateCourseInstances.js"
 import type { CourseInstanceDocument } from "../collection-schema/courseInstances.js"
 import type { CourseDocument } from "../collection-schema/courses.js"
-import type { CourseInstanceToBeCreated } from "../dtos/courseInstances/createCourseInstances.js"
-import type { UpdateCourseInstanceDto } from "../dtos/courseInstances/updateCourseInstances.js"
 import getValidObjectId, {
 	mapCreateCourseInstanceToDTO
 } from "../helpers/helpers.js"

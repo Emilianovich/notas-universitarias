@@ -1,5 +1,5 @@
 import { Hono } from "hono"
-import { createAcademicPeriodsDTO } from "../dtos/academicPeriods/createAcademicPeriods.js"
+import { createAcademicPeriodsDTO } from "../../../../packages/types/src/dtos/academicPeriods/createAcademicPeriods.js"
 import { getContextVars } from "../helpers/helpers.js"
 import authMiddleware from "../middlewares/auth.js"
 import { ZodMiddleware } from "../middlewares/zod.js"

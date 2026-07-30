@@ -1,5 +1,5 @@
 import { z } from "zod"
-import type { CreateUserDTO } from "./createUsers.js"
+import type { CreateUserDTO } from "./createUsers"
 
 export const updateUserDTO = z.object({
 	name: z

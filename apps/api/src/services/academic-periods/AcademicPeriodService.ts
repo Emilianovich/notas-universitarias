@@ -1,7 +1,7 @@
 import { HTTPException } from "hono/http-exception"
 import type { ObjectId } from "mongodb"
+import type { CreateAcademicPeriodsDto } from "../../../../../packages/types/src/dtos/academicPeriods/createAcademicPeriods.js"
 import type { AcademicPeriodDocument } from "../../collection-schema/academicPeriods.js"
-import type { CreateAcademicPeriodsDto } from "../../dtos/academicPeriods/createAcademicPeriods.js"
 import type { MongoService } from "../../modules/db/MongoService.js"
 import { AcademicPeriodsRepository } from "../../repositories/academicPeriods.js"
 

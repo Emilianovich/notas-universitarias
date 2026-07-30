@@ -6,3 +6,6 @@ allowBuilds:
   bcrypt: false
   esbuild: true
   lightningcss: true
+
+overrides:
+  "@tanstack/router-generator": "1.167.17"

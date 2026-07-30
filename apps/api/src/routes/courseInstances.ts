@@ -1,11 +1,11 @@
 import { Hono } from "hono"
 import type { ObjectId } from "mongodb"
-import type { CourseDocument } from "../collection-schema/courses.js"
-import { CreateCourseInstanceSchema } from "../dtos/courseInstances/createCourseInstances.js"
+import { CreateCourseInstanceSchema } from "../../../../packages/types/src/dtos/courseInstances/createCourseInstances.js"
 import {
 	type UpdateCourseInstanceDto,
 	updateCourseInstanceSchema
-} from "../dtos/courseInstances/updateCourseInstances.js"
+} from "../../../../packages/types/src/dtos/courseInstances/updateCourseInstances.js"
+import type { CourseDocument } from "../collection-schema/courses.js"
 import getValidObjectId, { getContextVars } from "../helpers/helpers.js"
 import type { MiddlewareVars } from "../index.js"
 import authMiddleware from "../middlewares/auth.js"

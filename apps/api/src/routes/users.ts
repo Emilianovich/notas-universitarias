@@ -1,6 +1,9 @@
 import { Hono } from "hono"
-import { type CreateUserDTO, createUserDto } from "../dtos/users/createUsers.js"
-import { updateUserDTO } from "../dtos/users/updateUsers.js"
+import {
+	type CreateUserDTO,
+	createUserDto
+} from "../../../../packages/types/src/dtos/users/createUsers.js"
+import { updateUserDTO } from "../../../../packages/types/src/dtos/users/updateUsers.js"
 import { getContextVars } from "../helpers/helpers.js"
 import type { MiddlewareVars } from "../index.js"
 import authMiddleware from "../middlewares/auth.js"

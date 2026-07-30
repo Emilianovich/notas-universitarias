@@ -8,8 +8,8 @@ import { ObjectId } from "mongodb"
 import type {
 	CourseInstanceToBeCreated,
 	CreatingCourseInstanceBreakdown
-} from "../dtos/courseInstances/createCourseInstances.js"
-import type { UpdateCourseInstanceDto } from "../dtos/courseInstances/updateCourseInstances.js"
+} from "../../../../packages/types/src/dtos/courseInstances/createCourseInstances.js"
+import type { UpdateCourseInstanceDto } from "../../../../packages/types/src/dtos/courseInstances/updateCourseInstances.js"
 import type { MiddlewareVars } from "../index.js"
 import type { MongoService } from "../modules/db/MongoService.js"
 

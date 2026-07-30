@@ -1,6 +1,6 @@
 import type { ObjectId } from "mongodb"
+import type { CreateUserDTO } from "../../../../packages/types/src/dtos/users/createUsers.js"
 import type { UserDocument } from "../collection-schema/users.js"
-import type { CreateUserDTO } from "../dtos/users/createUsers.js"
 import { Repository } from "./repository.js"
 
 export class UsersRepository extends Repository<UserDocument> {
