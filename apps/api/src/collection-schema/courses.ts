@@ -1,9 +1,9 @@
 import type { ObjectId } from "mongodb"
 
-interface CourseInterface {
-	_id: ObjectId
+export type CourseDocument = {
+	_id?: ObjectId
 	name: string
 	averageGrade: number
 	courseInstances: ObjectId[]
+	userId: ObjectId
 }
-export type CourseDocument = CourseInterface

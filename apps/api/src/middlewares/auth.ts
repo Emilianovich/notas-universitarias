@@ -12,8 +12,7 @@ const authMiddleware = createMiddleware<MiddlewareVars>(async (ctx, next) => {
 			message: "No se pudo validar la sesión, vuelva a iniciar sesión"
 		})
 	const [sessionId, rawHash] = cookies.split(".")
-	const [mongoService] = getContextVars(ctx)
-	const authService = new AuthService(mongoService)
+	const authService = new AuthService(getContextVars(ctx).mongoService)
 	const userId = await authService.validateSession(sessionId, rawHash)
 	ctx.set("userId", userId)
 	await next()

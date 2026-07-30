@@ -38,6 +38,7 @@ export class UserService {
 		userId: ObjectId,
 		dto: UpdateUserDTO | undefined
 	): Promise<void> {
+		// TODO think about moving this to the handler
 		if (!dto || !Object.keys(dto).length)
 			throw new HTTPException(400, {
 				message: "Por lo menos un campo tiene que ser actualizado"

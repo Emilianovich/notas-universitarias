@@ -11,6 +11,7 @@ export type CourseBreakdown = {
 	contribution: number
 	entries: CourseBreakdownEntry[]
 	laboratoryDetails?: CourseInstance
+	type: BreakdownCategory
 }
 
 export type CourseInstance = {

@@ -19,7 +19,7 @@ export class AcademicPeriodService {
 			.findOne({ isActive: true })
 		if (existingAcademicPeriod)
 			throw new HTTPException(400, {
-				message: `No puede registrar un nuevo periodo académico mientras que el actual no ha terminado. El actual abarca desde ${existingAcademicPeriod.startDate} hasta el ${existingAcademicPeriod.endDate}`
+				message: `No puede registrar un nuevo periodo académico mientras que el actual no ha terminado. El actual abarca desde ${existingAcademicPeriod.name} hasta el ${existingAcademicPeriod.endDate}`
 			})
 		const insertedAcademicPeriod =
 			await this.academicPeriodsRepository.insertOne(dto, currentUserId)

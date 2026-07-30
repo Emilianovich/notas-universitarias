@@ -7,5 +7,6 @@ interface AcademicPeriodInterface {
 	isActive: boolean
 	userId: ObjectId
 	courseInstances?: CourseInstanceDocument[]
+	registeredCourses?: ObjectId[]
 }
 export type AcademicPeriodDocument = AcademicPeriod & AcademicPeriodInterface
