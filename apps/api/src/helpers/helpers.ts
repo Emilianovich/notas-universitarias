@@ -10,6 +10,7 @@ import type {
 	CreatingCourseInstanceBreakdown
 } from "../../../../packages/types/src/dtos/courseInstances/createCourseInstances.js"
 import type { UpdateCourseInstanceDto } from "../../../../packages/types/src/dtos/courseInstances/updateCourseInstances.js"
+import type { CourseInstanceDocument } from "../collection-schema/courseInstances.js"
 import type { MiddlewareVars } from "../index.js"
 import type { MongoService } from "../modules/db/MongoService.js"
 
@@ -92,4 +93,11 @@ export function mapUpdateCourseInstance(
 		finalGrade: currentCourseInstance.finalGrade,
 		breakdown: dto.breakdown ?? currentCourseInstance.breakdown
 	}
+}
+
+export function mapInstanceDocToCourseInstance(
+	courseInstance: CourseInstanceDocument
+): CourseInstance {
+	const { _id, ...rest } = courseInstance
+	return rest
 }

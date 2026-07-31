@@ -1,5 +1,5 @@
-import type { BreakdownCategory } from "src/index"
 import { z } from "zod"
+import type { BreakdownCategory } from "../../db"
 
 const courseBreakdownEntrySchema = z
 	.object({

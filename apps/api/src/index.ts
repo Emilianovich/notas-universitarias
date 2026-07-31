@@ -1,9 +1,11 @@
 import { serve } from "@hono/node-server"
-import { formatDate } from "@notas-universitarias/helpers"
+import { convertToSeconds, formatDate } from "@notas-universitarias/helpers"
 import { Hono } from "hono"
+import { cors } from "hono/cors"
 import { HTTPException } from "hono/http-exception"
 import type { ObjectId } from "mongodb"
 import generalMiddleware from "./middlewares/general.js"
+import env from "./modules/config/env.js"
 import type { MongoService } from "./modules/db/MongoService.js"
 import academicPeriodsRoutes from "./routes/academicPeriods.js"
 import authRoutes from "./routes/auth.js"
@@ -21,10 +23,25 @@ export type MiddlewareVars = {
 }
 const app = new Hono<MiddlewareVars>().basePath("/api/v1")
 // Middlewares
+app.use(
+	"*",
+	cors({
+		origin: env.CORS_ALLOWED_ORIGINS,
+		allowMethods: ["GET", "POST", "PUT"],
+		allowHeaders: ["Content-Type"],
+		credentials: true,
+		maxAge: convertToSeconds({ amount: 1, units: "hour" })
+	})
+)
 app.use(generalMiddleware)
 app.onError((err, c) => {
 	if (err instanceof HTTPException) {
-		log("error", err.message)
+		log(
+			"error",
+			!err.message.trim().length
+				? "Ocurrió un error, imprime la propiedad 'errors' de la respuesta para ver qué pasó"
+				: err.message
+		)
 		return c.json(
 			{
 				statusCode: err.status,

@@ -1,6 +1,7 @@
-import type { BreakdownCategory } from "src/index"
 import { z } from "zod"
+import type { BreakdownCategory } from "../../db"
 
+// TODO think about rounding total percentage?
 export type CourseInstanceToBeCreated = {
 	isRegistered: boolean
 	name?: string
@@ -178,7 +179,7 @@ export const CreateCourseInstanceSchema = z
 		const totalPercentage = self.breakdown
 			.map((breakdown) => breakdown.percentage)
 			.reduce((total, currentPercent) => total + currentPercent, 0)
-		if (totalPercentage !== 1) {
+		if (Math.abs(totalPercentage - 1) > 0.001) {
 			ctx.addIssue({
 				code: "custom",
 				message: "El total de porcentajes tiene que ser igual a 100%"

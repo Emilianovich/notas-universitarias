@@ -11,7 +11,7 @@ import type { MiddlewareVars } from "../index.js"
 import authMiddleware from "../middlewares/auth.js"
 import { ZodMiddleware } from "../middlewares/zod.js"
 import { CoursesRepository } from "../repositories/courses.js"
-import { CourseService } from "../services/CourseService.js"
+import { CourseService } from "../services/courses/CourseService.js"
 
 const courseInstancesRoutes = new Hono<MiddlewareVars>().basePath(
 	"/course-instances"

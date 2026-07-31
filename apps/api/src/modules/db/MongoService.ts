@@ -1,4 +1,4 @@
-import * as process from "node:process"
+import { convertToMillis } from "@notas-universitarias/helpers"
 import type { ValidCollections } from "@notas-universitarias/types"
 import { HTTPException } from "hono/http-exception"
 import {
@@ -7,8 +7,7 @@ import {
 	MongoClient,
 	MongoServerSelectionError
 } from "mongodb"
-import ConfigService from "../config/ConfigService.js"
-
+import env from "../config/env.js"
 export class MongoService {
 	private client: MongoClient
 	// @ts-expect-error
@@ -18,14 +17,12 @@ export class MongoService {
 		this.db = connection.db()
 	}
 	constructor() {
-		const config = new ConfigService()
-		if (process.env.NODE_ENV !== "production") {
-			this.client = new MongoClient(config.getConfig("DB_URI_DEV"), {
-				serverSelectionTimeoutMS: 2000
-			})
-		} else {
-			this.client = new MongoClient(config.getConfig("DB_URI_PROD"))
-		}
+		this.client = new MongoClient(
+			env.IS_PROD ? env.DB_URI_PROD : env.DB_URI_DEV,
+			{
+				serverSelectionTimeoutMS: convertToMillis({ amount: 3, units: "s" })
+			}
+		)
 	}
 
 	private async handleMongoErrors(fn: () => Promise<void>) {
