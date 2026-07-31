@@ -34,23 +34,18 @@ export class UserService {
 		await this.userRepository.insertOne(dto)
 		return dto.name
 	}
-	async updateUser(
-		userId: ObjectId,
-		dto: UpdateUserDTO | undefined
-	): Promise<void> {
+	async updateUser(userId: ObjectId, dto: UpdateUserDTO): Promise<void> {
 		// TODO think about moving this to the handler
-		if (!dto || !Object.keys(dto).length)
-			throw new HTTPException(400, {
-				message: "Por lo menos un campo tiene que ser actualizado"
-			})
 		const currentUser = await this.userRepository.findById(userId)
 		if (!currentUser)
 			throw new HTTPException(404, { message: "No se encontró un usuario" })
-		if (dto.email) {
-			if ((await this.userRepository.findByEmail(dto.email)) !== null)
-				throw new HTTPException(404, {
-					message: "Ya existe un usuario con ese correo"
-				})
+		if (
+			dto.email &&
+			(await this.userRepository.findByEmail(dto.email)) !== null
+		) {
+			throw new HTTPException(404, {
+				message: "Ya existe un usuario con ese correo"
+			})
 		}
 		if (dto.password) {
 			dto.password = await argon2.hash(dto.password, { type: argon2id })

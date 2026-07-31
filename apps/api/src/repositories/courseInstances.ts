@@ -26,6 +26,12 @@ export class CourseInstancesRepository extends Repository<CourseInstanceDocument
 			dto
 		)
 		updateCourseInstanceFinalGrade(updatedCourseInstance)
-		return this.getCollection().replaceOne({ _id: _id }, updatedCourseInstance)
+		return {
+			result: await this.getCollection().replaceOne(
+				{ _id: _id },
+				updatedCourseInstance
+			),
+			updatedCourseInstance: { _id, ...updatedCourseInstance }
+		}
 	}
 }

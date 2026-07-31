@@ -2,17 +2,18 @@ import { updateCourseAverageGrade } from "@notas-universitarias/helpers"
 import type { Course, CourseInstance } from "@notas-universitarias/types"
 import { HTTPException } from "hono/http-exception"
 import type { ObjectId } from "mongodb"
-import type { CourseInstanceToBeCreated } from "../../../../packages/types/src/dtos/courseInstances/createCourseInstances.js"
-import type { UpdateCourseInstanceDto } from "../../../../packages/types/src/dtos/courseInstances/updateCourseInstances.js"
-import type { CourseInstanceDocument } from "../collection-schema/courseInstances.js"
-import type { CourseDocument } from "../collection-schema/courses.js"
+import type { CourseInstanceToBeCreated } from "../../../../../packages/types/src/dtos/courseInstances/createCourseInstances.js"
+import type { UpdateCourseInstanceDto } from "../../../../../packages/types/src/dtos/courseInstances/updateCourseInstances.js"
+import type { AcademicPeriodDocument } from "../../collection-schema/academicPeriods.js"
+import type { CourseInstanceDocument } from "../../collection-schema/courseInstances.js"
+import type { CourseDocument } from "../../collection-schema/courses.js"
 import getValidObjectId, {
 	mapCreateCourseInstanceToDTO
-} from "../helpers/helpers.js"
-import type { MongoService } from "../modules/db/MongoService.js"
-import { AcademicPeriodsRepository } from "../repositories/academicPeriods.js"
-import { CourseInstancesRepository } from "../repositories/courseInstances.js"
-import { CoursesRepository } from "../repositories/courses.js"
+} from "../../helpers/helpers.js"
+import type { MongoService } from "../../modules/db/MongoService.js"
+import { AcademicPeriodsRepository } from "../../repositories/academicPeriods.js"
+import { CourseInstancesRepository } from "../../repositories/courseInstances.js"
+import { CoursesRepository } from "../../repositories/courses.js"
 
 export class CourseService {
 	private readonly courseInstancesRepository: CourseInstancesRepository
@@ -37,8 +38,8 @@ export class CourseService {
 			})
 		let existingCourse: CourseDocument | null
 		let validCourseId: ObjectId
-		// NOTE checking if the user has already registered a courseInstance for a particular course during the current academic period
-		// NOTE in theory from DTO previousCourseId === "string" && isRegistered === true
+		// NOTE: checking if the user has already registered a courseInstance for a particular course during the current academic period
+		// NOTE: in theory from DTO previousCourseId === "string" && isRegistered === true
 		if (previousCourseId) {
 			validCourseId = getValidObjectId(previousCourseId)
 			existingCourse = await this.coursesRepository.findById(validCourseId)
@@ -140,36 +141,72 @@ export class CourseService {
 		return { courseInstance, courseInstanceDoc }
 	}
 
+	// OPTIMIZE
 	async handleCourseInstanceUpdate(
 		dto: UpdateCourseInstanceDto,
 		courseInstanceId: ObjectId,
 		userId: ObjectId
 	) {
+		const academicPeriod =
+			await this.academicPeriodRepository.findByCourseInstanceId(
+				courseInstanceId
+			)
+		if (!academicPeriod)
+			throw new HTTPException(404, {
+				message:
+					"La materia especificada no aparece registrada en ningún periodo académico"
+			})
+		if (!academicPeriod.courseInstances)
+			throw new HTTPException(400, {
+				message:
+					"For some reason un periodo académico con un id de materia no tiene materias!!!"
+			})
 		const courseDoc =
 			await this.coursesRepository.findByCourseInstanceId(courseInstanceId)
 		if (!courseDoc)
 			throw new HTTPException(404, {
-				message: "No tiene ningún curso donde en su historial aparezca ese id"
+				message:
+					"No tiene ninguna materia donde en su historial aparezca ese id"
 			})
 		const { courseInstanceDoc } = await this.getCourseInstance(
 			courseInstanceId,
 			userId
 		)
-		const updateStatus = await this.courseInstancesRepository.updateOne(
-			dto,
-			courseInstanceDoc
-		)
-		if (!updateStatus.modifiedCount)
+		const { result, updatedCourseInstance } =
+			await this.courseInstancesRepository.updateOne(dto, courseInstanceDoc)
+		if (!result.modifiedCount)
 			throw new HTTPException(400, {
 				message: "Ocurrió un error al actualizar, intente nuevamente"
 			})
-		const courseInstancesArray =
+		const updatedPeriodCourseInstances: CourseInstanceDocument[] = []
+		academicPeriod.courseInstances.forEach((instance) => {
+			const { _id, ...rest } = instance
+			if (!_id?.equals(updatedCourseInstance._id)) {
+				updatedPeriodCourseInstances.push({
+					_id,
+					...rest
+				})
+			} else {
+				updatedPeriodCourseInstances.push({
+					...updatedCourseInstance
+				})
+			}
+		})
+		const updatedAcademicPeriod: AcademicPeriodDocument = {
+			...academicPeriod,
+			courseInstances: updatedPeriodCourseInstances
+		}
+		await this.academicPeriodRepository.updateCourseInstance(
+			academicPeriod,
+			updatedAcademicPeriod
+		)
+		const courseInstancesInCourseArray =
 			await this.coursesRepository.getAllCourseInstances(courseDoc)
 		const { name, averageGrade } = courseDoc
 		const courseForFn: Course = {
 			name,
 			averageGrade,
-			courseInstances: courseInstancesArray
+			courseInstances: courseInstancesInCourseArray
 		}
 		updateCourseAverageGrade(courseForFn)
 		const { courseInstances, ...rest } = courseForFn

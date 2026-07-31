@@ -82,16 +82,31 @@ export class AcademicPeriodsRepository extends Repository<AcademicPeriodDocument
 		courseId: ObjectId
 	): Promise<void> {
 		try {
-			const update = await this.getCollection().updateOne(
+			const _update = await this.getCollection().updateOne(
 				{ _id: academicPeriod._id },
 				{ $push: { registeredCourses: courseId } }
-			)
-			log(
-				"error",
-				`Was acknowledged: ${update.acknowledged}, amount updated: ${update.modifiedCount}`
 			)
 		} catch (error) {
 			log("error", error)
 		}
+	}
+	async findByCourseInstanceId(
+		courseInstanceId: ObjectId
+	): Promise<AcademicPeriodDocument | null> {
+		return this.getCollection().findOne({
+			courseInstances: {
+				$elemMatch: { _id: courseInstanceId }
+			}
+		})
+	}
+
+	async updateCourseInstance(
+		oldAcademicPeriod: AcademicPeriodDocument,
+		newAcademicPeriod: AcademicPeriodDocument
+	): Promise<void> {
+		await this.getCollection().replaceOne(
+			{ _id: oldAcademicPeriod._id },
+			newAcademicPeriod
+		)
 	}
 }

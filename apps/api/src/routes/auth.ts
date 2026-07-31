@@ -8,8 +8,8 @@ import { getContextVars } from "../helpers/helpers.js"
 import type { MiddlewareVars } from "../index.js"
 import authMiddleware from "../middlewares/auth.js"
 import { ZodMiddleware } from "../middlewares/zod.js"
+import env from "../modules/config/env.js"
 import { AuthService } from "../services/auth/AuthService.js"
-import { log } from "../services/logging/LogService.js"
 
 const authRoutes = new Hono<MiddlewareVars>().basePath("/auth")
 
@@ -18,10 +18,10 @@ authRoutes.post("/login", ZodMiddleware("json", loginDTO), async (ctx) => {
 	const dto: LoginDTO = ctx.req.valid("json")
 	const [sessionId, hash, maxAge] = await authService.login(dto)
 	const sessionCookie = `${sessionId.toString()}.${hash}`
-	setCookie(ctx, "user_session", sessionCookie, {
+	setCookie(ctx, env.SESSION_COOKIE_NAME, sessionCookie, {
 		path: "/api",
-		secure: true,
-		sameSite: "lax",
+		secure: env.SESSION_COOKIE_SECURE,
+		sameSite: env.COOKIE_SAME_SITE,
 		httpOnly: true,
 		maxAge
 	})
@@ -31,10 +31,8 @@ authRoutes.post("/login", ZodMiddleware("json", loginDTO), async (ctx) => {
 authRoutes.post("/logout", authMiddleware, async (ctx) => {
 	const authService = new AuthService(getContextVars(ctx).mongoService)
 	await authService.logout(getContextVars(ctx).userId)
-	if (getCookie(ctx, "user_session")) {
-		log("info", "Got a cookie")
-		deleteCookie(ctx, "user_session")
-		log("info", `${getCookie(ctx, "user_session")}`)
+	if (getCookie(ctx, env.SESSION_COOKIE_NAME)) {
+		deleteCookie(ctx, env.SESSION_COOKIE_NAME)
 	}
 	return ctx.json("Sesión cerrada exitosamente")
 })
