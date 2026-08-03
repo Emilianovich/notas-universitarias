@@ -1,6 +1,102 @@
+@import url("https://fonts.googleapis.com/css2?family=Amiko:wght@400;600;700&family=Arima:wght@100..700&family=DynaPuff:wght@400..700&family=Google+Sans+Code:ital,wght,MONO@0,300..800,1;1,300..800,1&display=swap");
 @import "tailwindcss";
 
-* {
-	margin: 0;
-	padding: 0;
+@layer base {
+	* {
+		margin: 0;
+		padding: 0;
+	}
+}
+
+@theme {
+	--color-primary-300: #057e7e;
+	--color-primary-400: #035151;
+	--color-primary-500: #011e1e;
+	--color-primary-600: #010f0f;
+	--color-secondary: #e6f4f4;
+	--color-tertiary: #f3fafa;
+	--color-red-400: #7e0505;
+	--color-red-700: #510303;
+	--color-blue-600: #030351;
+	--spacing-button-height: 50px;
+}
+
+body {
+	min-height: 100vh;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto 1fr;
+	grid-template-areas:
+		"header header"
+		"main main";
+}
+
+nav {
+	@apply flex w-[40%] h-17 justify-evenly items-center gap-4 bg-secondary rounded-[20px] p-3;
+}
+
+header {
+	grid-area: header;
+}
+
+main {
+	grid-area: main;
+	transition: all 0.3s ease-in-out;
+}
+
+.border-styling {
+	@apply border-2 border-solid;
+}
+
+.pet-overlay {
+	pointer-events: none;
+}
+
+.speech-bubble {
+	@apply bg-secondary w-xs h-27 flex items-center justify-center text-sm text-center;
+	position: relative;
+	border-radius: 30px;
+	transition: all 0.3s ease-in-out;
+}
+
+.speech-bubble::before {
+	content: "";
+	position: absolute;
+	border: 8px solid transparent;
+	border-left: 8px solid var(--color-primary-300);
+	top: 50%;
+	left: 100%;
+	transform: translateY(-50%);
+}
+
+@keyframes fade-out-speech-bubble {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+.speech-bubble-animation {
+	animation: fade-out-speech-bubble 300ms ease-in-out;
+}
+
+@keyframes toast-fade-in {
+	from {
+		transform: translateX(-110%);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
+.toast-fade-in-animation {
+	animation: toast-fade-in 300ms ease-in-out;
+}
+
+.modal-wrapper {
+	@apply w-100 items-center justify-center gap-8;
+	display: grid;
+	grid-template-rows: auto 1fr var(--spacing-button-height);
 }

@@ -1,0 +1,77 @@
+{
+	"fontFamily": "Arima",
+	"selectedPet": "Spike",
+	"pets": [
+		{
+			"name": "Spike",
+			"alt": "Spike, el dinosaurio",
+			"awake": {
+				"src": "/spike-awake.png",
+				"aspectRatio": "219 / 256",
+				"preferredWidth": 155
+			},
+			"sleeping": {
+				"src": "/spike-sleeping.png",
+				"aspectRatio": "1024 / 835",
+				"preferredWidth": 160
+			}
+		},
+		{
+			"name": "Leon",
+			"alt": "Leon, el staffy",
+			"awake": {
+				"src": "/leon-awake.png",
+				"aspectRatio": "66 / 59",
+				"preferredWidth": 185
+			},
+			"sleeping": {
+				"src": "/leon-sleeping.png",
+				"aspectRatio": "3 / 2",
+				"preferredWidth": 160
+			}
+		},
+		{
+			"name": "Nita",
+			"alt": "Nita, la panda roja no roja",
+			"awake": {
+				"src": "/nita-awake.png",
+				"aspectRatio": "3 / 2",
+				"preferredWidth": 160
+			},
+			"sleeping": {
+				"src": "/nita-sleeping.png",
+				"aspectRatio": "3 / 2",
+				"preferredWidth": 160
+			}
+		},
+		{
+			"name": "Tom",
+			"alt": "Tom, el gato",
+			"awake": {
+				"src": "/tom-awake.png",
+				"aspectRatio": "1 / 1",
+				"preferredWidth": 190
+			},
+			"sleeping": {
+				"src": "/tom-sleeping.png",
+				"aspectRatio": "1 / 1",
+				"preferredWidth": 175
+			}
+		},
+		{
+			"name": "Mila",
+			"alt": "Mila, la hurón",
+			"awake": {
+				"src": "/mila-awake.png",
+				"aspectRatio": "1449 / 1570",
+				"preferredWidth": 145
+			},
+			"sleeping": {
+				"src": "/mila-sleeping.png",
+				"aspectRatio": "1 / 1",
+				"preferredWidth": 160
+			}
+		}
+	],
+	"theme": "dark"
+}
