@@ -9,38 +9,170 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as HomeRouteImport } from './routes/home'
+import { Route as DemoRouteImport } from './routes/demo'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HomeSettingsRouteImport } from './routes/home/settings'
+import { Route as HomeRegisterPeriodRouteImport } from './routes/home/register-period'
+import { Route as HomeHistoryRouteImport } from './routes/home/history'
+import { Route as HomeCurrentPeriodRouteImport } from './routes/home/current-period'
 
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoRoute = DemoRouteImport.update({
+  id: '/demo',
+  path: '/demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HomeSettingsRoute = HomeSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => HomeRoute,
+} as any)
+const HomeRegisterPeriodRoute = HomeRegisterPeriodRouteImport.update({
+  id: '/register-period',
+  path: '/register-period',
+  getParentRoute: () => HomeRoute,
+} as any)
+const HomeHistoryRoute = HomeHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => HomeRoute,
+} as any)
+const HomeCurrentPeriodRoute = HomeCurrentPeriodRouteImport.update({
+  id: '/current-period',
+  path: '/current-period',
+  getParentRoute: () => HomeRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/demo': typeof DemoRoute
+  '/home': typeof HomeRouteWithChildren
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/home/current-period': typeof HomeCurrentPeriodRoute
+  '/home/history': typeof HomeHistoryRoute
+  '/home/register-period': typeof HomeRegisterPeriodRoute
+  '/home/settings': typeof HomeSettingsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/demo': typeof DemoRoute
+  '/home': typeof HomeRouteWithChildren
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/home/current-period': typeof HomeCurrentPeriodRoute
+  '/home/history': typeof HomeHistoryRoute
+  '/home/register-period': typeof HomeRegisterPeriodRoute
+  '/home/settings': typeof HomeSettingsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/demo': typeof DemoRoute
+  '/home': typeof HomeRouteWithChildren
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/home/current-period': typeof HomeCurrentPeriodRoute
+  '/home/history': typeof HomeHistoryRoute
+  '/home/register-period': typeof HomeRegisterPeriodRoute
+  '/home/settings': typeof HomeSettingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/demo'
+    | '/home'
+    | '/login'
+    | '/register'
+    | '/home/current-period'
+    | '/home/history'
+    | '/home/register-period'
+    | '/home/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/demo'
+    | '/home'
+    | '/login'
+    | '/register'
+    | '/home/current-period'
+    | '/home/history'
+    | '/home/register-period'
+    | '/home/settings'
+  id:
+    | '__root__'
+    | '/'
+    | '/demo'
+    | '/home'
+    | '/login'
+    | '/register'
+    | '/home/current-period'
+    | '/home/history'
+    | '/home/register-period'
+    | '/home/settings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DemoRoute: typeof DemoRoute
+  HomeRoute: typeof HomeRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  RegisterRoute: typeof RegisterRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo': {
+      id: '/demo'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof DemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +180,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/home/settings': {
+      id: '/home/settings'
+      path: '/settings'
+      fullPath: '/home/settings'
+      preLoaderRoute: typeof HomeSettingsRouteImport
+      parentRoute: typeof HomeRoute
+    }
+    '/home/register-period': {
+      id: '/home/register-period'
+      path: '/register-period'
+      fullPath: '/home/register-period'
+      preLoaderRoute: typeof HomeRegisterPeriodRouteImport
+      parentRoute: typeof HomeRoute
+    }
+    '/home/history': {
+      id: '/home/history'
+      path: '/history'
+      fullPath: '/home/history'
+      preLoaderRoute: typeof HomeHistoryRouteImport
+      parentRoute: typeof HomeRoute
+    }
+    '/home/current-period': {
+      id: '/home/current-period'
+      path: '/current-period'
+      fullPath: '/home/current-period'
+      preLoaderRoute: typeof HomeCurrentPeriodRouteImport
+      parentRoute: typeof HomeRoute
+    }
   }
 }
 
+interface HomeRouteChildren {
+  HomeCurrentPeriodRoute: typeof HomeCurrentPeriodRoute
+  HomeHistoryRoute: typeof HomeHistoryRoute
+  HomeRegisterPeriodRoute: typeof HomeRegisterPeriodRoute
+  HomeSettingsRoute: typeof HomeSettingsRoute
+}
+
+const HomeRouteChildren: HomeRouteChildren = {
+  HomeCurrentPeriodRoute: HomeCurrentPeriodRoute,
+  HomeHistoryRoute: HomeHistoryRoute,
+  HomeRegisterPeriodRoute: HomeRegisterPeriodRoute,
+  HomeSettingsRoute: HomeSettingsRoute,
+}
+
+const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DemoRoute: DemoRoute,
+  HomeRoute: HomeRouteWithChildren,
+  LoginRoute: LoginRoute,
+  RegisterRoute: RegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
