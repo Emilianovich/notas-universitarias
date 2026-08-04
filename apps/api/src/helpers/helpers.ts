@@ -10,7 +10,9 @@ import type {
 	CreatingCourseInstanceBreakdown
 } from "../../../../packages/types/src/dtos/courseInstances/createCourseInstances.js"
 import type { UpdateCourseInstanceDto } from "../../../../packages/types/src/dtos/courseInstances/updateCourseInstances.js"
+import type { UpdateUserDTO } from "../../../../packages/types/src/dtos/users/updateUsers.js"
 import type { CourseInstanceDocument } from "../collection-schema/courseInstances.js"
+import type { UserDocument } from "../collection-schema/users.js"
 import type { MiddlewareVars } from "../index.js"
 import type { MongoService } from "../modules/db/MongoService.js"
 
@@ -100,4 +102,20 @@ export function mapInstanceDocToCourseInstance(
 ): CourseInstance {
 	const { _id, ...rest } = courseInstance
 	return rest
+}
+
+export function mapUpdateUserDtoToUserDocument(
+	currentUser: UserDocument,
+	dto: UpdateUserDTO
+): UserDocument {
+	return {
+		name: dto.name ?? currentUser.name,
+		password: dto.password ?? currentUser.password,
+		email: dto.email ?? currentUser.email,
+		preferences: {
+			petName: dto.petName ?? currentUser.preferences.petName,
+			theme: dto.theme ?? currentUser.preferences.theme,
+			fontFamily: dto.fontFamily ?? currentUser.preferences.fontFamily
+		}
+	}
 }

@@ -39,6 +39,9 @@
 				"useHeadingContent": "on",
 				"noStaticElementInteractions": "off",
 				"useKeyWithClickEvents": "off"
+			},
+			"correctness": {
+				"noChildrenProp": "off"
 			}
 		}
 	},

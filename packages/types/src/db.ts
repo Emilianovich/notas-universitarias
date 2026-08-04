@@ -40,3 +40,21 @@ export type ValidCollections =
 	| "academicPeriods"
 	| "courseInstances"
 	| "courses"
+	| "userPreferences"
+
+export type UserPreferences = {
+	fontFamily: FontFamily
+	theme: AppTheme
+	petName: PetName
+}
+
+export type FontFamily =
+	| "Google Sans Code"
+	| "Arima"
+	| "Amiko"
+	| "DynaPuff"
+	| "Libertinus Math"
+	| "Nunito"
+	| "Dancing Script"
+export type AppTheme = "dark" | "light"
+export type PetName = "Spike" | "Leon" | "Tom" | "Nita" | "Mila"
