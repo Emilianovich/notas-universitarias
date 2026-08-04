@@ -8,12 +8,18 @@ export const createAcademicPeriodsDTO = z
 				3,
 				"El nombre del periodo académico debe tener por lo menos 3 caracteres"
 			),
-		startDate: z.iso.date(
-			"La fecha de inicio debe tener el formato YYYY-MM-DD"
-		),
-		endDate: z.iso.date(
-			"La fecha de finalización debe tener el formato YYYY-MM-DD"
-		)
+		startDate: z
+			.preprocess((val: string) => {
+				return new Date(val).toISOString().split("T")[0]
+			}, z.iso.date("La fecha de inicio debe tener el formato YYYY-MM-DD"))
+			.transform((val) => val.toString()),
+		endDate: z
+			.preprocess((val: string) => {
+				return new Date(val).toISOString().split("T")[0]
+			}, z.iso.date(
+				"La fecha de finalización debe tener el formato YYYY-MM-DD"
+			))
+			.transform((val) => val.toString())
 	})
 	.refine((schema) => new Date(schema.startDate), {
 		abort: true,

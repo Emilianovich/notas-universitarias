@@ -1,3 +1,4 @@
+import type { AppTheme, FontFamily, PetName } from "@notas-universitarias/types"
 import { createContext, useContext } from "react"
 
 export type UserSettings = Omit<SettingsContextProps, "pet"> & {
@@ -6,7 +7,7 @@ export type UserSettings = Omit<SettingsContextProps, "pet"> & {
 }
 
 export interface Pet {
-	name: string
+	name: PetName
 	alt: string
 	awake: {
 		src: string
@@ -110,8 +111,8 @@ export const Mila: Pet = {
 }
 
 export type SettingsContextProps = {
-	fontFamily: "Google Sans Code" | "Arima" | "Amiko" | "DynaPuff"
-	theme: "dark" | "light"
+	fontFamily: FontFamily
+	theme: AppTheme
 	pet: Pet
 }
 

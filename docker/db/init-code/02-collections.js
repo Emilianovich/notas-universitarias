@@ -7,14 +7,14 @@ db.createCollection("users", {
 		$jsonSchema: {
 			bsonType: "object",
 			title: "Users Validations",
-			required: ["name", "email", "password"],
+			required: ["name", "email", "password", "preferences"],
 			properties: {
 				name: {
 					bsonType: "string",
 					minLength: 1,
 					maxLength: 100,
 					description:
-						"A user name is required and should have between 1 and 100 caracters"
+						"A user name is required and should have between 1 and 100 characters"
 				},
 				email: {
 					bsonType: "string",
@@ -25,6 +25,38 @@ db.createCollection("users", {
 				password: {
 					bsonType: "string",
 					description: "User password is required"
+				},
+				preferences: {
+					bsonType: "object",
+					description: "User preferences are required",
+					required: ["fontFamily", "theme", "petName"],
+					properties: {
+						fontFamily: {
+							bsonType: "string",
+							enum: [
+								"Google Sans Code",
+								"Arima",
+								"Amiko",
+								"DynaPuff",
+								"Libertinus Math",
+								"Nunito",
+								"Dancing Script"
+							],
+							description:
+								"A valid font family is required ('Google Sans Code', 'Arima', 'Amiko', 'DynaPuff', 'Libertinus Math', 'Nunito', 'Dancing Script')"
+						},
+						theme: {
+							bsonType: "string",
+							enum: ["dark", "light"],
+							description: "A valid theme is required ('dark', 'light')"
+						},
+						petName: {
+							bsonType: "string",
+							enum: ["Spike", "Leon", "Tom", "Nita", "Mila"],
+							description:
+								"A valid pet name is required ('Spike', 'Leon', 'Tom', 'Nita', 'Mila')"
+						}
+					}
 				}
 			}
 		}
