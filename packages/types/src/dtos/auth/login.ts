@@ -10,5 +10,5 @@ export const loginDTO = z.object({
 			/^(?!.*\.\.)(?!\.)(?!.*\.$)[A-Za-z0-9._%+-]{1,64}@(?:[A-Za-z](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,}$/,
 		error: "Ingrese un correo electrónico válido"
 	}),
-	password: z.string("Contraseña requerida")
+	password: z.string().min(1, "La contraseña es requerida")
 })

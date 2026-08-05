@@ -20,10 +20,11 @@ export default function Input({
 		"text" | "password" | "email" | "date"
 	>(type)
 	const bgColor = `bg-[${color}]`
-	const borderColor = error ? "border-red-400" : "border-primary-300"
+	const borderColor = error && isDirty ? "border-red-400" : "transparent"
 	const { fontFamily } = useSettings()
+	const maxWidth = 400
 	return (
-		<div className={`grid grid-rows-3 gap-2 relative`}>
+		<div className={`grid grid-rows-3 gap-2 relative`} style={{ maxWidth }}>
 			<label
 				style={{ fontFamily, fontSize: 18, marginTop: "1em" }}
 				htmlFor={id}
@@ -39,7 +40,7 @@ export default function Input({
 					onChange={syncValueToState}
 					onBlur={handleBlur}
 					value={value}
-					className={`${bgColor} p-2 w-87.5 h-11.25 rounded-[10px] border outline-none ${borderColor}`}
+					className={`${bgColor} p-2 w-[400px] h-11.25 rounded-[10px] border outline-none ${borderColor}`}
 					placeholder={placeholder}
 				/>
 				{originallyPassword && (
@@ -77,7 +78,7 @@ function PasswordImage({ isOpen, changeType }: PasswordImageProps) {
 			src={imageSrc}
 			alt={alt}
 			className={
-				"w-7.5 h-6 absolute right-2 top-1/2 -translate-y-1/2 hover:scale-95 cursor-pointer"
+				"w-7.5 h-6 absolute right-8 top-1/2 -translate-y-1/2 hover:scale-95 cursor-pointer"
 			}
 			onClick={changeType}
 		/>

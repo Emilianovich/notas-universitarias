@@ -2,23 +2,12 @@ import { z } from "zod"
 
 export const createAcademicPeriodsDTO = z
 	.object({
-		name: z
-			.string()
-			.min(
-				3,
-				"El nombre del periodo académico debe tener por lo menos 3 caracteres"
-			),
-		startDate: z
-			.preprocess((val: string) => {
-				return new Date(val).toISOString().split("T")[0]
-			}, z.iso.date("La fecha de inicio debe tener el formato YYYY-MM-DD"))
+		name: z.string().min(3, "El nombre debe tener por lo menos 3 caracteres"),
+		startDate: z.iso
+			.date("La fecha de inicio debe tener el formato YYYY-MM-DD")
 			.transform((val) => val.toString()),
-		endDate: z
-			.preprocess((val: string) => {
-				return new Date(val).toISOString().split("T")[0]
-			}, z.iso.date(
-				"La fecha de finalización debe tener el formato YYYY-MM-DD"
-			))
+		endDate: z.iso
+			.date("La fecha de finalización debe tener el formato YYYY-MM-DD")
 			.transform((val) => val.toString())
 	})
 	.refine((schema) => new Date(schema.startDate), {
@@ -34,8 +23,7 @@ export const createAcademicPeriodsDTO = z
 	.refine((schema) => schema.endDate > schema.startDate, {
 		abort: true,
 		path: ["endDate"],
-		error:
-			"La fecha en la que termina el periodo académico no puede ser menor que la de inicio"
+		error: "La fecha de fin no puede ser menor que la de inicio"
 	})
 
 export type CreateAcademicPeriodsDto = {
