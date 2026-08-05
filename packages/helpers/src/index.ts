@@ -3,10 +3,13 @@ import type {
 	CourseBreakdown,
 	CourseBreakdownEntry,
 	CourseInstance,
+	ErrorRes,
 	GradeLetter,
 	PersonFullName,
 	RemoveElementType,
-	RemoveSpecificStrings
+	RemoveSpecificStrings,
+	RequestBuilder,
+	SuccessRes
 } from "@notas-universitarias/types"
 
 export function stringToArray(someString: string): string[] {
@@ -176,47 +179,6 @@ export function getValueOver100({
 	return (rawScore / maxScore) * 100
 }
 
-// function updateObtainedPercentage(courseBreakdown: CourseBreakdown) : void {
-// 	// Procedure for when the breakdown is a laboratory (Physics, Chemistry, etc.).
-// 	// Each laboratory for these subjects has its own teacher and course breakdown
-// 	// These breakdowns SHOULD NOT have laboratory details !!!
-// 	if (courseBreakdown.laboratoryDetails) {
-// 		let labTotal = 0
-// 		courseBreakdown.laboratoryDetails.breakdown.forEach((labBreakdown) => {
-// 			updateObtainedPercentage(labBreakdown);
-// 			labTotal += labBreakdown.contribution
-// 		})
-// 		courseBreakdown.contribution = (labTotal  * courseBreakdown.percentage )
-// 		return
-// 	}
-// 	let total = 0
-// 	courseBreakdown.entries.forEach(entry => {
-// 		total += getValueOver100({ rawScore: entry.rawScore, maxScore: entry.maxScore })
-// 	})
-// 	courseBreakdown.contribution = ((total / courseBreakdown.entries.length) * courseBreakdown.percentage) / 100
-// }
-//
-// export function updateCourseInstanceGrade(courseInstance: CourseInstance) : void {
-// 	courseInstance.breakdown.forEach(breakdown => {
-// 		if (breakdown.laboratoryDetails) {
-// 			updateCourseInstanceGrade(breakdown.laboratoryDetails)
-// 		}
-// 		updateObtainedPercentage(breakdown)
-// 		courseInstance.finalGrade += (breakdown.contribution * 100)
-// 	})
-// 	courseInstance.finalGrade = roundNumber({ number: courseInstance.finalGrade, amountOfDecimals: 2 })
-// 	console.log(courseInstance)
-// }
-//
-// export function updateCourseAverageGrade(course: Course) : void {
-// 	course.courseInstances.forEach(courseInstance => {
-// 		updateCourseInstanceGrade(courseInstance)
-// 		course.averageGrade += courseInstance.finalGrade
-// 	})
-// 	course.averageGrade /= course.courseInstances.length
-// 	course.averageGrade = roundNumber({ number: course.averageGrade, amountOfDecimals: 2 })
-// }
-
 function getEntriesAverageGrade(entries: CourseBreakdownEntry[]): number {
 	if (!entries.length) return 0
 	const gradeAverage: number[] = []
@@ -281,4 +243,46 @@ export function updateCourseAverageGrade(course: Course): void {
 			course.courseInstances.length,
 		amountOfDecimals: 4
 	})
+}
+
+export async function buildRequest<T, U>({
+	method,
+	path,
+	reqBody,
+	includeCredentials
+}: RequestBuilder): Promise<SuccessRes<T> | ErrorRes<U>> {
+	const baseUrl = "http://localhost:3035/api/v1"
+	const url = `${baseUrl}${path}`
+	if (!includeCredentials) {
+		if (method === "POST") {
+			const req = await fetch(url, {
+				method,
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(reqBody)
+			})
+			return await req.json()
+		} else {
+			const req = await fetch(url)
+			return await req.json()
+		}
+	} else {
+		if (method === "GET") {
+			const req = await fetch(url, {
+				credentials: "include"
+			})
+			return await req.json()
+		} else {
+			const req = await fetch(url, {
+				method,
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(reqBody),
+				credentials: "include"
+			})
+			return await req.json()
+		}
+	}
 }

@@ -1,29 +1,43 @@
 import { type ReactNode, useState } from "react"
 import Toast from "@/components/general/Toast.tsx"
 import {
+	type BuildToastProps,
 	ToastContext,
-	type ToastProps,
 	type ToastProviderProps
 } from "@/contexts/toast.ts"
 
-const ToastBaseProps: ToastProps = {
-	type: "info",
-	content: "Hi! If you find this it's an easter egg"
-}
-
 export default function ToastProvider({ children }: { children: ReactNode }) {
 	const [providerState, setProviderState] = useState<ToastProviderProps>({
-		renderToast: false,
-		toastProps: ToastBaseProps
+		toasts: []
 	})
-	const { content, type } = providerState.toastProps
-	const buildToast = (data: ToastProps) => {
-		setProviderState({ toastProps: data, renderToast: true })
+	const buildToast = (data: BuildToastProps) => {
+		setProviderState({ toasts: [...providerState.toasts, data] })
 	}
+	const removeToast = (id: number) =>
+		setProviderState({
+			toasts: providerState.toasts.filter((toast) => toast.id !== id)
+		})
 	return (
 		<ToastContext value={{ buildToast }}>
 			{children}
-			{providerState.renderToast && <Toast type={type} content={content} />}
+			<div
+				className={
+					"fixed bottom-4 left-8 flex flex-col gap-4 w-fit h-fit transition-all duration-300 ease-in-out"
+				}
+			>
+				{providerState.toasts.map((toast) => {
+					const { id, type, content } = toast
+					return (
+						<Toast
+							key={id}
+							id={id}
+							type={type}
+							content={content}
+							removeToast={removeToast}
+						/>
+					)
+				})}
+			</div>
 		</ToastContext>
 	)
 }

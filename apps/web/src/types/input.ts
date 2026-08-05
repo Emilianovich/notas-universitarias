@@ -19,3 +19,25 @@ export type PasswordImageProps = {
 	isOpen: boolean
 	changeType: () => void
 }
+
+export type RegisterState = {
+	isFirstDone: boolean
+	isFirstHasBeenCompleted: boolean
+	isSecondHasBeenCompleted: boolean
+	firstFormContent: {
+		name: string
+		startDate: string
+		endDate: string
+	}
+	secondFormContent: {
+		username: string
+		email: string
+		password: string
+	}
+	progress: number
+}
+
+export type RegisterFormProps = {
+	registerState: RegisterState
+	setGlobalFormState: (state: RegisterState) => void
+}

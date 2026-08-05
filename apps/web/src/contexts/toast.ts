@@ -1,17 +1,19 @@
 import { createContext, useContext } from "react"
 
-export type ToastProps = {
+export type BuildToastProps = {
+	id: number
 	type: "success" | "info" | "error"
 	content: string
 }
 
+export type ToastProps = BuildToastProps & { removeToast: (id: number) => void }
+
 export type ToastContext = {
-	buildToast: (props: ToastProps) => void
+	buildToast: (props: BuildToastProps) => void
 }
 
 export type ToastProviderProps = {
-	toastProps: ToastProps
-	renderToast: boolean
+	toasts: BuildToastProps[]
 }
 
 export const ToastContext = createContext<ToastContext | null>(null)

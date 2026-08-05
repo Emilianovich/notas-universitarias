@@ -2,9 +2,9 @@ import { useEffect, useState } from "react"
 import useSettings from "@/contexts/settings.ts"
 import type { ToastProps } from "@/contexts/toast.ts"
 
-export default function Toast({ type, content }: ToastProps) {
+export default function Toast({ type, content, removeToast, id }: ToastProps) {
 	const [shouldVanish, setShouldVanish] = useState(false)
-	const startAnimation = shouldVanish
+	// const startAnimation = shouldVanish
 	const { fontFamily } = useSettings()
 	useEffect(() => {
 		const vanishTimeout = setTimeout(() => {
@@ -50,32 +50,34 @@ export default function Toast({ type, content }: ToastProps) {
 		closeIconSrc = stylesObject.info.closeIcon
 		nextToImgSrc = stylesObject.info.nextToTextImg
 	}
-	if (!shouldVanish || startAnimation) {
-		return (
-			<div
-				className={`${appliedStyles} fixed bottom-4 left-8 shadow-[0px_5px_2px_2px_rgba(0,0,0,0.25)] rounded-[40px] w-100 h-25 p-2 flex flex-col gap-2 ${startAnimation ? "translate-x-[-125%]" : "toast-fade-in-animation"} duration-700 transition-all ease-in-out`}
-				style={{ fontFamily }}
-			>
-				<div className={"w-full  flex justify-end"}>
-					<img
-						src={closeIconSrc}
-						alt="Botón para cerrar el toast"
-						width={20}
-						height={20}
-						className={"mr-4 hover:scale-110 cursor-pointer"}
-						onClick={() => setShouldVanish(true)}
-					/>
-				</div>
-				<div className={"flex gap-4 h-fit"}>
-					<img
-						src={nextToImgSrc}
-						alt="Imagen ilustrativa para el toast"
-						width={20}
-						height={20}
-					/>
-					<p className={"text-sm"}>{content}</p>
-				</div>
+	return (
+		<div
+			className={`${appliedStyles} shadow-[0px_5px_2px_2px_rgba(0,0,0,0.25)] rounded-[40px] w-100 h-25 p-2 flex flex-col gap-2 ${shouldVanish ? "translate-x-[-125%]" : "toast-fade-in-animation"} duration-700 transition-all ease-in-out`}
+			style={{ fontFamily }}
+			onTransitionEnd={(event) => {
+				if (event.propertyName !== "transform") return
+				removeToast(id)
+			}}
+		>
+			<div className={"w-full  flex justify-end"}>
+				<img
+					src={closeIconSrc}
+					alt="Botón para cerrar el toast"
+					width={20}
+					height={20}
+					className={"mr-4 hover:scale-110 cursor-pointer"}
+					onClick={() => setShouldVanish(true)}
+				/>
 			</div>
-		)
-	}
+			<div className={"flex gap-4 h-fit"}>
+				<img
+					src={nextToImgSrc}
+					alt="Imagen ilustrativa para el toast"
+					width={20}
+					height={20}
+				/>
+				<p className={"text-sm"}>{content}</p>
+			</div>
+		</div>
+	)
 }

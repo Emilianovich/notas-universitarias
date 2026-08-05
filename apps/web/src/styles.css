@@ -84,10 +84,10 @@ main {
 
 @keyframes toast-fade-in {
 	from {
-		transform: translateX(-110%);
+		translate: -110% 0;
 	}
 	to {
-		transform: translateX(0);
+		translate: 0 0;
 	}
 }
 
@@ -99,4 +99,8 @@ main {
 	@apply w-100 items-center justify-center gap-8;
 	display: grid;
 	grid-template-rows: auto 1fr var(--spacing-button-height);
+}
+
+button:disabled {
+	opacity: 0.65;
 }
