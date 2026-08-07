@@ -1,9 +1,10 @@
 import { createAcademicPeriodsDTO } from "@notas-universitarias/types"
-import { useForm, useSelector } from "@tanstack/react-form"
+import {revalidateLogic, useForm, useSelector} from "@tanstack/react-form"
 import Input from "@/components/form/Input.tsx"
 import Button from "@/components/general/Button.tsx"
 import useToast from "@/contexts/toast.ts"
 import type { RegisterFormProps } from "@/types/input.ts"
+import {Link} from "@tanstack/react-router";
 
 export default function CreateAcademicPeriodForm({
 	registerState,
@@ -17,7 +18,12 @@ export default function CreateAcademicPeriodForm({
 			startDate,
 			endDate
 		},
+		validationLogic: revalidateLogic({
+			mode: "submit",
+			modeAfterSubmission: "blur"
+		}),
 		validators: {
+			onDynamic: createAcademicPeriodsDTO,
 			onBlur: createAcademicPeriodsDTO
 		},
 		onSubmit: ({ value }) => {
@@ -27,14 +33,8 @@ export default function CreateAcademicPeriodForm({
 				isFirstDone: true,
 				progress: 50
 			})
-			buildToast({
-				id: Date.now(),
-				type: "info",
-				content: `Completaste la primera parte del formulario`
-			})
 		},
 		onSubmitInvalid: () => {
-			console.log(Date.now())
 			buildToast({
 				id: Date.now(),
 				type: "error",
@@ -43,7 +43,8 @@ export default function CreateAcademicPeriodForm({
 		},
 		canSubmitWhenInvalid: false
 	})
-	const { Field, Subscribe } = form
+	const { Field  } = form
+	const submissionAttempts = useSelector(form.store, (state) => state.submissionAttempts)
 	return (
 		<form
 			onSubmit={async (e) => {
@@ -54,9 +55,33 @@ export default function CreateAcademicPeriodForm({
 			className={"grid grid-rows-4 gap-2 justify-center items-center relative"}
 		>
 			<Field
+				name={"name"}
+				children={(fieldApi) => {
+					const { errors, isBlurred } = fieldApi.state.meta
+					const { name, handleBlur, state, handleChange } = fieldApi
+					return (
+						<Input
+							key={name}
+							id={name}
+							label={"Nombre de tu periodo académico actual"}
+							type={"text"}
+							name={name}
+							value={state.value}
+							error={errors[0]?.message}
+							syncValueToState={(e) => handleChange(e.target.value)}
+							handleBlur={handleBlur}
+							isBlurred={isBlurred || submissionAttempts > 0}
+							color={"#F9FCFC"}
+							originallyPassword={false}
+							placeholder={"Semestre I 2026"}
+						/>
+					)
+				}}
+			/>
+			<Field
 				name={"startDate"}
 				children={(fieldApi) => {
-					const { errors, isDirty } = fieldApi.state.meta
+					const { errors, isBlurred } = fieldApi.state.meta
 					const { name, handleBlur, state, handleChange } = fieldApi
 					return (
 						<Input
@@ -69,7 +94,7 @@ export default function CreateAcademicPeriodForm({
 							error={errors[0]?.message}
 							syncValueToState={(e) => handleChange(e.target.value)}
 							handleBlur={handleBlur}
-							isDirty={isDirty}
+							isBlurred={isBlurred || submissionAttempts > 0}
 							color={"#F9FCFC"}
 							originallyPassword={false}
 							placeholder={"2026/04/24"}
@@ -80,7 +105,7 @@ export default function CreateAcademicPeriodForm({
 			<Field
 				name={"endDate"}
 				children={(fieldApi) => {
-					const { errors, isDirty } = fieldApi.state.meta
+					const { errors, isBlurred } = fieldApi.state.meta
 					const { name, handleBlur, state, handleChange } = fieldApi
 					return (
 						<Input
@@ -93,7 +118,7 @@ export default function CreateAcademicPeriodForm({
 							error={errors[0]?.message}
 							syncValueToState={(e) => handleChange(e.target.value)}
 							handleBlur={handleBlur}
-							isDirty={isDirty}
+							isBlurred={isBlurred || submissionAttempts > 0}
 							color={"#F9FCFC"}
 							originallyPassword={false}
 							placeholder={"2026/07/17"}
@@ -101,47 +126,19 @@ export default function CreateAcademicPeriodForm({
 					)
 				}}
 			/>
-			<Field
-				name={"name"}
-				children={(fieldApi) => {
-					const { errors, isDirty } = fieldApi.state.meta
-					const { name, handleBlur, state, handleChange } = fieldApi
-					return (
-						<Input
-							key={name}
-							id={name}
-							label={"Nombre del periodo académico"}
-							type={"text"}
-							name={name}
-							value={state.value}
-							error={errors[0]?.message}
-							syncValueToState={(e) => handleChange(e.target.value)}
-							handleBlur={handleBlur}
-							isDirty={isDirty}
-							color={"#F9FCFC"}
-							originallyPassword={false}
-							placeholder={"Semestre I 2026"}
-						/>
-					)
-				}}
-			/>
-			<Subscribe
-				selector={(state) => [state.canSubmit, state.isTouched]}
-				children={([canSubmit, isTouched]) => (
-					<div
-						className={
-							"flex gap-4 justify-center items-center w-full h-fit absolute top-[75%] border border-black"
-						}
-					>
-						<Button
-							text={"Guardar & Seguir"}
-							type={"submit"}
-							styleType={"primary"}
-							isDisabled={false}
-						/>
-					</div>
-				)}
-			/>
+			<div
+				className={
+					"flex flex-col gap-4 justify-center items-center w-full h-fit absolute top-[80%]"
+				}
+			>
+				<p>¿Ya tienes cuenta? <Link to={"/login"}><strong className={"cursor-pointer font-medium hover:scale-105 hover:text-primary-400 transition-all duration-300 ease-in-out underline"}>Inicia sesión</strong></Link></p>
+				<Button
+					text={"Guardar & Seguir"}
+					type={"submit"}
+					styleType={"primary"}
+					isDisabled={false}
+				/>
+			</div>
 		</form>
 	)
 }

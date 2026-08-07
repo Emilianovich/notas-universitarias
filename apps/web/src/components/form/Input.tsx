@@ -9,7 +9,7 @@ export default function Input({
 	syncValueToState,
 	value,
 	handleBlur,
-	isDirty,
+	isBlurred,
 	color,
 	label,
 	id,
@@ -20,7 +20,7 @@ export default function Input({
 		"text" | "password" | "email" | "date"
 	>(type)
 	const bgColor = `bg-[${color}]`
-	const borderColor = error && isDirty ? "border-red-400" : "transparent"
+	const borderColor = error && isBlurred ? "border-red-400" : "transparent"
 	const { fontFamily } = useSettings()
 	const maxWidth = 400
 	return (
@@ -54,7 +54,7 @@ export default function Input({
 					/>
 				)}
 			</div>
-			{error && isDirty && <ErrorMessage error={error} />}
+			{error && isBlurred && <ErrorMessage error={error} />}
 		</div>
 	)
 }

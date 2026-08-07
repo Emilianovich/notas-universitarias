@@ -17,7 +17,7 @@ function RouteComponent() {
 			onBlur: loginDTO
 		},
 		onSubmit: (value) => {
-			console.log(value)
+
 		}
 	})
 	const { Field } = loginForm
@@ -44,7 +44,7 @@ function RouteComponent() {
 							error={errors[0]?.message}
 							syncValueToState={(e) => handleChange(e.target.value)}
 							handleBlur={handleBlur}
-							isDirty={isDirty}
+							isBlurred={isDirty}
 							color={"#F9FCFC"}
 							originallyPassword={false}
 							placeholder={"Ej. eminola@correo.com"}
@@ -68,7 +68,7 @@ function RouteComponent() {
 							error={errors[0]?.message}
 							syncValueToState={(e) => handleChange(e.target.value)}
 							handleBlur={handleBlur}
-							isDirty={isDirty}
+							isBlurred={isDirty}
 							color={"#F9FCFC"}
 							originallyPassword={true}
 							placeholder={"********"}
