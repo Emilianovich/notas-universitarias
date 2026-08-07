@@ -21,7 +21,7 @@
 	--spacing-button-height: 50px;
 }
 
-body {
+.main-body {
 	min-height: 100vh;
 	display: grid;
 	grid-template-columns: 1fr 1fr;

@@ -1,7 +1,11 @@
-import type { ReactNode } from "react"
-import useSettings from "@/contexts/settings.ts"
+import type { FontFamily } from "@notas-universitarias/types"
+import type { ContentProps } from "@/components/general/HomeContent.tsx"
 
-export default function Content({ children }: { children: ReactNode }) {
-	const { fontFamily } = useSettings()
-	return <main style={{ fontFamily }}>{children}</main>
+export default function Content({ bodyClasses, children }: ContentProps) {
+	const fontFamily: FontFamily = "Arima"
+	return (
+		<body style={{ fontFamily }} className={bodyClasses}>
+			{children}
+		</body>
+	)
 }

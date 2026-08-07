@@ -46,7 +46,7 @@ export default function ModalProvider({ children }: { children: ReactNode }) {
 			{children}
 			<div
 				style={{ fontFamily }}
-				className={`${modalProps.isOpen ? "fixed inset-0 bg-[rgba(0,0,0,0.4)] flex justify-center items-center z-200 transition-opacity duration-700 opacity-100" : "opacity-0"}`}
+				className={`${modalProps.isOpen ? "fixed inset-0 bg-[rgba(0,0,0,0.4)] flex justify-center items-center z-200 transition-opacity duration-700 opacity-100" : "opacity-0 -z-1"}`}
 			>
 				{modalProps.isOpen && (
 					<Modal
@@ -83,12 +83,14 @@ export function Modal({
 						text={closeButtonTitle}
 						styleType={"secondary"}
 						clickAction={closeModal}
+						isDisabled={false}
 					/>
 					<Button
 						type={"button"}
 						text={confirmButton.text}
 						styleType={confirmButton.type}
 						clickAction={confirmButton.action}
+						isDisabled={false}
 					/>
 				</div>
 			</div>

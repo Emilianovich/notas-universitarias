@@ -29,7 +29,7 @@ usersRoutes.post("/", ZodMiddleware("json", createUserDto), async (ctx) => {
 	).createUser(dto)
 	log("info", `New user created!`)
 	ctx.status(201)
-	return ctx.json(`Bienvenido ${username}`)
+	return ctx.json(`Bienvenid@ ${username}`)
 })
 
 // Update users

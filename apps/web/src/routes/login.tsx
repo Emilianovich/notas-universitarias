@@ -1,81 +1,33 @@
-import { loginDTO } from "@notas-universitarias/types"
-import { useForm } from "@tanstack/react-form"
+import { buildRequest } from "@notas-universitarias/helpers"
+import type { LoginDTO } from "@notas-universitarias/types"
 import { createFileRoute } from "@tanstack/react-router"
-import Input from "@/components/form/Input.tsx"
+import ToastProvider from "@/components/context-providers/toast-provider.tsx"
+import LoginForm from "@/components/form/login/LoginForm.tsx"
+import Content from "@/components/general/Content"
 
 export const Route = createFileRoute("/login")({
 	component: RouteComponent
 })
 
-function RouteComponent() {
-	const loginForm = useForm({
-		defaultValues: {
-			email: "",
-			password: ""
-		},
-		validators: {
-			onBlur: loginDTO
-		},
-		onSubmit: (value) => {
-
-		}
+const handleLogin = async (dto: LoginDTO) => {
+	return buildRequest<string, string>({
+		method: "POST",
+		includeCredentials: true,
+		path: "/auth/login",
+		reqBody: dto
 	})
-	const { Field } = loginForm
+}
+
+function RouteComponent() {
 	return (
-		<form
-			onSubmit={(e) => {
-				e.preventDefault()
-			}}
-			className={"w-screen h-fit grid grid-rows-3 items-center justify-center"}
-		>
-			<Field
-				name={"email"}
-				children={(fieldApi) => {
-					const { errors, isDirty } = fieldApi.state.meta
-					const { name, handleBlur, state, handleChange } = fieldApi
-					return (
-						<Input
-							key={name}
-							id={name}
-							label={"¿Cuál es tu correo?"}
-							type={"email"}
-							name={name}
-							value={state.value}
-							error={errors[0]?.message}
-							syncValueToState={(e) => handleChange(e.target.value)}
-							handleBlur={handleBlur}
-							isBlurred={isDirty}
-							color={"#F9FCFC"}
-							originallyPassword={false}
-							placeholder={"Ej. eminola@correo.com"}
-						/>
-					)
-				}}
-			/>
-			<Field
-				name={"password"}
-				children={(fieldApi) => {
-					const { errors, isDirty } = fieldApi.state.meta
-					const { name, handleBlur, state, handleChange } = fieldApi
-					return (
-						<Input
-							key={name}
-							id={name}
-							label={"¿Cuál es tu contraseña?"}
-							type={"password"}
-							name={name}
-							value={state.value}
-							error={errors[0]?.message}
-							syncValueToState={(e) => handleChange(e.target.value)}
-							handleBlur={handleBlur}
-							isBlurred={isDirty}
-							color={"#F9FCFC"}
-							originallyPassword={true}
-							placeholder={"********"}
-						/>
-					)
-				}}
-			/>
-		</form>
+		<Content bodyClasses={"bg-secondary"}>
+			<ToastProvider>
+				<main className={"w-screen h-screen flex justify-center items-center"}>
+					<LoginForm />
+				</main>
+			</ToastProvider>
+		</Content>
 	)
 }
+
+export default handleLogin

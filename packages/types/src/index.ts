@@ -1,8 +1,8 @@
 export type GradeLetter = "A" | "B" | "C" | "D" | "F"
 export type RequestBuilder = {
-	method: "GET" | "POST" | "PUT"
+	method: "GET" | "POST" | "PUT" | "DELETE"
 	includeCredentials: boolean
-	reqBody: object
+	reqBody?: object
 	path: string
 }
 type BaseRes = {

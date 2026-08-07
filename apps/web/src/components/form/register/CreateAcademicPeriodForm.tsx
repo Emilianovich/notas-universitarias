@@ -1,10 +1,10 @@
 import { createAcademicPeriodsDTO } from "@notas-universitarias/types"
-import {revalidateLogic, useForm, useSelector} from "@tanstack/react-form"
+import { revalidateLogic, useForm, useSelector } from "@tanstack/react-form"
+import { Link } from "@tanstack/react-router"
 import Input from "@/components/form/Input.tsx"
 import Button from "@/components/general/Button.tsx"
 import useToast from "@/contexts/toast.ts"
 import type { RegisterFormProps } from "@/types/input.ts"
-import {Link} from "@tanstack/react-router";
 
 export default function CreateAcademicPeriodForm({
 	registerState,
@@ -38,13 +38,16 @@ export default function CreateAcademicPeriodForm({
 			buildToast({
 				id: Date.now(),
 				type: "error",
-				content: `No todos los valores ingresados son válidos. Intenta nuevamente`
+				content: `Asegúrate llenar todos los campos y cumplir con todas las validaciones`
 			})
 		},
 		canSubmitWhenInvalid: false
 	})
-	const { Field  } = form
-	const submissionAttempts = useSelector(form.store, (state) => state.submissionAttempts)
+	const { Field } = form
+	const submissionAttempts = useSelector(
+		form.store,
+		(state) => state.submissionAttempts
+	)
 	return (
 		<form
 			onSubmit={async (e) => {
@@ -131,7 +134,18 @@ export default function CreateAcademicPeriodForm({
 					"flex flex-col gap-4 justify-center items-center w-full h-fit absolute top-[80%]"
 				}
 			>
-				<p>¿Ya tienes cuenta? <Link to={"/login"}><strong className={"cursor-pointer font-medium hover:scale-105 hover:text-primary-400 transition-all duration-300 ease-in-out underline"}>Inicia sesión</strong></Link></p>
+				<p>
+					¿Ya tienes cuenta?{" "}
+					<Link to={"/login"}>
+						<strong
+							className={
+								"cursor-pointer font-medium hover:scale-105 hover:text-primary-400 transition-all duration-300 ease-in-out underline"
+							}
+						>
+							Inicia sesión
+						</strong>
+					</Link>
+				</p>
 				<Button
 					text={"Guardar & Seguir"}
 					type={"submit"}

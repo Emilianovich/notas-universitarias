@@ -250,7 +250,7 @@ export async function buildRequest<T, U>({
 	path,
 	reqBody,
 	includeCredentials
-}: RequestBuilder): Promise<SuccessRes<T> | ErrorRes<U>> {
+}: RequestBuilder): Promise<SuccessRes<T>> {
 	const baseUrl = "http://localhost:3035/api/v1"
 	const url = `${baseUrl}${path}`
 	if (!includeCredentials) {
@@ -262,17 +262,22 @@ export async function buildRequest<T, U>({
 				},
 				body: JSON.stringify(reqBody)
 			})
-			return await req.json()
+			return getResponse<U>(req)
 		} else {
-			const req = await fetch(url)
-			return await req.json()
+			return getResponse<U>(await fetch(url))
 		}
 	} else {
 		if (method === "GET") {
 			const req = await fetch(url, {
 				credentials: "include"
 			})
-			return await req.json()
+			return getResponse<U>(req)
+		} else if (method === "DELETE") {
+			const req = await fetch(url, {
+				credentials: "include",
+				method: "DELETE"
+			})
+			return getResponse<U>(req)
 		} else {
 			const req = await fetch(url, {
 				method,
@@ -282,7 +287,23 @@ export async function buildRequest<T, U>({
 				body: JSON.stringify(reqBody),
 				credentials: "include"
 			})
-			return await req.json()
+			return getResponse<U>(req)
 		}
 	}
+}
+
+export class ServerErrorRes<T> extends Error {
+	errors: T
+	constructor(message: T) {
+		super(JSON.stringify(message))
+		this.name = "ServerErrorRes"
+		this.errors = message
+		Object.setPrototypeOf(this, ServerErrorRes.prototype)
+	}
+}
+
+export async function getResponse<T>(req: Response) {
+	const res = await req.json()
+	if (req.ok) return res
+	throw new ServerErrorRes<T>(res.errors)
 }
