@@ -24,8 +24,8 @@ function RouteComponent() {
 			email: "",
 			password: ""
 		},
-		isFirstHasBeenCompleted: false,
-		isSecondHasBeenCompleted: false
+		isFirstBeenCompleted: false,
+		isSecondBeenCompleted: false
 	})
 	const { isFirstDone, progress } = registerState
 	const totalContainerWidth = 550

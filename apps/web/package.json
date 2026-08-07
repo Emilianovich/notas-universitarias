@@ -14,6 +14,7 @@
 		"test": "vitest run"
 	},
 	"dependencies": {
+		"@notas-universitarias/helpers": "workspace:*",
 		"@notas-universitarias/types": "workspace:*",
 		"@tailwindcss/vite": "^4.1.18",
 		"@tanstack/react-devtools": "latest",

@@ -1,6 +1,6 @@
 import { TanStackDevtools } from "@tanstack/react-devtools"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router"
+import {createRootRoute, HeadContent, Scripts} from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import type { ReactNode } from "react"
 import SettingsProvider from "@/components/context-providers/settings-provider.tsx"
@@ -41,7 +41,9 @@ function RootDocument({ children }: { children: ReactNode }) {
 			<body>
 				<QueryClientProvider client={queryClient}>
 					<SettingsProvider>
-						<ToastProvider>{children}</ToastProvider>
+						<ToastProvider>
+							{children}
+						</ToastProvider>
 					</SettingsProvider>
 				</QueryClientProvider>
 			</body>

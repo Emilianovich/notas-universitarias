@@ -9,7 +9,7 @@ export type InputProps<T> = {
 	error: string | undefined
 	syncValueToState: (e: ChangeEvent<HTMLInputElement>) => void
 	handleBlur: () => void
-	isDirty: boolean
+	isBlurred: boolean
 	color: "#F9FCFC"
 	id: string
 	originallyPassword: boolean
@@ -22,8 +22,8 @@ export type PasswordImageProps = {
 
 export type RegisterState = {
 	isFirstDone: boolean
-	isFirstHasBeenCompleted: boolean
-	isSecondHasBeenCompleted: boolean
+	isFirstBeenCompleted: boolean
+	isSecondBeenCompleted: boolean
 	firstFormContent: {
 		name: string
 		startDate: string
