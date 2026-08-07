@@ -1,8 +1,25 @@
+import type { PetName } from "@notas-universitarias/types"
 import { createContext, useContext } from "react"
+import { Leon, Mila, Nita, type Pet, Spike, Tom } from "@/contexts/settings.ts"
 
 export type PetContextProps = {
 	isHovered: boolean
 	togglePetHover: () => void
+}
+
+export const findPetByName = (name: PetName): Pet => {
+	switch (name) {
+		case "Spike":
+			return Spike
+		case "Mila":
+			return Mila
+		case "Leon":
+			return Leon
+		case "Nita":
+			return Nita
+		case "Tom":
+			return Tom
+	}
 }
 
 export const PetContext = createContext<PetContextProps | null>(null)

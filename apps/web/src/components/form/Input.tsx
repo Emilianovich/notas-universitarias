@@ -1,5 +1,4 @@
 import { useState } from "react"
-import useSettings from "@/contexts/settings.ts"
 import type { InputProps, PasswordImageProps } from "@/types/input.ts"
 
 export default function Input({
@@ -20,27 +19,23 @@ export default function Input({
 		"text" | "password" | "email" | "date"
 	>(type)
 	const bgColor = `bg-[${color}]`
-	const borderColor = error && isBlurred ? "border-red-400" : "transparent"
-	const { fontFamily } = useSettings()
+	const borderColor =
+		error && isBlurred ? "border border-red-400" : "transparent"
 	const maxWidth = 400
 	return (
 		<div className={`grid grid-rows-3 gap-2 relative`} style={{ maxWidth }}>
-			<label
-				style={{ fontFamily, fontSize: 18, marginTop: "1em" }}
-				htmlFor={id}
-			>
+			<label style={{ fontSize: 18, marginTop: "1em" }} htmlFor={id}>
 				{label}
 			</label>
 			<div className={"relative"}>
 				<input
 					id={id}
-					style={{ fontFamily }}
 					name={name}
 					type={currentInputType}
 					onChange={syncValueToState}
 					onBlur={handleBlur}
 					value={value}
-					className={`${bgColor} p-2 w-[400px] h-11.25 rounded-[10px] border outline-none ${borderColor}`}
+					className={`${bgColor} p-2 w-[400px] h-11.25 rounded-[10px] outline-none ${borderColor} shadow-[0px_2px_4px_rgba(0,0,0,0.25)]`}
 					placeholder={placeholder}
 				/>
 				{originallyPassword && (
@@ -60,12 +55,7 @@ export default function Input({
 }
 
 function ErrorMessage({ error }: { error: string }) {
-	const { fontFamily } = useSettings()
-	return (
-		<span style={{ fontFamily }} className={"text-red-400"}>
-			{error}
-		</span>
-	)
+	return <span className={"text-red-400"}>{error}</span>
 }
 
 function PasswordImage({ isOpen, changeType }: PasswordImageProps) {

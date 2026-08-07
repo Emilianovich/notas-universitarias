@@ -1,13 +1,13 @@
+import { buildRequest, ServerErrorRes } from "@notas-universitarias/helpers"
+import type { createUserDto } from "@notas-universitarias/types"
 import { useForm, useSelector } from "@tanstack/react-form"
+import { useMutation } from "@tanstack/react-query"
+import { useNavigate } from "@tanstack/react-router"
 import { z } from "zod"
 import Input from "@/components/form/Input.tsx"
 import Button from "@/components/general/Button.tsx"
 import useToast from "@/contexts/toast.ts"
 import type { RegisterFormProps } from "@/types/input.ts"
-import { useNavigate } from "@tanstack/react-router";
-import type {createUserDto} from "@notas-universitarias/types";
-import {buildRequest, ServerErrorRes} from "@notas-universitarias/helpers";
-import {useMutation} from "@tanstack/react-query";
 
 const userCredentialsSchema = z.object({
 	username: z
@@ -24,8 +24,13 @@ const userCredentialsSchema = z.object({
 	password: z.string().min(1, "Su contraseña debe tener al menos un caracter")
 })
 
-const registerUser = async (payload : z.infer<typeof createUserDto>)=> {
-	return buildRequest<string, string>({ method: "POST", reqBody: payload, path: "/users", includeCredentials: false })
+const registerUser = async (payload: z.infer<typeof createUserDto>) => {
+	return buildRequest<string, string>({
+		method: "POST",
+		reqBody: payload,
+		path: "/users",
+		includeCredentials: false
+	})
 }
 
 export default function UserCredentialsForm({
@@ -38,14 +43,18 @@ export default function UserCredentialsForm({
 	const mutation = useMutation({
 		mutationFn: registerUser,
 		onSuccess: async (data) => {
-			await navigate({ to: "/home/current-period" })
-			buildToast({
-				id: Date.now(),
-				type: "success",
-				content: data.content
-			})
+			setGlobalFormState({ ...registerState, progress: 100 })
+			setTimeout(async () => {
+				await navigate({ to: "/login" })
+				buildToast({
+					id: Date.now(),
+					type: "success",
+					content: data.content
+				})
+			}, 500)
 		},
-		onError: error => {
+		onError: (error) => {
+			setGlobalFormState({ ...registerState, progress: 80 })
 			if (error instanceof ServerErrorRes) {
 				buildToast({
 					id: Date.now(),
@@ -69,25 +78,25 @@ export default function UserCredentialsForm({
 			buildToast({
 				id: Date.now(),
 				type: "error",
-				content: "Tus datos no cumplen con el formato solicitado"
+				content:
+					"Asegúrate llenar todos los campos y cumplir con todas las validaciones"
 			})
 		},
 		onSubmit: async ({ value }) => {
 			const { name, endDate, startDate } = registerState.firstFormContent
 			const { username, email, password } = value
-			const payload : z.infer<typeof createUserDto> =  {
+			const payload: z.infer<typeof createUserDto> = {
 				username,
 				email,
 				password,
 				name,
 				endDate,
-				startDate,
+				startDate
 			}
-			setGlobalFormState({ ...registerState, progress: 100 })
 			mutate(payload)
 		}
 	})
-	const { Field  } = form
+	const { Field } = form
 	const currentUsername = useSelector(
 		form.store,
 		(state) => state.values.username
@@ -97,7 +106,10 @@ export default function UserCredentialsForm({
 		form.store,
 		(state) => state.values.password
 	)
-	const submissionAttempts = useSelector(form.store, (state) => state.submissionAttempts)
+	const submissionAttempts = useSelector(
+		form.store,
+		(state) => state.submissionAttempts
+	)
 	return (
 		<form
 			onSubmit={async (e) => {
@@ -110,7 +122,7 @@ export default function UserCredentialsForm({
 			<Field
 				name={"username"}
 				children={(fieldApi) => {
-					const { errors, isBlurred} = fieldApi.state.meta
+					const { errors, isBlurred } = fieldApi.state.meta
 					const { name, handleBlur, state, handleChange } = fieldApi
 					return (
 						<Input
@@ -176,36 +188,36 @@ export default function UserCredentialsForm({
 					)
 				}}
 			/>
-				<div
-					className={
-						"flex justify-center items-center gap-4 w-full h-fit absolute top-[75%]"
+			<div
+				className={
+					"flex justify-center items-center gap-4 w-full h-fit absolute top-[75%]"
+				}
+			>
+				<Button
+					text={"Volver atrás"}
+					type={"button"}
+					styleType={"primary"}
+					isDisabled={false}
+					clickAction={() =>
+						setGlobalFormState({
+							...registerState,
+							isFirstDone: false,
+							progress: 2,
+							secondFormContent: {
+								username: currentUsername,
+								email: currentEmail,
+								password: currentPassword
+							}
+						})
 					}
-				>
-					<Button
-						text={"Volver atrás"}
-						type={"button"}
-						styleType={"primary"}
-						isDisabled={false}
-						clickAction={() =>
-							setGlobalFormState({
-								...registerState,
-								isFirstDone: false,
-								progress: 2,
-								secondFormContent: {
-									username: currentUsername,
-									email: currentEmail,
-									password: currentPassword
-								}
-							})
-						}
-					/>
-					<Button
-						text={"Registrarme"}
-						type={"submit"}
-						styleType={"primary"}
-						isDisabled={isPending}
-					/>
-				</div>
+				/>
+				<Button
+					text={"Registrarme"}
+					type={"submit"}
+					styleType={"primary"}
+					isDisabled={isPending}
+				/>
+			</div>
 		</form>
 	)
 }

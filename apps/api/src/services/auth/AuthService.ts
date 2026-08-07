@@ -35,11 +35,11 @@ export class AuthService {
 		const session = await this.sessionsRepository.insertOne({
 			issuedAt: new Date(issuedAt),
 			expiresAt: new Date(expiresAt),
-			userId: user._id!,
+			userId: user._id as ObjectId,
 			hash
 		})
 		await this.sessionsRepository.deleteAllSessionsExcept(
-			user._id!,
+			user._id as ObjectId,
 			session.insertedId
 		)
 		return [session.insertedId, sessionHash, cookieMaxAge]

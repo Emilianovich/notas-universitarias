@@ -1,9 +1,6 @@
+import { type LoginDTO, loginDTO } from "@notas-universitarias/types"
 import { Hono } from "hono"
 import { deleteCookie, getCookie, setCookie } from "hono/cookie"
-import {
-	type LoginDTO,
-	loginDTO
-} from "../../../../packages/types/src/dtos/auth/login.js"
 import { getContextVars } from "../helpers/helpers.js"
 import type { MiddlewareVars } from "../index.js"
 import authMiddleware from "../middlewares/auth.js"
@@ -19,7 +16,7 @@ authRoutes.post("/login", ZodMiddleware("json", loginDTO), async (ctx) => {
 	const [sessionId, hash, maxAge] = await authService.login(dto)
 	const sessionCookie = `${sessionId.toString()}.${hash}`
 	setCookie(ctx, env.SESSION_COOKIE_NAME, sessionCookie, {
-		path: "/api",
+		path: "/",
 		secure: env.SESSION_COOKIE_SECURE,
 		sameSite: env.COOKIE_SAME_SITE,
 		httpOnly: true,
@@ -28,7 +25,7 @@ authRoutes.post("/login", ZodMiddleware("json", loginDTO), async (ctx) => {
 	return ctx.json("Greetings and salutations")
 })
 
-authRoutes.post("/logout", authMiddleware, async (ctx) => {
+authRoutes.delete("/logout", authMiddleware, async (ctx) => {
 	const authService = new AuthService(getContextVars(ctx).mongoService)
 	await authService.logout(getContextVars(ctx).userId)
 	if (getCookie(ctx, env.SESSION_COOKIE_NAME)) {

@@ -27,7 +27,7 @@ app.use(
 	"*",
 	cors({
 		origin: env.CORS_ALLOWED_ORIGINS,
-		allowMethods: ["GET", "POST", "PUT"],
+		allowMethods: ["GET", "POST", "PUT", "DELETE"],
 		allowHeaders: ["Content-Type"],
 		credentials: true,
 		maxAge: convertToSeconds({ amount: 1, units: "hour" })

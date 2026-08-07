@@ -15,7 +15,8 @@ export function SettingsIcon() {
 			<img
 				src="/settings-icon.svg"
 				alt="Icono para ir a las configuraciones"
-				className="absolute right-8 top-1/2 -translate-y-1/2 hover:rotate-180 transition-all duration-700 ease-in-out"
+				title={"Configuraciones"}
+				className="hover:rotate-180 transition-all duration-700 ease-in-out"
 				width={35}
 				height={37.06}
 			/>

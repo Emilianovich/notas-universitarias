@@ -121,7 +121,7 @@ export const SettingsContext = createContext<SettingsContextProps | null>(null)
 const useSettings = () => {
 	const context = useContext(SettingsContext)
 	if (!context) {
-		throw new Error("No context provided")
+		throw new Error("No settings context provided")
 	}
 	return context
 }
