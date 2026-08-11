@@ -7,7 +7,9 @@ export type InputProps<T> = {
 	name: string
 	value: T
 	error: string | undefined
-	syncValueToState: (e: ChangeEvent<HTMLInputElement>) => void
+	syncValueToState: (
+		e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+	) => void
 	handleBlur: () => void
 	isBlurred: boolean
 	color: "#F9FCFC"

@@ -1,4 +1,4 @@
-import type { UserPreferences } from "@notas-universitarias/types"
+import type { UserPreferences } from "@notas-universitarias/types/db"
 import type { ObjectId } from "mongodb"
 
 export interface UserDocument {

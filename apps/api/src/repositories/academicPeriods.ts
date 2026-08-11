@@ -1,8 +1,10 @@
 import { updateCourseInstanceFinalGrade } from "@notas-universitarias/helpers"
+import type {
+	AcademicPeriodDocument,
+	CourseInstanceDocument,
+	CreateAcademicPeriodsDto
+} from "@notas-universitarias/types"
 import type { Collection, ObjectId } from "mongodb"
-import type { CreateAcademicPeriodsDto } from "../../../../packages/types/src/dtos/academicPeriods/createAcademicPeriods.js"
-import type { AcademicPeriodDocument } from "../collection-schema/academicPeriods.js"
-import type { CourseInstanceDocument } from "../collection-schema/courseInstances.js"
 import { log } from "../services/logging/LogService.js"
 import { Repository } from "./repository.js"
 
@@ -16,10 +18,12 @@ export class AcademicPeriodsRepository extends Repository<AcademicPeriodDocument
 		const { name, startDate, endDate } = academicPeriod
 		return await this.getCollection().insertOne({
 			name,
-			startDate,
-			endDate,
+			startDate: new Date(startDate),
+			endDate: new Date(endDate),
 			userId,
-			isActive: true
+			isActive: true,
+			courseInstances: [],
+			registeredCourses: []
 		})
 	}
 	async getOneById(id: ObjectId): Promise<AcademicPeriodDocument | null> {
@@ -31,9 +35,10 @@ export class AcademicPeriodsRepository extends Repository<AcademicPeriodDocument
 		await this.finalizeUnactive(userId)
 		return this.getCollection().findOne({ isActive: true, userId })
 	}
-	private async finalizeUnactive(userId: ObjectId) {
+	async finalizeUnactive(userId: ObjectId) {
+		console.log(userId)
 		await this.getCollection().updateMany(
-			{ endDate: { $lt: new Date() }, userId },
+			{ endDate: { $lt: new Date() }, userId, isActive: true },
 			{
 				$set: {
 					isActive: false
@@ -53,7 +58,6 @@ export class AcademicPeriodsRepository extends Repository<AcademicPeriodDocument
 		// const courseInstances: CourseInstanceDocument[] = []
 		academicPeriods.forEach((academicPeriod) => {
 			academicPeriod.courseInstances?.forEach((courseInstance) => {
-				// const { _id, ...rest } = courseInstance
 				updateCourseInstanceFinalGrade(courseInstance)
 			})
 		})

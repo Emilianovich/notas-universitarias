@@ -1,15 +1,30 @@
 import { ServerErrorRes } from "@notas-universitarias/helpers"
-import { type LoginDTO, loginDTO } from "@notas-universitarias/types"
+import {
+	type LoginDTO,
+	loginDTO,
+	ON_SUBMIT_INVALID_MSG
+} from "@notas-universitarias/types"
 import { useForm, useSelector } from "@tanstack/react-form"
 import { useMutation } from "@tanstack/react-query"
 import { Link, useNavigate } from "@tanstack/react-router"
-import Input from "@/components/form/Input.tsx"
+import Input from "@/components/form/general/Input.tsx"
 import Button from "@/components/general/Button.tsx"
 import useToast from "@/contexts/toast.ts"
 import handleLogin from "@/routes/login.tsx"
 
-export default function LoginForm() {
+export type Redirected = {
+	wasRedirected?: "true"
+}
+
+export default function LoginForm({ wasRedirected }: Redirected) {
 	const { buildToast } = useToast()
+	// if (wasRedirected) {
+	// 	buildToast({
+	// 		id: Date.now(),
+	// 		type: "error",
+	// 		content: "No se pudo validar la sesión, vuelva a iniciar sesión"
+	// 	})
+	// }
 	const navigate = useNavigate({ from: "/login" })
 	const mutation = useMutation({
 		mutationFn: handleLogin,
@@ -44,8 +59,7 @@ export default function LoginForm() {
 			buildToast({
 				id: Date.now(),
 				type: "error",
-				content:
-					"Asegúrate llenar todos los campos y cumplir con todas las validaciones"
+				content: ON_SUBMIT_INVALID_MSG
 			})
 		},
 		onSubmit: (value) => {

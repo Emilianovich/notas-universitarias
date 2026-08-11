@@ -25,3 +25,27 @@ export default function Pet() {
 		</div>
 	)
 }
+
+export type PetVariant = {
+	variant: "shocked" | "lost"
+}
+
+export function PetVariant({ variant }: PetVariant) {
+	const { pet } = useSettings()
+	const { shocked, lost, alt } = pet
+	let src: string
+	let preferredWidth: number
+	let aspectRatio: string
+	if (variant === "shocked") {
+		src = shocked.src
+		preferredWidth = shocked.preferredWidth
+		aspectRatio = shocked.aspectRatio
+	} else {
+		src = lost.src
+		preferredWidth = lost.preferredWidth
+		aspectRatio = lost.aspectRatio
+	}
+	return (
+		<img src={src} alt={alt} style={{ width: preferredWidth, aspectRatio }} />
+	)
+}

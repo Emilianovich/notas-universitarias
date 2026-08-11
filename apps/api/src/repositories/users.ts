@@ -1,7 +1,9 @@
-import type { UserPreferences } from "@notas-universitarias/types"
+import type {
+	CreateUserDTO,
+	UserDocument,
+	UserPreferences
+} from "@notas-universitarias/types"
 import type { ObjectId } from "mongodb"
-import type { CreateUserDTO } from "../../../../packages/types/src/dtos/users/createUsers.js"
-import type { UserDocument } from "../collection-schema/users.js"
 import { Repository } from "./repository.js"
 
 export class UsersRepository extends Repository<UserDocument> {

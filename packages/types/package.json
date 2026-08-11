@@ -11,6 +11,7 @@
 		"./helpers": "./src/helpers.ts"
 	},
 	"dependencies": {
+		"mongodb": "^7.3.0",
 		"zod": "^4.4.3"
 	}
 }

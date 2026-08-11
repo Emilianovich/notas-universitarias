@@ -26,8 +26,4 @@ export const createAcademicPeriodsDTO = z
 		error: "La fecha de fin no puede ser menor que la de inicio"
 	})
 
-export type CreateAcademicPeriodsDto = {
-	name: string
-	startDate: Date
-	endDate: Date
-}
+export type CreateAcademicPeriodsDto = z.infer<typeof createAcademicPeriodsDTO>

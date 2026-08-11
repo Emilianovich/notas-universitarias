@@ -1,4 +1,9 @@
-import { type LoginDTO, loginDTO } from "@notas-universitarias/types"
+import {
+	type ChangePasswordDto,
+	changePasswordSchema,
+	type LoginDTO,
+	loginDTO
+} from "@notas-universitarias/types"
 import { Hono } from "hono"
 import { deleteCookie, getCookie, setCookie } from "hono/cookie"
 import { getContextVars } from "../helpers/helpers.js"
@@ -34,4 +39,16 @@ authRoutes.delete("/logout", authMiddleware, async (ctx) => {
 	return ctx.json("Sesión cerrada exitosamente")
 })
 
+authRoutes.put(
+	"/change-password",
+	authMiddleware,
+	ZodMiddleware("json", changePasswordSchema),
+	async (ctx) => {
+		const { mongoService, userId } = getContextVars(ctx)
+		const authService = new AuthService(mongoService)
+		const dto: ChangePasswordDto = ctx.req.valid("json")
+		await authService.handlePasswordChange(userId, dto)
+		return ctx.json("Contraseña actualizada exitosamente")
+	}
+)
 export default authRoutes

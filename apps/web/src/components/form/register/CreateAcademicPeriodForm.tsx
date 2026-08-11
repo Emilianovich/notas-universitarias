@@ -1,7 +1,7 @@
 import { createAcademicPeriodsDTO } from "@notas-universitarias/types"
 import { revalidateLogic, useForm, useSelector } from "@tanstack/react-form"
 import { Link } from "@tanstack/react-router"
-import Input from "@/components/form/Input.tsx"
+import Input from "@/components/form/general/Input.tsx"
 import Button from "@/components/general/Button.tsx"
 import useToast from "@/contexts/toast.ts"
 import type { RegisterFormProps } from "@/types/input.ts"

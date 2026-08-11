@@ -1,15 +1,29 @@
-import argon2, { argon2id } from "argon2"
+import type {
+	AppTheme,
+	CreateAcademicPeriodsDto,
+	CreateUserDTO,
+	FontFamily,
+	PetName,
+	UpdateUserDTO,
+	UserDocument
+} from "@notas-universitarias/types"
+import argon2 from "argon2"
 import { HTTPException } from "hono/http-exception"
 import type { ObjectId } from "mongodb"
-import type { CreateAcademicPeriodsDto } from "../../../../../packages/types/src/dtos/academicPeriods/createAcademicPeriods.js"
-import type { CreateUserDTO } from "../../../../../packages/types/src/dtos/users/createUsers.js"
-import type { UpdateUserDTO } from "../../../../../packages/types/src/dtos/users/updateUsers.js"
-import type { UserDocument } from "../../collection-schema/users.js"
+
 import { mapUpdateUserDtoToUserDocument } from "../../helpers/helpers.js"
 import type { MongoService } from "../../modules/db/MongoService.js"
 import { AcademicPeriodsRepository } from "../../repositories/academicPeriods.js"
 import { UsersRepository } from "../../repositories/users.js"
 import { log } from "../logging/LogService.js"
+
+type UserToCompare = {
+	name: string
+	email: string
+	fontFamily: FontFamily
+	theme: AppTheme
+	petName: PetName
+}
 
 export class UserService {
 	private readonly userRepository: UsersRepository
@@ -62,15 +76,41 @@ export class UserService {
 			throw new HTTPException(404, { message: "No se encontró un usuario" })
 		if (
 			dto.email &&
-			(await this.userRepository.findByEmail(dto.email)) !== null
+			(await this.userRepository.findByEmail(dto.email)) !== null &&
+			dto.email !== currentUser.email
 		) {
 			throw new HTTPException(404, {
 				message: "Ya existe un usuario con ese correo"
 			})
 		}
-		if (dto.password) {
-			dto.password = await argon2.hash(dto.password, { type: argon2id })
+		// TODO: find a more elegant way of doing this
+		const userToCompare = {
+			name: dto.name,
+			email: dto.email,
+			fontFamily: dto.fontFamily,
+			petName: dto.petName,
+			theme: dto.theme
 		}
+		const user = {
+			name: currentUser.name,
+			email: currentUser.email,
+			fontFamily: currentUser.preferences.fontFamily,
+			petName: currentUser.preferences.petName,
+			theme: currentUser.preferences.theme
+		}
+		const equalValues: string[] = []
+		for (const key in userToCompare) {
+			if (
+				userToCompare[key as keyof UserToCompare] ===
+				user[key as keyof UserToCompare]
+			) {
+				equalValues.push(user[key as keyof UserToCompare])
+			}
+		}
+		if (equalValues.length === Object.keys(userToCompare).length)
+			throw new HTTPException(400, {
+				message: "Actualiza por lo menos una de tus configuraciones"
+			})
 		const updatedUser = mapUpdateUserDtoToUserDocument(currentUser, dto)
 		await this.userRepository.updateOne(userId, updatedUser)
 	}

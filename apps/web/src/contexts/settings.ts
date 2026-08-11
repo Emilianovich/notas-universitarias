@@ -1,26 +1,21 @@
 import type { AppTheme, FontFamily, PetName } from "@notas-universitarias/types"
 import { createContext, useContext } from "react"
 
-export type UserSettings = Omit<SettingsContextProps, "pet"> & {
-	selectedPet: string
-	pets: Pet[]
+export type UserSettings = Omit<SettingsProviderProps, "setUserSettings">
+
+type PetImageData = {
+	src: string
+	aspectRatio: string
+	preferredWidth: number
 }
 
 export interface Pet {
 	name: PetName
 	alt: string
-	awake: {
-		src: string
-		aspectRatio: string
-		preferredWidth: number
-	}
-	sleeping: {
-		src: string
-		aspectRatio: string
-		preferredWidth: number
-	}
-	sleepingSrc: string
-	awakeSrc: string
+	awake: PetImageData
+	sleeping: PetImageData
+	shocked: PetImageData
+	lost: PetImageData
 }
 
 export type PetProps = Pet & { togglePetFocus: () => void; isFocused: boolean }
@@ -38,8 +33,16 @@ export const Spike: Pet = {
 		aspectRatio: "1024 / 835",
 		preferredWidth: 160
 	},
-	sleepingSrc: "/spike-sleeping.png",
-	awakeSrc: "/spike-awake.png"
+	shocked: {
+		src: "/spike-shocked.png",
+		aspectRatio: "1 / 1",
+		preferredWidth: 160
+	},
+	lost: {
+		src: "/spike-lost.png",
+		aspectRatio: "1 / 1",
+		preferredWidth: 160
+	}
 }
 
 export const Leon: Pet = {
@@ -55,8 +58,16 @@ export const Leon: Pet = {
 		aspectRatio: "3 / 2",
 		preferredWidth: 160
 	},
-	sleepingSrc: "/leon-sleeping.png",
-	awakeSrc: "/leon-awake.png"
+	shocked: {
+		src: "/leon-shocked.png",
+		aspectRatio: "1 / 1",
+		preferredWidth: 155
+	},
+	lost: {
+		src: "/leon-lost.png",
+		aspectRatio: "1 / 1",
+		preferredWidth: 155
+	}
 }
 
 export const Nita: Pet = {
@@ -72,8 +83,16 @@ export const Nita: Pet = {
 		aspectRatio: "3 / 2",
 		preferredWidth: 160
 	},
-	awakeSrc: "/nita-awake.png",
-	sleepingSrc: "/nita-sleeping.png"
+	shocked: {
+		src: "/nita-shocked.png",
+		aspectRatio: "3 / 2",
+		preferredWidth: 170
+	},
+	lost: {
+		src: "/nita-lost.png",
+		aspectRatio: "3 / 2",
+		preferredWidth: 170
+	}
 }
 
 export const Tom: Pet = {
@@ -89,8 +108,16 @@ export const Tom: Pet = {
 		aspectRatio: "1 / 1",
 		preferredWidth: 175
 	},
-	awakeSrc: "/tom-awake.png",
-	sleepingSrc: "/tom-sleeping.png"
+	shocked: {
+		src: "/tom-shocked.png",
+		aspectRatio: "1 / 1",
+		preferredWidth: 155
+	},
+	lost: {
+		src: "/tom-lost.png",
+		aspectRatio: "1 / 1",
+		preferredWidth: 155
+	}
 }
 
 export const Mila: Pet = {
@@ -106,17 +133,29 @@ export const Mila: Pet = {
 		aspectRatio: "1 / 1",
 		preferredWidth: 160
 	},
-	awakeSrc: "/mila-awake.png",
-	sleepingSrc: "/mila-sleeping.png"
+	shocked: {
+		src: "/mila-shocked.png",
+		aspectRatio: "1 / 1",
+		preferredWidth: 150
+	},
+	lost: {
+		src: "/mila-lost.png",
+		aspectRatio: "1 / 1",
+		preferredWidth: 150
+	}
 }
 
-export type SettingsContextProps = {
+export type SettingsProviderProps = {
 	fontFamily: FontFamily
 	theme: AppTheme
 	pet: Pet
 }
 
-export const SettingsContext = createContext<SettingsContextProps | null>(null)
+export type SettingsContextType = SettingsProviderProps & {
+	changeUserSettings: (data: UserSettings) => void
+}
+
+export const SettingsContext = createContext<SettingsContextType | null>(null)
 
 const useSettings = () => {
 	const context = useContext(SettingsContext)

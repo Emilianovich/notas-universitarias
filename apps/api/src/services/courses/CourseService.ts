@@ -1,12 +1,16 @@
 import { updateCourseAverageGrade } from "@notas-universitarias/helpers"
-import type { Course, CourseInstance } from "@notas-universitarias/types"
+import type {
+	AcademicPeriodDocument,
+	Course,
+	CourseDocument,
+	CourseInstance,
+	CourseInstanceDocument,
+	CourseInstanceToBeCreated,
+	UpdateCourseInstanceDto
+} from "@notas-universitarias/types"
 import { HTTPException } from "hono/http-exception"
 import type { ObjectId } from "mongodb"
-import type { CourseInstanceToBeCreated } from "../../../../../packages/types/src/dtos/courseInstances/createCourseInstances.js"
-import type { UpdateCourseInstanceDto } from "../../../../../packages/types/src/dtos/courseInstances/updateCourseInstances.js"
-import type { AcademicPeriodDocument } from "../../collection-schema/academicPeriods.js"
-import type { CourseInstanceDocument } from "../../collection-schema/courseInstances.js"
-import type { CourseDocument } from "../../collection-schema/courses.js"
+
 import getValidObjectId, {
 	mapCreateCourseInstanceToDTO
 } from "../../helpers/helpers.js"
@@ -48,7 +52,7 @@ export class CourseService {
 					message: "No se encontró una materia registrada con ese id"
 				})
 			if (
-				currentAcademicPeriod.registeredCourses?.some((id) =>
+				currentAcademicPeriod.registeredCourses?.some((id: ObjectId) =>
 					id.equals(existingCourse?._id)
 				)
 			) {
@@ -179,19 +183,21 @@ export class CourseService {
 				message: "Ocurrió un error al actualizar, intente nuevamente"
 			})
 		const updatedPeriodCourseInstances: CourseInstanceDocument[] = []
-		academicPeriod.courseInstances.forEach((instance) => {
-			const { _id, ...rest } = instance
-			if (!_id?.equals(updatedCourseInstance._id)) {
-				updatedPeriodCourseInstances.push({
-					_id,
-					...rest
-				})
-			} else {
-				updatedPeriodCourseInstances.push({
-					...updatedCourseInstance
-				})
+		academicPeriod.courseInstances.forEach(
+			(instance: CourseInstanceDocument) => {
+				const { _id, ...rest } = instance
+				if (!_id?.equals(updatedCourseInstance._id)) {
+					updatedPeriodCourseInstances.push({
+						_id,
+						...rest
+					})
+				} else {
+					updatedPeriodCourseInstances.push({
+						...updatedCourseInstance
+					})
+				}
 			}
-		})
+		)
 		const updatedAcademicPeriod: AcademicPeriodDocument = {
 			...academicPeriod,
 			courseInstances: updatedPeriodCourseInstances
