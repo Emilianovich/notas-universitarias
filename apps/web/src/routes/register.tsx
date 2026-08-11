@@ -5,11 +5,17 @@ import CreateAcademicPeriodForm from "@/components/form/register/CreateAcademicP
 import UserCredentialsForm from "@/components/form/register/UserCredentialsForm.tsx"
 import Content from "@/components/general/Content"
 import ProgressBar from "@/components/ui/ProgressBar.tsx"
-import useSettings from "@/contexts/settings.ts"
 import type { RegisterState } from "@/types/input.ts"
 
 export const Route = createFileRoute("/register")({
-	component: RouteComponent
+	component: RouteComponent,
+	head: () => ({
+		meta: [
+			{
+				title: "Crear cuenta"
+			}
+		]
+	})
 })
 
 function RouteComponent() {
@@ -31,7 +37,6 @@ function RouteComponent() {
 	})
 	const { isFirstDone, progress } = registerState
 	const totalContainerWidth = 550
-	const { fontFamily } = useSettings()
 	// useEffect(() => {
 	// 	const interval = setInterval(() => {
 	// 		setRegisterState(prevState =>  ({...prevState, progress: prevState.progress + 2.5}))
@@ -46,7 +51,7 @@ function RouteComponent() {
 						className={
 							"relative flex flex-col gap-8 bg-tertiary rounded-[10px] shadow-[0px_4px_10px_2px_rgba(0,0,0,0.25)]"
 						}
-						style={{ width: totalContainerWidth, fontFamily }}
+						style={{ width: totalContainerWidth }}
 					>
 						{!isFirstDone && (
 							<h1 className={"mt-10 text-2xl text-center"}>

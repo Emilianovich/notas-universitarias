@@ -1,9 +1,10 @@
 import { addDate, convertToSeconds } from "@notas-universitarias/helpers"
+import type { ChangePasswordDto, LoginDTO } from "@notas-universitarias/types"
 import argon2, { argon2id } from "argon2"
 import { HTTPException } from "hono/http-exception"
 import { ObjectId } from "mongodb"
-import type { LoginDTO } from "../../../../../packages/types/src/dtos/auth/login.js"
 import type { MongoService } from "../../modules/db/MongoService.js"
+import { AcademicPeriodsRepository } from "../../repositories/academicPeriods.js"
 import { SessionsRepository } from "../../repositories/sessions.js"
 import { UsersRepository } from "../../repositories/users.js"
 import { log } from "../logging/LogService.js"
@@ -11,9 +12,11 @@ import { log } from "../logging/LogService.js"
 export class AuthService {
 	private sessionsRepository: SessionsRepository
 	private usersRepository: UsersRepository
+	private academicPeriodsRepository: AcademicPeriodsRepository
 	constructor(mongoService: MongoService) {
 		this.sessionsRepository = new SessionsRepository(mongoService)
 		this.usersRepository = new UsersRepository(mongoService)
+		this.academicPeriodsRepository = new AcademicPeriodsRepository(mongoService)
 	}
 	async login(dto: LoginDTO): Promise<[ObjectId, string, number]> {
 		const user = await this.usersRepository.findByEmail(dto.email)
@@ -26,6 +29,7 @@ export class AuthService {
 			throw new HTTPException(400, {
 				message: "Correo o contraseña incorrectos"
 			})
+		await this.sessionsRepository.deleteAllUserSessions(user._id as ObjectId)
 		const issuedAt = Date.now()
 		const cookieMaxAge = convertToSeconds({ amount: 1, units: "days" })
 		const expiresAt = addDate({ date: Date.now(), amount: 1, units: "days" })
@@ -42,6 +46,7 @@ export class AuthService {
 			user._id as ObjectId,
 			session.insertedId
 		)
+		await this.academicPeriodsRepository.finalizeUnactive(user._id as ObjectId)
 		return [session.insertedId, sessionHash, cookieMaxAge]
 	}
 	async validateSession(sessionId: string, rawHash: string): Promise<ObjectId> {
@@ -63,5 +68,18 @@ export class AuthService {
 	}
 	async logout(userId: ObjectId): Promise<void> {
 		await this.sessionsRepository.deleteAllUserSessions(userId)
+	}
+	async handlePasswordChange(userId: ObjectId, dto: ChangePasswordDto) {
+		const user = await this.usersRepository.findById(userId)
+		if (!user)
+			throw new HTTPException(404, {
+				message: "No se encontró el usuario especificado"
+			})
+		if (await argon2.verify(user.password, dto.password))
+			throw new HTTPException(400, {
+				message: "Ingresa una contraseña distinta a la anterior"
+			})
+		user.password = await argon2.hash(dto.password, { type: argon2.argon2id })
+		await this.usersRepository.updateOne(userId, user)
 	}
 }

@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react"
-import useSettings from "@/contexts/settings.ts"
 import type { ToastProps } from "@/contexts/toast.ts"
 
 export default function Toast({ type, content, removeToast, id }: ToastProps) {
 	const [shouldVanish, setShouldVanish] = useState(false)
-	// const startAnimation = shouldVanish
-	const { fontFamily } = useSettings()
 	useEffect(() => {
 		const vanishTimeout = setTimeout(() => {
 			setShouldVanish(true)
@@ -53,7 +50,6 @@ export default function Toast({ type, content, removeToast, id }: ToastProps) {
 	return (
 		<div
 			className={`${appliedStyles} shadow-[0px_5px_2px_2px_rgba(0,0,0,0.25)] rounded-[40px] w-100 h-25 p-2 flex flex-col gap-2 ${shouldVanish ? "translate-x-[-125%]" : "toast-fade-in-animation"} duration-700 transition-all ease-in-out`}
-			style={{ fontFamily }}
 			onTransitionEnd={(event) => {
 				if (event.propertyName !== "transform") return
 				removeToast(id)

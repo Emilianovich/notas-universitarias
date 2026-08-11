@@ -1,5 +1,5 @@
 import createUserPreferencesSchema from "./createSettings"
 
-const updateUserPreferences = createUserPreferencesSchema.partial()
+const updateUserPreferences = createUserPreferencesSchema
 
 export default updateUserPreferences

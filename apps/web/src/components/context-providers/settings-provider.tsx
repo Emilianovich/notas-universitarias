@@ -5,8 +5,9 @@ import { type ReactNode, useState } from "react"
 import { findPetByName } from "@/contexts/pet.ts"
 import {
 	SettingsContext,
-	type SettingsContextProps,
-	Spike
+	type SettingsProviderProps,
+	Spike,
+	type UserSettings
 } from "@/contexts/settings.ts"
 
 type User = {
@@ -17,7 +18,7 @@ type User = {
 	}
 }
 
-const getUserPreferences = async () => {
+export const getUserPreferences = async () => {
 	return buildRequest<User, string>({
 		includeCredentials: true,
 		path: "/users",
@@ -31,7 +32,7 @@ export default function SettingsProvider({
 }: {
 	children: ReactNode
 }) {
-	let currentSettings: SettingsContextProps = {
+	let currentSettings: SettingsProviderProps = {
 		fontFamily: "Arima",
 		pet: Spike,
 		theme: "dark"
@@ -50,10 +51,13 @@ export default function SettingsProvider({
 		const pet = findPetByName(petName)
 		currentSettings = { fontFamily: fontFamily, theme, pet }
 	}
-	const [userSettings, _setUserSettings] =
-		useState<SettingsContextProps>(currentSettings)
+	const [userSettings, setUserSettings] =
+		useState<SettingsProviderProps>(currentSettings)
+	const changeUserSettings = (newSettings: UserSettings) => {
+		setUserSettings(newSettings)
+	}
 	return (
-		<SettingsContext.Provider value={userSettings}>
+		<SettingsContext.Provider value={{ ...userSettings, changeUserSettings }}>
 			{children}
 		</SettingsContext.Provider>
 	)

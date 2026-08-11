@@ -1,16 +1,14 @@
 import type {
 	CourseBreakdown,
-	CourseInstance
+	CourseInstance,
+	CourseInstanceToBeCreated,
+	CreatingCourseInstanceBreakdown,
+	UpdateCourseInstanceDto,
+	UpdateUserDTO
 } from "@notas-universitarias/types"
 import type { Context } from "hono"
 import { HTTPException } from "hono/http-exception"
 import { ObjectId } from "mongodb"
-import type {
-	CourseInstanceToBeCreated,
-	CreatingCourseInstanceBreakdown
-} from "../../../../packages/types/src/dtos/courseInstances/createCourseInstances.js"
-import type { UpdateCourseInstanceDto } from "../../../../packages/types/src/dtos/courseInstances/updateCourseInstances.js"
-import type { UpdateUserDTO } from "../../../../packages/types/src/dtos/users/updateUsers.js"
 import type { CourseInstanceDocument } from "../collection-schema/courseInstances.js"
 import type { UserDocument } from "../collection-schema/users.js"
 import type { MiddlewareVars } from "../index.js"
@@ -111,7 +109,7 @@ export function mapUpdateUserDtoToUserDocument(
 	return {
 		name: dto.name ?? currentUser.name,
 		password: dto.password ?? currentUser.password,
-		email: dto.email ?? currentUser.email,
+		email: dto.email.toLowerCase() ?? currentUser.email,
 		preferences: {
 			petName: dto.petName ?? currentUser.preferences.petName,
 			theme: dto.theme ?? currentUser.preferences.theme,

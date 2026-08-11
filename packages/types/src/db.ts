@@ -3,8 +3,7 @@ export type CourseBreakdownEntry = {
 	rawScore: number
 	maxScore: number
 }
-/* If is not a dedicated lab, has no entries and breakdowns, the gradedOver must be specified */
-/* Add validation so the sum of breakdown percentages adds to 1 */
+
 export type CourseBreakdown = {
 	name: string
 	percentage: number
@@ -41,13 +40,11 @@ export type ValidCollections =
 	| "courseInstances"
 	| "courses"
 	| "userPreferences"
-
 export type UserPreferences = {
 	fontFamily: FontFamily
 	theme: AppTheme
 	petName: PetName
 }
-
 export type FontFamily =
 	| "Google Sans Code"
 	| "Arima"
@@ -58,3 +55,14 @@ export type FontFamily =
 	| "Dancing Script"
 export type AppTheme = "dark" | "light"
 export type PetName = "Spike" | "Leon" | "Tom" | "Nita" | "Mila"
+export type CurrentAcademicPeriod = {
+	name: string
+	startDate: Date
+	endDate: Date
+	courseInstances: CurrentAcademicPeriodSubjects[]
+	isActive: boolean
+}
+export type CurrentAcademicPeriodSubjects = {
+	id: string
+	name: string
+}

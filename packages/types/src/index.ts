@@ -9,8 +9,11 @@ type BaseRes = {
 	statusCode: number
 	issuedAt: string
 }
+export const ON_SUBMIT_INVALID_MSG =
+	"Asegúrate llenar todos los campos y cumplir con todas las validaciones"
 export type SuccessRes<T> = BaseRes & { content: T }
 export type ErrorRes<T> = BaseRes & { errors: T }
-export * from "./db"
+export * from "./db.js"
+export * from "./document-schemas/index.js"
 export * from "./dtos/index.js"
-export * from "./helpers"
+export * from "./helpers.js"

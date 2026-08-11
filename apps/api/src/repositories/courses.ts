@@ -1,8 +1,12 @@
-import type { Course, CourseInstance } from "@notas-universitarias/types"
+import type {
+	Course,
+	CourseDocument,
+	CourseInstance,
+	CourseInstanceDocument
+} from "@notas-universitarias/types"
 import { HTTPException } from "hono/http-exception"
 import type { Collection, ObjectId, UpdateResult } from "mongodb"
-import type { CourseInstanceDocument } from "../collection-schema/courseInstances.js"
-import type { CourseDocument } from "../collection-schema/courses.js"
+
 import { CourseInstancesRepository } from "./courseInstances.js"
 import { Repository } from "./repository.js"
 
@@ -81,6 +85,15 @@ export class CoursesRepository extends Repository<CourseDocument> {
 			const { _id, ...rest } = courseInstance
 			return rest
 		})
+	}
+
+	async getCourseNameByCourseInstanceId(
+		courseInstanceId: ObjectId
+	): Promise<string | undefined> {
+		const course = await this.getCollection().findOne({
+			courseInstances: courseInstanceId
+		})
+		return course?.name
 	}
 
 	async updateCourse(

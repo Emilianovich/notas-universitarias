@@ -12,8 +12,7 @@ const createUserPreferencesSchema = z.strictObject({
 			"Dancing Script"
 		],
 		{
-			error:
-				"Se requiere una familia tipográfica válida ('Google Sans Code', 'Arima', 'Amiko', 'DynaPuff', 'Libertinus Math', 'Nunito' o 'Dancing Script')"
+			error: "Seleccione una familia tipográfica permitida"
 		}
 	),
 
@@ -22,8 +21,7 @@ const createUserPreferencesSchema = z.strictObject({
 	}),
 
 	petName: z.enum(["Spike", "Leon", "Tom", "Nita", "Mila"], {
-		error:
-			"Se requiere un nombre de mascota válido ('Spike', 'Leon', 'Tom', 'Nita' o 'Mila')"
+		error: "'Spike', 'Leon', 'Tom', 'Nita' o 'Mila' son las mascotas permitidas"
 	})
 })
 

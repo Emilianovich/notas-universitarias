@@ -1,0 +1,76 @@
+import type { AppTheme, FontFamily, PetName } from "@notas-universitarias/types"
+import GeneralInputContainer from "@/components/form/general/GeneralInputContainer.tsx"
+import type { InputProps } from "@/types/input.ts"
+
+export const allowedFontFamilies: Set<FontFamily> = new Set([
+	"Google Sans Code",
+	"Arima",
+	"Amiko",
+	"DynaPuff",
+	"Libertinus Math",
+	"Nunito",
+	"Dancing Script"
+])
+
+export const allowedThemes: Set<AppTheme> = new Set(["dark", "light"])
+
+export const allowedPets: Set<PetName> = new Set([
+	"Tom",
+	"Spike",
+	"Leon",
+	"Mila",
+	"Nita"
+])
+
+type DropdownMenuProps<T> = {
+	selectedItem: T
+	iterableItems: Set<T>
+} & Omit<
+	InputProps<string>,
+	"originallyPassword" | "type" | "placeholder" | "value"
+>
+
+export default function DropdownMenu<
+	T extends string | number | readonly string[] | undefined
+>({
+	selectedItem,
+	iterableItems,
+	id,
+	isBlurred,
+	label,
+	error,
+	handleBlur,
+	syncValueToState
+}: DropdownMenuProps<T>) {
+	const borderColor =
+		error && isBlurred ? "border border-red-400" : "transparent"
+	return (
+		<GeneralInputContainer
+			labelText={label}
+			inputId={id}
+			maxWidth={400}
+			isBlurred={isBlurred}
+			input={
+				<div className={"w-fit h-fit relative"}>
+					<select
+						className={`p-2 w-100 h-11.25 rounded-[10px] outline-none shadow-[0px_2px_4px_rgba(0,0,0,0.25)] ${borderColor}`}
+						onBlur={handleBlur}
+						onChange={syncValueToState}
+						defaultValue={selectedItem}
+					>
+						{[...iterableItems].map((item, i) => (
+							<option
+								key={`${item}-${i}`}
+								value={item}
+								selected={selectedItem === item}
+							>
+								{item}
+							</option>
+						))}
+					</select>
+				</div>
+			}
+			error={error}
+		/>
+	)
+}

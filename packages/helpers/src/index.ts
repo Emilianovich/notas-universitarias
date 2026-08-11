@@ -3,7 +3,6 @@ import type {
 	CourseBreakdown,
 	CourseBreakdownEntry,
 	CourseInstance,
-	ErrorRes,
 	GradeLetter,
 	PersonFullName,
 	RemoveElementType,
@@ -306,4 +305,8 @@ export async function getResponse<T>(req: Response) {
 	const res = await req.json()
 	if (req.ok) return res
 	throw new ServerErrorRes<T>(res.errors)
+}
+
+export function getLastElementFromArray<T>(array: T[]) {
+	return array[array.length - 1]
 }
