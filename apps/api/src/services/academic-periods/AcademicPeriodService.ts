@@ -164,8 +164,8 @@ export class AcademicPeriodService {
 					updatedAcademicPeriod
 				)
 			}
-			console.info(courseInstances)
 			preparedAcademicPeriods.push({
+				_id: period._id as ObjectId,
 				name: period.name,
 				startDate: period.startDate,
 				endDate: period.endDate,

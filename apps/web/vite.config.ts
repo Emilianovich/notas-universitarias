@@ -8,7 +8,8 @@ import { defineConfig } from "vite"
 
 const config = defineConfig({
 	resolve: { tsconfigPaths: true },
-	plugins: [devtools(), tailwindcss(), tanstackStart(), viteReact()]
+	plugins: [devtools(), tailwindcss(), tanstackStart(), viteReact()],
+	clearScreen: true
 })
 
 export default config

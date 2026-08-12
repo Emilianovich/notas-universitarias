@@ -4,7 +4,6 @@ import { getContextVars } from "../helpers/helpers.js"
 import authMiddleware from "../middlewares/auth.js"
 import { ZodMiddleware } from "../middlewares/zod.js"
 import { AcademicPeriodService } from "../services/academic-periods/AcademicPeriodService.js"
-import { log } from "../services/logging/LogService.js"
 
 const academicPeriodsRoutes = new Hono()
 	.basePath("/academic-periods")
@@ -25,7 +24,6 @@ academicPeriodsRoutes.post(
 	ZodMiddleware("json", createAcademicPeriodsDTO),
 	async (ctx) => {
 		const { userId } = getContextVars(ctx)
-		log("info", `User id ${userId}`)
 		const academicPeriodService = new AcademicPeriodService(
 			getContextVars(ctx).mongoService
 		)
@@ -33,9 +31,10 @@ academicPeriodsRoutes.post(
 		const { name, startDate, endDate } = rawDTO
 		const dto = {
 			name,
-			startDate: new Date(startDate),
-			endDate: new Date(endDate)
+			startDate,
+			endDate
 		}
+		// REVIEW
 		const content = await academicPeriodService.createAcademicPeriod(
 			dto,
 			userId

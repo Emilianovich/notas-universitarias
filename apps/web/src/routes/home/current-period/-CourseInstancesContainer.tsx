@@ -34,7 +34,9 @@ export function ChildCourseContainerProps({
 export default function CourseInstancesContainer({
 	isActive,
 	courseInstances,
-	name
+	name,
+	startDate,
+	endDate
 }: CurrentAcademicPeriod) {
 	const navigate = useNavigate({ from: "/home/current-period/" })
 	const registeredCourseInstances = courseInstances.map(
@@ -45,7 +47,7 @@ export default function CourseInstancesContainer({
 				key={`${instance.id}-${i}`}
 				navigateTo={() =>
 					navigate({
-						to: "course-instance/$courseInstanceId",
+						to: "/home/course-instance/edit/$courseInstanceId",
 						params: { courseInstanceId: instance.id }
 					})
 				}
@@ -55,7 +57,20 @@ export default function CourseInstancesContainer({
 	return (
 		<section className={"flex flex-col items-center justify-center gap-10"}>
 			<h1 className={"text-4xl font-bold text-center text-primary-500 mb-8"}>
-				{!name.trim().length ? "Sin periodo académico registrado" : name}
+				{!name.trim().length
+					? "Sin periodo académico registrado"
+					: `${name} - ${new Intl.DateTimeFormat(navigator.language, {
+							year: "numeric",
+							month: "2-digit",
+							day: "2-digit"
+						}).format(new Date(startDate))} al ${new Intl.DateTimeFormat(
+							navigator.language,
+							{
+								year: "numeric",
+								month: "2-digit",
+								day: "2-digit"
+							}
+						).format(new Date(endDate))}`}
 			</h1>
 			{!isActive ? (
 				<ChildCourseContainerProps

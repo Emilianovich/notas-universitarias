@@ -55,6 +55,9 @@ function RouteComponent() {
 		queryKey: ["userPreferences"],
 		queryFn: getUserPreferences
 	})
+	const { user } = data.content
+	const { name, email, preferences } = user
+	const { petName, theme, fontFamily } = preferences
 	const { buildToast } = useToast()
 	const { changeUserSettings } = useSettings()
 	const navigate = useNavigate({ from: "/home/settings/" })
@@ -77,14 +80,8 @@ function RouteComponent() {
 			})
 		}
 	})
-	const {
-		mutate,
-		isPending: isUpdatePending,
-		isSuccess: isUpdateSuccess
-	} = mutation
-	const { user } = data.content
-	const { name, email, preferences } = user
-	const { petName, theme, fontFamily } = preferences
+	const { mutate } = mutation
+
 	const form = useForm({
 		validators: {
 			onBlur: updateUserDTO
@@ -104,17 +101,16 @@ function RouteComponent() {
 			})
 		},
 		onSubmit: ({ value }) => {
-			const { theme, petName, fontFamily } = value
-			const pet = findPetByName(petName)
-			console.log(value)
-			mutate(value)
-			if (isUpdateSuccess) {
-				changeUserSettings({
-					theme,
-					pet,
-					fontFamily
-				})
-			}
+			mutate(value, {
+				onSuccess: () => {
+					const pet = findPetByName(value.petName)
+					changeUserSettings({
+						theme: value.theme,
+						pet,
+						fontFamily: value.fontFamily
+					})
+				}
+			})
 		}
 	})
 	const { Field } = form
@@ -318,7 +314,7 @@ function RouteComponent() {
 							}}
 						/>
 					</SettingsContainer>
-					<div className={"w-fil flex justify-center items-center"}>
+					<div className={"w-full flex justify-center items-center"}>
 						<Button
 							text={"Guardar preferencias"}
 							type={"submit"}
