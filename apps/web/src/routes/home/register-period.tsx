@@ -41,7 +41,7 @@ function RegisterPeriodPage() {
 	return (
 		<main className={"flex flex-col justify-center items-center w-full gap-8"}>
 			{isSuccess && data.content.isActive && (
-				<h1 className={"text-4xl text-primary-500"}>
+				<h1 className={"text-2xl text-primary-500"}>
 					El periodo académico actual tiene que finalizar para registrar uno
 					nuevo
 				</h1>

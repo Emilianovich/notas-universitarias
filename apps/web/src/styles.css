@@ -29,6 +29,7 @@
 	grid-template-areas:
 		"header header"
 		"main main";
+	background-color: var(--color-tertiary);
 }
 
 nav {

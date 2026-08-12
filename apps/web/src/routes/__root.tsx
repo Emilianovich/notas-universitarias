@@ -3,7 +3,7 @@ import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router"
 import type { ReactNode } from "react"
 import appCss from "../styles.css?url"
 
-const queryClient = new QueryClient()
+export const queryClient = new QueryClient()
 export const Route = createRootRoute({
 	head: () => ({
 		meta: [

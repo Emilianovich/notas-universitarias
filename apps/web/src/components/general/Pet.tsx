@@ -3,9 +3,9 @@ import usePet from "@/contexts/pet.ts"
 import useSettings from "@/contexts/settings.ts"
 
 export default function Pet() {
-	const { togglePetHover, isHovered } = usePet()
 	const { pet } = useSettings()
 	const { alt, awake, sleeping } = pet
+	const { togglePetHover, isHovered } = usePet()
 	return (
 		<div
 			className={`fixed flex justify-evenly gap-4 items-center p-4 bottom-4 right-8`}

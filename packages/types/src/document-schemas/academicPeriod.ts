@@ -15,6 +15,7 @@ interface AcademicPeriodInterface {
 export type AcademicPeriodDocument = AcademicPeriod & AcademicPeriodInterface
 
 export type AcademicPeriodPresentation = {
+	_id: ObjectId
 	name: string
 	startDate: Date
 	endDate: Date
