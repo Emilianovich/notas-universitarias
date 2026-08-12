@@ -11,8 +11,9 @@
 @theme {
 	--color-primary-300: #057e7e;
 	--color-primary-400: #035151;
-	--color-primary-500: #011e1e;
-	--color-primary-600: #010f0f;
+	--color-primary-500: #022525;
+	--color-primary-600: #011e1e;
+	--color-primary-700: #010f0f;
 	--color-secondary: #e6f4f4;
 	--color-tertiary: #f3fafa;
 	--color-red-400: #7e0505;
@@ -120,4 +121,17 @@ select {
 	background-image: url("/chevron-down.svg");
 	background-repeat: no-repeat;
 	background-position: right 16px top 50%;
+}
+
+input[type="radio"] {
+	appearance: none;
+	border: 1px solid #011e1e;
+	border-radius: 50px;
+	width: 15px;
+	height: 15px;
+	transition: all 300ms ease-in-out;
+}
+
+input:checked {
+	background-color: var(--color-primary-500);
 }

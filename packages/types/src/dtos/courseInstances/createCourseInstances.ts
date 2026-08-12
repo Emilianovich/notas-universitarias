@@ -2,20 +2,24 @@ import { z } from "zod"
 import type { BreakdownCategory } from "../../db"
 
 // TODO think about rounding total percentage?
-export type CourseInstanceToBeCreated = {
-	isRegistered: boolean
-	name?: string
-	profesorName: string
-	breakdown: {
-		name: string
-		percentage: number
-		type: BreakdownCategory
-		laboratoryDetails?: {
-			profesorName: string
-			breakdown: CreatingCourseInstanceBreakdown[]
-		}
-	}[]
-}
+export type CourseInstanceToBeCreated = z.infer<
+	typeof CreateCourseInstanceSchema
+>
+export type CourseBreakdownToBeCreated = z.infer<typeof CreateBreakdownSchema>
+// {
+// 	isRegistered: boolean
+// 	name?: string
+// 	profesorName: string
+// 	breakdown: {
+// 		name: string
+// 		percentage: number
+// 		type: BreakdownCategory
+// 		laboratoryDetails?: {
+// 			profesorName: string
+// 			breakdown: CreatingCourseInstanceBreakdown[]
+// 		}
+// 	}[]
+// }
 
 export type CreatingCourseInstanceBreakdown = {
 	name: string

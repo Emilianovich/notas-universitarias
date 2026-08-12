@@ -9,7 +9,7 @@ import type {
 	UpdateCourseInstanceDto
 } from "@notas-universitarias/types"
 import { HTTPException } from "hono/http-exception"
-import type { ObjectId } from "mongodb"
+import {FindCursor, type ObjectId, type WithId} from "mongodb"
 
 import getValidObjectId, {
 	mapCreateCourseInstanceToDTO
@@ -225,4 +225,29 @@ export class CourseService {
 		// NOTE probably should do something like a rollback if anything goes bad but bruuhhh
 		await this.coursesRepository.updateCourse(courseDoc, updatedCourse)
 	}
+
+	async getAvailableCoursesInAcademicPeriod(userId: ObjectId): Promise<CoursesInfo[]> {
+		const currentAcademicPeriod = await this.academicPeriodRepository.getCurrentAcademicPeriod(userId)
+		if (!currentAcademicPeriod) throw new HTTPException(400, { message: "No tienes ningún periodo académico activo" })
+		let coursesInfoCursor : FindCursor<WithId<CourseDocument>>
+		const coursesInfo : CoursesInfo[] = []
+		if (!currentAcademicPeriod.registeredCourses.length) {
+			coursesInfoCursor = this.coursesRepository.getCollection().find({ userId })
+		} else {
+			coursesInfoCursor = this.coursesRepository.getCollection().find({ _id: { $nin: currentAcademicPeriod.registeredCourses }, userId })
+		}
+		for await (const course of coursesInfoCursor) {
+			const { name, _id } = course
+			coursesInfo.push({
+				name,
+				_id
+			})
+		}
+		return coursesInfo
+	}
+}
+
+type CoursesInfo = {
+	_id: ObjectId
+	name: string
 }

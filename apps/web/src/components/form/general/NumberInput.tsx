@@ -21,7 +21,7 @@ export default function NumberInput({
 			error={error}
 			labelText={label}
 			inputId={id}
-			maxWidth={100}
+			maxWidth={400}
 			isBlurred={isBlurred}
 			input={
 				<input
@@ -31,7 +31,7 @@ export default function NumberInput({
 					onChange={syncValueToState}
 					onBlur={handleBlur}
 					placeholder={placeholder}
-					className={`${bgColor} p-2 w-[inherit] h-11.25 rounded-[10px] outline-none ${borderColor} shadow-[0px_2px_4px_rgba(0,0,0,0.25)]`}
+					className={`${bgColor} p-2 w-20 h-11.25 rounded-[10px] outline-none ${borderColor} shadow-[0px_2px_4px_rgba(0,0,0,0.25)]`}
 				/>
 			}
 		/>

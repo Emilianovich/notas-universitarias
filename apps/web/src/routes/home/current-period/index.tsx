@@ -29,6 +29,7 @@ export const Route = createFileRoute("/home/current-period/")({
 			}
 		]
 	}),
+	ssr: true,
 	server: {
 		middleware: [authMiddleware]
 	}

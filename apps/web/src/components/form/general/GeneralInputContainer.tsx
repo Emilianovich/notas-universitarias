@@ -19,7 +19,7 @@ export default function GeneralInputContainer({
 	input
 }: GeneralInputContainerProps) {
 	return (
-		<div className={`grid grid-rows-3 gap-2 relative`} style={{ maxWidth }}>
+		<div className={`grid grid-rows-3 gap-4 relative`} style={{ maxWidth }}>
 			<label style={{ fontSize: 18, marginTop: "1em" }} htmlFor={inputId}>
 				{labelText}
 			</label>
