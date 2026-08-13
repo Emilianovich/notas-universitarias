@@ -310,3 +310,7 @@ export async function getResponse<T>(req: Response) {
 export function getLastElementFromArray<T>(array: T[]) {
 	return array[array.length - 1]
 }
+
+export function isArrayEmpty<T>(array: T[]) {
+	return array.length === 0
+}

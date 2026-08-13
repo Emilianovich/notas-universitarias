@@ -1,4 +1,4 @@
-import { stringSlicer } from "@notas-universitarias/helpers"
+// import { stringSlicer } from "@notas-universitarias/helpers"
 
 type CourseInstanceBoxProps = {
 	courseInstanceId: string
@@ -18,7 +18,7 @@ export default function CourseInstanceBox({
 			onClick={navigateTo}
 			title={`Curso de ${courseInstanceName}`}
 		>
-			<p className={"text-xl"}>{stringSlicer(courseInstanceName)}</p>
+			<p className={"text-xl"}>{courseInstanceName}</p>
 		</article>
 	)
 }

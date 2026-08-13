@@ -14,3 +14,7 @@ export type CourseInstancePresentation = {
 	name: string
 	finalGrade: number
 }
+export type CoursesInfo = {
+	_id: ObjectId
+	name: string
+}

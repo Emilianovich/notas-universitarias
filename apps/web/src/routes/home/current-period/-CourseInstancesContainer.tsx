@@ -40,19 +40,20 @@ export default function CourseInstancesContainer({
 }: CurrentAcademicPeriod) {
 	const navigate = useNavigate({ from: "/home/current-period/" })
 	const registeredCourseInstances = courseInstances.map(
-		(instance: CurrentAcademicPeriodSubjects, i) => (
-			<CourseInstanceBox
+		(instance: CurrentAcademicPeriodSubjects) => {
+			console.log(JSON.stringify(instance))
+			return (<CourseInstanceBox
 				courseInstanceId={instance.id}
 				courseInstanceName={instance.name}
-				key={`${instance.id}-${i}`}
+				key={instance.id}
 				navigateTo={() =>
 					navigate({
 						to: "/home/course-instance/edit/$courseInstanceId",
 						params: { courseInstanceId: instance.id }
-					})
-				}
+					}
+					)}
 			/>
-		)
+		)}
 	)
 	return (
 		<section className={"flex flex-col items-center justify-center gap-10"}>

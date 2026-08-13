@@ -1,6 +1,8 @@
 import GeneralInputContainer from "@/components/form/general/GeneralInputContainer.tsx"
 import type { InputProps } from "@/types/input.ts"
 
+export type NumberInputProps = Omit<InputProps<string>, "originallyPassword" | "type">
+
 export default function NumberInput({
 	name,
 	error,

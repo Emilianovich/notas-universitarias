@@ -1,4 +1,10 @@
-import type { AppTheme, FontFamily, PetName } from "@notas-universitarias/types"
+import type {
+	AppTheme,
+	CoursesInfo,
+	FontFamily,
+	PetName
+} from "@notas-universitarias/types"
+import type { JSX } from "react"
 import GeneralInputContainer from "@/components/form/general/GeneralInputContainer.tsx"
 import type { InputProps } from "@/types/input.ts"
 
@@ -24,7 +30,7 @@ export const allowedPets: Set<PetName> = new Set([
 
 type DropdownMenuProps<T> = {
 	selectedItem: T
-	iterableItems: Set<T>
+	iterableItems: Set<T> | Array<CoursesInfo>
 } & Omit<
 	InputProps<string>,
 	"originallyPassword" | "type" | "placeholder" | "value"
@@ -44,6 +50,28 @@ export default function DropdownMenu<
 }: DropdownMenuProps<T>) {
 	const borderColor =
 		error && isBlurred ? "border border-red-400" : "transparent"
+	let itemsToRender: JSX.Element[] = []
+	if (iterableItems instanceof Set) {
+		itemsToRender = [...iterableItems].map((item, i) => (
+			<option
+				key={`${item}-${i}`}
+				value={item}
+				selected={selectedItem === item}
+			>
+				{item}
+			</option>
+		))
+	} else {
+		itemsToRender = iterableItems.map((item) => (
+			<option
+				key={item.name}
+				value={item._id.toString()}
+				selected={selectedItem === item.name}
+			>
+				{item.name}
+			</option>
+		))
+	}
 	return (
 		<GeneralInputContainer
 			labelText={label}
@@ -58,15 +86,7 @@ export default function DropdownMenu<
 						onChange={syncValueToState}
 						defaultValue={selectedItem}
 					>
-						{[...iterableItems].map((item, i) => (
-							<option
-								key={`${item}-${i}`}
-								value={item}
-								selected={selectedItem === item}
-							>
-								{item}
-							</option>
-						))}
+						{...itemsToRender}
 					</select>
 				</div>
 			}
