@@ -98,7 +98,7 @@ export class AcademicPeriodService {
 						instance._id as ObjectId
 					)
 				courseInstances.push({
-					id: _id?.toString() as string,
+					id: instance._id?.toString() as string,
 					name: name as string
 				})
 			}

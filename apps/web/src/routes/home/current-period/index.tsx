@@ -37,6 +37,7 @@ export const Route = createFileRoute("/home/current-period/")({
 
 function CurrentPeriodPage() {
 	const { data, isPending, isError, isSuccess } = useGetCurrentAcademicPeriod()
+	console.log(data.content)
 	return (
 		<main className={"flex flex-col items-center justify-center"}>
 			{isPending && (

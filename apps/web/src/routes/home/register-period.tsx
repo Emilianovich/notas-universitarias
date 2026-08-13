@@ -36,8 +36,9 @@ export const Route = createFileRoute("/home/register-period")({
 	}
 })
 
+// TODO use isPending, isError
 function RegisterPeriodPage() {
-	const { data, isPending, isError, isSuccess } = useGetCurrentAcademicPeriod()
+	const { data, isSuccess } = useGetCurrentAcademicPeriod()
 	return (
 		<main className={"flex flex-col justify-center items-center w-full gap-8"}>
 			{isSuccess && data.content.isActive && (

@@ -36,7 +36,6 @@ export class AcademicPeriodsRepository extends Repository<AcademicPeriodDocument
 		return this.getCollection().findOne({ isActive: true, userId })
 	}
 	async finalizeUnactive(userId: ObjectId) {
-		console.log(userId)
 		await this.getCollection().updateMany(
 			{ endDate: { $lt: new Date() }, userId, isActive: true },
 			{
