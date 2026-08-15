@@ -2,6 +2,7 @@ import { type ReactNode, useState } from "react"
 import Pet from "@/components/general/Pet.tsx"
 import usePet, { PetContext } from "@/contexts/pet.ts"
 import useSettings from "@/contexts/settings.ts"
+import defaultSettings from "@/components/context-providers/default-settings.ts";
 
 const numberOfCategories = 5
 const numberOfFacts = 15
@@ -163,7 +164,7 @@ export default function PetProvider({ children }: { children: ReactNode }) {
 
 export function Fact() {
 	const { isHovered } = usePet()
-	const { fontFamily } = useSettings()
+	const { fontFamily } = useSettings() ?? defaultSettings
 	if (isHovered) {
 		return (
 			<div

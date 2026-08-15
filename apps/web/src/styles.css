@@ -86,10 +86,10 @@ main {
 
 @keyframes toast-fade-in {
 	from {
-		translate: -110% 0;
+		transform: translate(-110%, 0);
 	}
 	to {
-		translate: 0 0;
+		transform: translate(0, 0);
 	}
 }
 

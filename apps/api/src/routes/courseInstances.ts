@@ -1,10 +1,10 @@
-import { Hono } from "hono"
-import type { ObjectId } from "mongodb"
-import { CreateCourseInstanceSchema } from "../../../../packages/types/src/dtos/courseInstances/createCourseInstances.js"
 import {
 	type UpdateCourseInstanceDto,
 	updateCourseInstanceSchema
-} from "../../../../packages/types/src/dtos/courseInstances/updateCourseInstances.js"
+} from "@notas-universitarias/types"
+import { Hono } from "hono"
+import type { ObjectId } from "mongodb"
+import { CreateCourseInstanceSchema } from "../../../../packages/types/src/dtos/courseInstances/createCourseInstances.js"
 import type { CourseDocument } from "../collection-schema/courses.js"
 import getValidObjectId, { getContextVars } from "../helpers/helpers.js"
 import type { MiddlewareVars } from "../index.js"

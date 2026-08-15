@@ -1,10 +1,12 @@
-import { buildRequest } from "@notas-universitarias/helpers"
+import { buildRequest, ServerErrorRes } from "@notas-universitarias/helpers"
 import type { CurrentAcademicPeriod } from "@notas-universitarias/types"
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import ErrorComponent from "@/components/error-components/current-period/ErrorComponent.tsx"
 import LoadingComponent from "@/components/loading-components/current-period/LoadingComponent.tsx"
+import useToast from "@/contexts/toast.ts"
 import authMiddleware from "@/middlewares/auth.ts"
+import { queryClient } from "@/routes/__root.tsx"
 import CourseInstancesContainer from "@/routes/home/current-period/-CourseInstancesContainer.tsx"
 
 const getCurrentAcademicPeriod = async () => {
@@ -37,7 +39,6 @@ export const Route = createFileRoute("/home/current-period/")({
 
 function CurrentPeriodPage() {
 	const { data, isPending, isError, isSuccess } = useGetCurrentAcademicPeriod()
-	console.log(data.content)
 	return (
 		<main className={"flex flex-col items-center justify-center"}>
 			{isPending && (

@@ -58,7 +58,7 @@ const LaboratoryDetailsSchema = z
 						100,
 						"El porcentaje total de la subdivisión no puede ser mayor a 100%"
 					)
-					.multipleOf(0.01, { message: 'Máximo 2 decimales' })
+					.multipleOf(0.01, { message: "Máximo 2 decimales" })
 					.transform((val) => val / 100),
 				type: z.enum(
 					["STANDALONE", "NESTED", "NOT-NESTED"],
@@ -105,9 +105,12 @@ const CreateBreakdownSchema = z
 		percentage: z
 			.number()
 			.gte(0, "El porcentaje no puede ser negativo")
-			.lte(100, "El porcentaje total de la subdivisión no puede ser mayor a 100%")
-			.multipleOf(0.01, { message: 'Máximo 2 decimales' })
-			.transform((val) => val/ 100),
+			.lte(
+				100,
+				"El porcentaje total de la subdivisión no puede ser mayor a 100%"
+			)
+			.multipleOf(0.01, { message: "Máximo 2 decimales" })
+			.transform((val) => val / 100),
 		type: z.enum(
 			["STANDALONE", "NESTED", "NOT-NESTED"],
 			"El tipo de la subdivisión no encaja dentro de los registrados"

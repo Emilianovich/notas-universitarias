@@ -53,8 +53,12 @@ const CourseBreakdownBaseSchema = z
 		percentage: z
 			.number()
 			.gte(0, "El porcentaje de la subdivisión no puede ser negativo")
-			.lte(1, "El porcentaje total de la subdivisión no puede ser mayor a 100%")
-			.transform((val) => Math.round(val * 100) / 100),
+			.lte(
+				100,
+				"El porcentaje total de la subdivisión no puede ser mayor a 100%"
+			)
+			.multipleOf(0.01, { message: "Máximo 2 decimales" })
+			.transform((val) => val / 100),
 		contribution: z
 			.number()
 			.gte(0, "El porcentaje obtenido no puede ser negativo")
@@ -69,16 +73,16 @@ const CourseBreakdownBaseSchema = z
 			"El tipo de la subdivisión no encaja dentro de los registrados"
 		)
 	})
-	.superRefine((self, ctx) => {
-		if (self.contribution > self.percentage) {
-			ctx.addIssue({
-				code: "custom",
-				message:
-					"El porcentaje obtenido para una subdivisión no puede ser mayor a su porcentaje total",
-				path: ["contribution"]
-			})
-		}
-	})
+	// .superRefine((self, ctx) => {
+	// 	if (self.contribution > self.percentage) {
+	// 		ctx.addIssue({
+	// 			code: "custom",
+	// 			message:
+	// 				"El porcentaje obtenido para una subdivisión no puede ser mayor a su porcentaje total",
+	// 			path: ["contribution"]
+	// 		})
+	// 	}
+	// })
 
 const CourseBreakdownSchema = CourseBreakdownBaseSchema.safeExtend({
 	laboratoryDetails: z
@@ -132,10 +136,11 @@ export const updateCourseInstanceSchema = z
 		profesorName: z
 			.string()
 			.min(1, "El nombre del profesor debería tener por lo menos un caracter")
-			.max(100, "El nombre del profesor debería tener entre 1 a 100 caracteres")
-			.optional(),
-		breakdown: z.array(CourseBreakdownSchema).optional(),
-		finalGrade: z.number().gte(0, "La nota añadida debe ser mayor a cero")
+			.max(
+				100,
+				"El nombre del profesor debería tener entre 1 a 100 caracteres"
+			),
+		breakdown: z.array(CourseBreakdownSchema)
 	})
 	.superRefine((self, ctx) => {
 		if (!self.profesorName && !self.breakdown) {
@@ -147,7 +152,7 @@ export const updateCourseInstanceSchema = z
 		let totalPercentage = 0
 		self.breakdown?.forEach((item) => {
 			totalPercentage += item.percentage
-			if (totalPercentage > 1) {
+			if (totalPercentage > 100) {
 				ctx.addIssue({
 					code: "custom",
 					message:
@@ -157,33 +162,8 @@ export const updateCourseInstanceSchema = z
 		})
 	})
 	.strict()
-
-export type UpdateCourseInstanceDto = {
-	profesorName?: string
-	breakdown?: {
-		name: string
-		percentage: number
-		contribution: number
-		entries: {
-			name?: string
-			rawScore: number
-			maxScore: number
-		}[]
-		laboratoryDetails?: {
-			profesorName: string
-			finalGrade: number
-			breakdown: {
-				name: string
-				percentage: number
-				contribution: number
-				entries: {
-					name?: string
-					rawScore: number
-					maxScore: number
-				}[]
-				type: BreakdownCategory
-			}[]
-		}
-		type: BreakdownCategory
-	}[]
-}
+export type UpdateCourseInstanceDto = z.infer<typeof updateCourseInstanceSchema>
+export const demoCourseInstanceSchema = updateCourseInstanceSchema.required({
+	breakdown: true
+})
+export type DemoCourseInstanceDto = z.infer<typeof demoCourseInstanceSchema>

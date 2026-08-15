@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
-import CreateCourseInstanceForm from "@/components/form/courses/CreateCourseInstanceForm.tsx"
+import CreateCourseInstanceForm from "@/components/form/courses/Create/CreateCourseInstanceForm.tsx"
 
 export const Route = createFileRoute("/home/current-period/course-instance/")({
 	component: RouteComponent

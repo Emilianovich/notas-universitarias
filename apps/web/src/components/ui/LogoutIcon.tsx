@@ -1,8 +1,8 @@
 import { buildRequest, ServerErrorRes } from "@notas-universitarias/helpers"
 import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
+import useModal from "@/contexts/modal.ts"
 import useToast from "@/contexts/toast.ts"
-import useModal from "@/contexts/modal.ts";
 
 const handleLogout = async () => {
 	return buildRequest<string, string>({
@@ -61,7 +61,6 @@ export default function LogoutIcon() {
 						action: () => mutate()
 					}
 				})
-
 			}}
 		/>
 	)

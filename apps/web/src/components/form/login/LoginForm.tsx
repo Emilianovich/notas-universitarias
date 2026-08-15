@@ -38,12 +38,12 @@ export default function LoginForm({ wasRedirected }: Redirected) {
 			}
 		},
 		onSuccess: async (data) => {
+			await navigate({ to: "/home/current-period" })
 			buildToast({
 				id: Date.now(),
 				type: "success",
 				content: data.content
 			})
-			await navigate({ to: "/home/current-period" })
 		}
 	})
 	const { mutate, isPending } = mutation

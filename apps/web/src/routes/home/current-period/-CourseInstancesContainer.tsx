@@ -42,18 +42,20 @@ export default function CourseInstancesContainer({
 	const registeredCourseInstances = courseInstances.map(
 		(instance: CurrentAcademicPeriodSubjects) => {
 			console.log(JSON.stringify(instance))
-			return (<CourseInstanceBox
-				courseInstanceId={instance.id}
-				courseInstanceName={instance.name}
-				key={instance.id}
-				navigateTo={() =>
-					navigate({
-						to: "/home/course-instance/edit/$courseInstanceId",
-						params: { courseInstanceId: instance.id }
+			return (
+				<CourseInstanceBox
+					courseInstanceId={instance.id}
+					courseInstanceName={instance.name}
+					key={instance.id}
+					navigateTo={() =>
+						navigate({
+							to: "/home/course-instance/edit/$courseInstanceId",
+							params: { courseInstanceId: instance.id }
+						})
 					}
-					)}
-			/>
-		)}
+				/>
+			)
+		}
 	)
 	return (
 		<section className={"flex flex-col items-center justify-center gap-10"}>

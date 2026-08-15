@@ -1,4 +1,4 @@
-import { type ReactNode, useState } from "react"
+import {type ReactNode,  useState} from "react"
 import Toast from "@/components/general/Toast.tsx"
 import {
 	type BuildToastProps,
@@ -13,16 +13,17 @@ export default function ToastProvider({ children }: { children: ReactNode }) {
 	const buildToast = (data: BuildToastProps) => {
 		setProviderState({ toasts: [...providerState.toasts, data] })
 	}
-	const removeToast = (id: number) =>
+	const removeToast = (id: number) => {
 		setProviderState({
 			toasts: providerState.toasts.filter((toast) => toast.id !== id)
 		})
+	}
 	return (
 		<ToastContext value={{ buildToast }}>
 			{children}
 			<div
 				className={
-					"fixed bottom-4 left-8 flex flex-col gap-4 w-fit h-fit transition-all duration-300 ease-in-out"
+					"fixed bottom-4 left-8 flex flex-col gap-4 w-fit h-fit justify-end transition-all duration-300 ease-in-out"
 				}
 			>
 				{providerState.toasts.map((toast) => {
