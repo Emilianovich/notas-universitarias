@@ -7,6 +7,7 @@ import {
 	type ModalProps
 } from "@/contexts/modal.ts"
 import useSettings from "@/contexts/settings.ts"
+import defaultSettings from "@/components/context-providers/default-settings.ts";
 
 const defaultModalContextComponentProps: ModalContextComponentProps = {
 	isOpen: false,
@@ -40,7 +41,7 @@ export default function ModalProvider({ children }: { children: ReactNode }) {
 		})
 	}
 	const closeModal = () => setModalProps({ ...modalProps, isOpen: false })
-	const { fontFamily } = useSettings()
+	const { fontFamily } = useSettings() ?? defaultSettings
 	return (
 		<ModalContext value={{ buildModal, closeModal }}>
 			{children}

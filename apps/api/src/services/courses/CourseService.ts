@@ -53,7 +53,7 @@ export class CourseService {
 					message: "No se encontró una materia registrada con ese id"
 				})
 			if (
-				currentAcademicPeriod.registeredCourses?.some((id: ObjectId) =>
+				currentAcademicPeriod.registeredCourses.some((id: ObjectId) =>
 					id.equals(existingCourse?._id)
 				)
 			) {
@@ -67,10 +67,14 @@ export class CourseService {
 		)
 		const courseInstance =
 			await this.courseInstancesRepository.findById(courseInstanceId)
-		if (!courseInstance)
+		if (!courseInstance) {
+			await this.courseInstancesRepository
+				.getCollection()
+				.deleteOne({ _id: courseInstanceId })
 			throw new HTTPException(400, {
 				message: "No se pudo guardar la materia, intente nuevamente"
 			})
+		}
 		await this.academicPeriodRepository.addCourseInstance(
 			currentAcademicPeriod,
 			courseInstance
@@ -105,7 +109,7 @@ export class CourseService {
 			courseInstanceId
 		)
 	}
-
+	// NOTE: courseInstances do not have a userId so its necessary a validation to ensure it belongs to logged user
 	async getCourseInstance(
 		courseInstanceId: ObjectId,
 		userId: ObjectId

@@ -51,8 +51,9 @@ export default function Toast({ type, content, removeToast, id }: ToastProps) {
 		<div
 			className={`${appliedStyles} shadow-[0px_5px_2px_2px_rgba(0,0,0,0.25)] rounded-[40px] w-100 h-25 p-2 flex flex-col gap-2 ${shouldVanish ? "translate-x-[-125%]" : "toast-fade-in-animation"} duration-700 transition-all ease-in-out`}
 			onTransitionEnd={(event) => {
-				if (event.propertyName !== "transform") return
-				removeToast(id)
+				if (event.propertyName === "translate") {
+					removeToast(id)
+				}
 			}}
 		>
 			<div className={"w-full  flex justify-end"}>

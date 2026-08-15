@@ -1,7 +1,10 @@
 import GeneralInputContainer from "@/components/form/general/GeneralInputContainer.tsx"
 import type { InputProps } from "@/types/input.ts"
 
-export type NumberInputProps = Omit<InputProps<string>, "originallyPassword" | "type">
+export type NumberInputProps = Omit<
+	InputProps<string>,
+	"originallyPassword" | "type"
+>
 
 export default function NumberInput({
 	name,
@@ -34,6 +37,7 @@ export default function NumberInput({
 					onBlur={handleBlur}
 					placeholder={placeholder}
 					className={`${bgColor} p-2 w-20 h-11.25 rounded-[10px] outline-none ${borderColor} shadow-[0px_2px_4px_rgba(0,0,0,0.25)]`}
+					inputMode={"decimal"}
 				/>
 			}
 		/>

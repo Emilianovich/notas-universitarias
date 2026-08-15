@@ -1,9 +1,10 @@
 import { Fact } from "@/components/context-providers/pet-provider.tsx"
 import usePet from "@/contexts/pet.ts"
 import useSettings from "@/contexts/settings.ts"
+import defaultSettings from "@/components/context-providers/default-settings.ts";
 
 export default function Pet() {
-	const { pet } = useSettings()
+	const { pet } = useSettings() ?? defaultSettings
 	const { alt, awake, sleeping } = pet
 	const { togglePetHover, isHovered } = usePet()
 	return (
@@ -31,7 +32,7 @@ export type PetVariant = {
 }
 
 export function PetVariant({ variant }: PetVariant) {
-	const { pet } = useSettings()
+	const { pet } = useSettings() ?? defaultSettings
 	const { shocked, lost, alt } = pet
 	let src: string
 	let preferredWidth: number

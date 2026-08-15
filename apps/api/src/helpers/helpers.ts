@@ -88,10 +88,11 @@ export function mapUpdateCourseInstance(
 	currentCourseInstance: CourseInstance,
 	dto: UpdateCourseInstanceDto
 ): CourseInstance {
+	const { profesorName, breakdown } = dto
 	return {
-		profesorName: dto.profesorName ?? currentCourseInstance.profesorName,
+		profesorName,
 		finalGrade: currentCourseInstance.finalGrade,
-		breakdown: dto.breakdown ?? currentCourseInstance.breakdown
+		breakdown
 	}
 }
 

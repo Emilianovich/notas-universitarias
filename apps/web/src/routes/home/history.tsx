@@ -1,4 +1,8 @@
-import {buildRequest, gradeToLetter, isArrayEmpty} from "@notas-universitarias/helpers"
+import {
+	buildRequest,
+	gradeToLetter,
+	isArrayEmpty
+} from "@notas-universitarias/helpers"
 import type {
 	AcademicPeriodPresentation,
 	CourseInstancePresentation
@@ -53,7 +57,9 @@ function RouteComponent() {
 			)}
 			{isSuccess && isArrayEmpty(data.content) && (
 				<section className={"w-full h-full flex justify-center items-center"}>
-					<h1 className={"text-2xl text-primary-500"}>No tienes historial académico todavía</h1>
+					<h1 className={"text-2xl text-primary-500"}>
+						No tienes historial académico todavía
+					</h1>
 				</section>
 			)}
 			{isSuccess && data.content.length > 0 && (

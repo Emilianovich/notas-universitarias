@@ -91,12 +91,16 @@ export class AcademicPeriodService {
 		} = academicPeriod
 		const courseInstances: CurrentAcademicPeriodSubjects[] = []
 		// NOTE: added this because some academic periods did not have courseInstances
-		if (rest.courseInstances?.length) {
+		if (rest.courseInstances.length) {
 			for await (const instance of rest.courseInstances) {
 				const name =
 					await this.coursesRepository.getCourseNameByCourseInstanceId(
 						instance._id as ObjectId
 					)
+				if (!name)
+					throw new HTTPException(400, {
+						message: "No se encontró el nombre de la materia especificada"
+					})
 				courseInstances.push({
 					id: instance._id?.toString() as string,
 					name: name as string

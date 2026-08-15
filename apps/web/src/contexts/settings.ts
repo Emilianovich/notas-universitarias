@@ -158,11 +158,7 @@ export type SettingsContextType = SettingsProviderProps & {
 export const SettingsContext = createContext<SettingsContextType | null>(null)
 
 const useSettings = () => {
-	const context = useContext(SettingsContext)
-	if (!context) {
-		throw new Error("No settings context provided")
-	}
-	return context
+	return useContext(SettingsContext)
 }
 
 export default useSettings
