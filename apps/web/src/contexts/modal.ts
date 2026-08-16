@@ -3,7 +3,7 @@ import { createContext, useContext } from "react"
 export type ModalButton = {
 	action: () => Promise<void> | void
 	text: string
-	type: "modal-primary" | "secondary"
+	type: "modal-primary" | "secondary" | "primary"
 }
 
 export type ModalContextProps = {

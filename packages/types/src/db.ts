@@ -46,13 +46,21 @@ export type UserPreferences = {
 	petName: PetName
 }
 export type FontFamily =
-	| "Google Sans Code"
 	| "Arima"
 	| "Amiko"
-	| "DynaPuff"
+	| "Playwrite Brasil Guides"
+	| "Elsie"
 	| "Libertinus Math"
 	| "Nunito"
-	| "Dancing Script"
+	| "Gorditas"
+	| "Special Elite"
+	| "Short Stack"
+	| "Uncial Antiqua"
+	| "Saira Stencil"
+	| "Cherry Cream Soda"
+	| "Metamorphous"
+	| "Audiowide"
+	| "Cabin Sketch"
 export type AppTheme = "dark" | "light"
 export type PetName = "Spike" | "Leon" | "Tom" | "Nita" | "Mila"
 export type CurrentAcademicPeriod = {

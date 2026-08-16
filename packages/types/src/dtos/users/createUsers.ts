@@ -1,15 +1,7 @@
 import { z } from "zod"
-import { createAcademicPeriodsDTO } from "../academicPeriods/createAcademicPeriods"
 
-export type CreateUserDTO = {
-	name: string
-	startDate: string
-	endDate: string
-	username: string
-	email: string
-	password: string
-}
-export const createUserDto = createAcademicPeriodsDTO.safeExtend({
+export type CreateUserDTO = z.infer<typeof createUserDto>
+export const createUserDto = z.object({
 	username: z
 		.string()
 		.min(1, "Tu apodo debería tener por lo menos un caracter")

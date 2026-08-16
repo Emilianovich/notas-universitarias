@@ -8,8 +8,7 @@ import type {
 	RemoveElementType,
 	RemoveSpecificStrings,
 	RequestBuilder,
-	SuccessRes,
-	UpdateCourseInstanceDto
+	SuccessRes
 } from "@notas-universitarias/types"
 
 export function stringToArray(someString: string): string[] {
@@ -314,12 +313,4 @@ export function getLastElementFromArray<T>(array: T[]) {
 
 export function isArrayEmpty<T>(array: T[]) {
 	return array.length === 0
-}
-
-export function addContributionToBreakdowns(
-	dto: UpdateCourseInstanceDto
-): CourseBreakdown {
-	dto.breakdown.forEach((breakdown) => {
-		breakdown.contribution = 0
-	})
 }

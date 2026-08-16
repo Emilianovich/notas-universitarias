@@ -1,6 +1,10 @@
 import {
 	type ChangePasswordDto,
-	changePasswordSchema, type CreateUserDTO, createUserDto, type DataAfterRegister, dataAfterUserRegisterSchema,
+	type CreateUserDTO,
+	changePasswordSchema,
+	createUserDto,
+	type DataAfterRegister,
+	dataAfterUserRegisterSchema,
 	type LoginDTO,
 	loginDTO
 } from "@notas-universitarias/types"
@@ -15,29 +19,43 @@ import { AuthService } from "../services/auth/AuthService.js"
 
 const authRoutes = new Hono<MiddlewareVars>().basePath("/auth")
 
-authRoutes.post("/register", ZodMiddleware("json", createUserDto),async (ctx) => {
-	const { mongoService } = getContextVars(ctx)
-	const dto : CreateUserDTO = ctx.req.valid("json")
-	const {userId, maxAge} = await (new AuthService(mongoService)).createUser(dto)
-	setCookie(ctx, env.TEMP_USER_COOKIE_NAME, userId.toString(), {
-		path: "/",
-		secure: env.SESSION_COOKIE_SECURE,
-		sameSite: env.COOKIE_SAME_SITE,
-		httpOnly: true,
-		maxAge
-	})
-	// TODO REVIEW: cambiar quizás el nombre
-	return ctx.json("Tu cuenta fue creada. Si quieres, puedes terminar unas configuraciones")
-})
+authRoutes.post(
+	"/register",
+	ZodMiddleware("json", createUserDto),
+	async (ctx) => {
+		const { mongoService } = getContextVars(ctx)
+		const dto: CreateUserDTO = ctx.req.valid("json")
+		const { userId, maxAge, username } = await new AuthService(
+			mongoService
+		).createUser(dto)
+		setCookie(ctx, env.TEMP_USER_COOKIE_NAME, userId.toString(), {
+			path: "/",
+			secure: env.SESSION_COOKIE_SECURE,
+			sameSite: env.COOKIE_SAME_SITE,
+			httpOnly: true,
+			maxAge
+		})
+		// TODO REVIEW: cambiar quizás el nombre
+		return ctx.json({
+			message:
+				"Tu cuenta fue creada. Si quieres, puedes terminar unas configuraciones",
+			username
+		})
+	}
+)
 
-authRoutes.post("/register-after-creation", ZodMiddleware("json", dataAfterUserRegisterSchema),async (ctx) => {
-	const userId = getValidObjectId(getCookie(ctx, env.TEMP_USER_COOKIE_NAME))
-	const { mongoService } = getContextVars(ctx)
-	const dto : DataAfterRegister = ctx.req.valid("json")
-	const authService = new AuthService(mongoService)
-	await authService.handleUpdateAfterRegister(dto, userId)
-	return ctx.json("¡Tu cuenta está preparada!")
-})
+authRoutes.post(
+	"/register-after-creation",
+	ZodMiddleware("json", dataAfterUserRegisterSchema),
+	async (ctx) => {
+		const userId = getValidObjectId(getCookie(ctx, env.TEMP_USER_COOKIE_NAME))
+		const { mongoService } = getContextVars(ctx)
+		const dto: DataAfterRegister = ctx.req.valid("json")
+		const authService = new AuthService(mongoService)
+		await authService.handleUpdateAfterRegister(dto, userId)
+		return ctx.json("¡Tu cuenta está preparada!")
+	}
+)
 
 authRoutes.post("/login", ZodMiddleware("json", loginDTO), async (ctx) => {
 	const authService = new AuthService(getContextVars(ctx).mongoService)
@@ -51,6 +69,9 @@ authRoutes.post("/login", ZodMiddleware("json", loginDTO), async (ctx) => {
 		httpOnly: true,
 		maxAge
 	})
+	if (getCookie(ctx, env.TEMP_USER_COOKIE_NAME)) {
+		deleteCookie(ctx, env.TEMP_USER_COOKIE_NAME)
+	}
 	return ctx.json("Greetings and salutations")
 })
 

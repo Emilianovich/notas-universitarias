@@ -111,7 +111,7 @@ function AcademicPeriodContainer({
 						size={24}
 						fill="currentColor"
 						stroke="none"
-						className={`${isFlipped ? "rotate-90" : "rotate-180"} hover:scale-95 cursor-pointer`}
+						className={`${isFlipped ? "rotate-180" : "rotate-90"} hover:scale-95 cursor-pointer text-primary-400`}
 					/>
 				</button>
 			</div>

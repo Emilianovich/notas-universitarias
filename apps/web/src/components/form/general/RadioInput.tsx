@@ -8,7 +8,7 @@ export type RadioInputProps = {
 	labelText: string
 	syncValueToState: (e: ChangeEvent<HTMLInputElement>) => void
 	handleBlur: () => void
-  propsForDb?: RadioPropsForDb
+	propsForDb?: RadioPropsForDb
 	currentVal?: BreakdownCategory
 }
 
@@ -41,9 +41,7 @@ export default function RadioInput({
 					id={radioId}
 					onChange={syncValueToState}
 					onBlur={handleBlur}
-					checked={
-					currentVal === value
-					}
+					checked={currentVal === value}
 				/>
 			</div>
 			<label htmlFor={radioId} className={"text-primary-600"}>

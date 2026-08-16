@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Amiko:wght@400;600;700&family=Arima:wght@100..700&family=Dancing+Script:wght@400..700&family=DynaPuff:wght@400..700&family=Google+Sans+Code:ital,wght,MONO@0,300..800,1;1,300..800,1&family=Libertinus+Math&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Amiko:wght@400;600;700&family=Arima:wght@100..700&family=Audiowide&family=Cabin+Sketch:wght@400;700&family=Cherry+Cream+Soda&family=Elsie:wght@400;900&family=Gorditas:wght@400;700&family=Libertinus+Math&family=Metamorphous&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Playwrite+BR+Guides&family=Saira+Stencil:ital,wght@0,100..900;1,100..900&family=Short+Stack&family=Special+Elite&family=Uncial+Antiqua&display=swap");
 @import "tailwindcss";
 
 @layer base {
@@ -96,11 +96,9 @@ main {
 .toast-fade-in-animation {
 	animation: toast-fade-in 300ms ease-in-out;
 }
-
+/*grid w-[90%] items-center justify-center*/
 .modal-wrapper {
-	@apply w-100 items-center justify-center gap-8;
-	display: grid;
-	grid-template-rows: auto 1fr var(--spacing-button-height);
+	@apply flex flex-col justify-evenly gap-10 h-full;
 }
 
 button:disabled {

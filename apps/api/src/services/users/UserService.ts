@@ -54,8 +54,8 @@ export class UserService {
 		dto.password = await argon2.hash(dto.password, { type: argon2.argon2id })
 		const academicPeriod: CreateAcademicPeriodsDto = {
 			name,
-			startDate: (new Date(startDate)).toString(),
-			endDate: (new Date(endDate)).toString(),
+			startDate: new Date(startDate).toString(),
+			endDate: new Date(endDate).toString()
 		}
 		try {
 			const userId = (await this.userRepository.insertOne(dto)).insertedId

@@ -12,7 +12,7 @@ export type NavOptions = {
 		| "/home/history"
 		| "/home/register-period"
 		| "/home/settings"
-  text: string
+	text: string
 }
 
 export type HeaderAndNavProps = {
@@ -20,8 +20,8 @@ export type HeaderAndNavProps = {
 }
 
 export type NavToOutsideProps = {
-  text: string
-  href: string
+	text: string
+	href: string
 }
 
 export function Nav({ children }: HeaderAndNavProps) {
@@ -49,13 +49,13 @@ export function NavOption({ navigateTo, text }: NavOptions) {
 }
 
 export function NavToOutside({ text, href }: NavToOutsideProps) {
-  return (
-    <Link
-      to={href}
-      target={"_blank"}
-      className="text-[20px] w-25 text-primary-600 hover:scale-[0.95] transition-all duration-200 ease-in-out"
-    >
-      {text}
-    </Link>
-  )
+	return (
+		<Link
+			to={href}
+			target={"_blank"}
+			className="text-[20px] w-25 text-primary-600 hover:scale-[0.95] transition-all duration-200 ease-in-out"
+		>
+			{text}
+		</Link>
+	)
 }

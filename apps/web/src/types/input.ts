@@ -1,6 +1,5 @@
+import type { DataAfterRegister } from "@notas-universitarias/types"
 import type { ChangeEvent } from "react"
-import {FieldApi, type AnyFieldApi} from "@tanstack/react-form";
-import { z, ZodObject } from "zod";
 
 export type InputProps<T> = {
 	label: string
@@ -26,19 +25,10 @@ export type PasswordImageProps = {
 
 export type RegisterState = {
 	isFirstDone: boolean
-	isFirstBeenCompleted: boolean
 	isSecondDone: boolean
-	firstFormContent: {
-		name: string
-		startDate: string
-		endDate: string
-	}
-	secondFormContent: {
-		username: string
-		email: string
-		password: string
-	}
 	progress: number
+	afterRegisterData: DataAfterRegister
+	username?: string
 }
 
 export type RegisterFormProps = {

@@ -34,16 +34,23 @@ db.createCollection("users", {
 						fontFamily: {
 							bsonType: "string",
 							enum: [
-								"Google Sans Code",
 								"Arima",
 								"Amiko",
-								"DynaPuff",
+								"Playwrite Brasil Guides",
+								"Elsie",
 								"Libertinus Math",
 								"Nunito",
-								"Dancing Script"
+								"Gorditas",
+								"Special Elite",
+								"Short Stack",
+								"Uncial Antiqua",
+								"Saira Stencil",
+								"Cherry Cream Soda",
+								"Metamorphous",
+								"Audiowide",
+								"Cabin Sketch"
 							],
-							description:
-								"A valid font family is required ('Google Sans Code', 'Arima', 'Amiko', 'DynaPuff', 'Libertinus Math', 'Nunito', 'Dancing Script')"
+							description: "A valid font family is required"
 						},
 						theme: {
 							bsonType: "string",

@@ -72,13 +72,13 @@ export function Modal({
 }: ModalProps) {
 	return (
 		<div
-			className={`flex text-primary-400 items-center justify-center p-4 gap-4 bg-secondary h-[min(335px,calc(100dvh-32px))] rounded-[20px] transition-all ease-in-out duration-300`}
+			className={`flex text-primary-400 items-center justify-center p-4 gap-4 bg-secondary h-[min(300px,calc(100dvh-32px))] rounded-[20px] transition-all ease-in-out duration-300`}
 			style={{ aspectRatio: "151 / 89" }}
 		>
-			<div className={"modal-wrapper"}>
+			<div className={"modal-wrapper w-[90%]"}>
 				<h2 className={"text-2xl"}>{modalTitle}</h2>
 				<p className={"text-[18px] text-justify"}>{modalContent}</p>
-				<div className={"flex justify-between items-center"}>
+				<div className={"flex justify-between items-center w-full"}>
 					<Button
 						type={"button"}
 						text={closeButtonTitle}

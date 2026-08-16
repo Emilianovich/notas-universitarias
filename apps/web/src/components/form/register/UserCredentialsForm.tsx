@@ -1,35 +1,24 @@
 import { buildRequest, ServerErrorRes } from "@notas-universitarias/helpers"
-import type { createUserDto } from "@notas-universitarias/types"
+import {
+	type AfterRegisterRes,
+	createUserDto,
+	ON_SUBMIT_INVALID_MSG
+} from "@notas-universitarias/types"
 import { useForm, useSelector } from "@tanstack/react-form"
 import { useMutation } from "@tanstack/react-query"
-import { useNavigate } from "@tanstack/react-router"
-import { z } from "zod"
+import { Link } from "@tanstack/react-router"
+import type { z } from "zod"
 import Input from "@/components/form/general/Input.tsx"
 import Button from "@/components/general/Button.tsx"
 import useToast from "@/contexts/toast.ts"
 import type { RegisterFormProps } from "@/types/input.ts"
 
-const userCredentialsSchema = z.object({
-	username: z
-		.string()
-		.min(1, "Tu apodo debería tener por lo menos un caracter")
-		.max(100, "Tu apodo debería tener entre 1 a 100 caracteres"),
-	email: z
-		.email({
-			pattern:
-				/^(?!.*\.\.)(?!\.)(?!.*\.$)[A-Za-z0-9._%+-]{1,64}@(?:[A-Za-z](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,}$/,
-			error: "Ingrese un correo electrónico válido"
-		})
-		.transform((val) => val.toLowerCase()),
-	password: z.string().min(1, "Su contraseña debe tener al menos un caracter")
-})
-
 const registerUser = async (payload: z.infer<typeof createUserDto>) => {
-	return buildRequest<string, string>({
+	return buildRequest<AfterRegisterRes, string>({
 		method: "POST",
 		reqBody: payload,
-		path: "/users",
-		includeCredentials: false
+		path: "/auth/register",
+		includeCredentials: true
 	})
 }
 
@@ -37,24 +26,23 @@ export default function UserCredentialsForm({
 	setGlobalFormState,
 	registerState
 }: RegisterFormProps) {
-	const { username, email, password } = registerState.secondFormContent
 	const { buildToast } = useToast()
-	const navigate = useNavigate({ from: "/register" })
 	const mutation = useMutation({
 		mutationFn: registerUser,
 		onSuccess: async (data) => {
-			setGlobalFormState({ ...registerState, progress: 66 })
-			// setTimeout(async () => {
-			// 	await navigate({ to: "/login" })
-			// 	buildToast({
-			// 		id: Date.now(),
-			// 		type: "success",
-			// 		content: data.content
-			// 	})
-			// }, 500)
+			setGlobalFormState({
+				...registerState,
+				isFirstDone: true,
+				progress: 33,
+				username: data.content.username
+			})
+			buildToast({
+				id: Date.now(),
+				type: "success",
+				content: data.content.message
+			})
 		},
 		onError: (error) => {
-			setGlobalFormState({ ...registerState, progress: 80 })
 			if (error instanceof ServerErrorRes) {
 				buildToast({
 					id: Date.now(),
@@ -67,45 +55,31 @@ export default function UserCredentialsForm({
 	const { mutate, isPending } = mutation
 	const form = useForm({
 		defaultValues: {
-			username,
-			email,
-			password
+			username: "",
+			email: "",
+			password: ""
 		},
 		validators: {
-			onBlur: userCredentialsSchema
+			onBlur: createUserDto
 		},
 		onSubmitInvalid: () => {
 			buildToast({
 				id: Date.now(),
 				type: "error",
-				content:
-					"Asegúrate llenar todos los campos y cumplir con todas las validaciones"
+				content: ON_SUBMIT_INVALID_MSG
 			})
 		},
 		onSubmit: async ({ value }) => {
-			const { name, endDate, startDate } = registerState.firstFormContent
 			const { username, email, password } = value
 			const payload: z.infer<typeof createUserDto> = {
 				username,
 				email,
-				password,
-				name,
-				endDate,
-				startDate
+				password
 			}
 			mutate(payload)
 		}
 	})
 	const { Field } = form
-	const currentUsername = useSelector(
-		form.store,
-		(state) => state.values.username
-	)
-	const currentEmail = useSelector(form.store, (state) => state.values.email)
-	const currentPassword = useSelector(
-		form.store,
-		(state) => state.values.password
-	)
 	const submissionAttempts = useSelector(
 		form.store,
 		(state) => state.submissionAttempts
@@ -190,33 +164,33 @@ export default function UserCredentialsForm({
 			/>
 			<div
 				className={
-					"flex justify-center items-center gap-4 w-full h-fit absolute top-[75%]"
+					"flex flex-col justify-center items-center gap-4 w-full h-fit"
 				}
 			>
 				<Button
-					text={"Volver atrás"}
-					type={"button"}
-					styleType={"primary"}
-					isDisabled={false}
-					clickAction={() =>
-						setGlobalFormState({
-							...registerState,
-							isFirstDone: false,
-							progress: 2,
-							secondFormContent: {
-								username: currentUsername,
-								email: currentEmail,
-								password: currentPassword
-							}
-						})
-					}
-				/>
-				<Button
-					text={"Registrarme"}
+					text={"Crear usuario"}
 					type={"submit"}
 					styleType={"primary"}
 					isDisabled={isPending}
 				/>
+			</div>
+			<div
+				className={
+					"flex flex-col gap-4 justify-center items-center w-full h-fit absolute top-[80%]"
+				}
+			>
+				<p>
+					¿Ya tienes cuenta?{" "}
+					<Link to={"/login"}>
+						<strong
+							className={
+								"cursor-pointer font-medium hover:scale-105 hover:text-primary-400 transition-all duration-300 ease-in-out underline"
+							}
+						>
+							Inicia sesión
+						</strong>
+					</Link>
+				</p>
 			</div>
 		</form>
 	)
