@@ -1,4 +1,6 @@
 import type { ChangeEvent } from "react"
+import {FieldApi, type AnyFieldApi} from "@tanstack/react-form";
+import { z, ZodObject } from "zod";
 
 export type InputProps<T> = {
 	label: string
@@ -25,7 +27,7 @@ export type PasswordImageProps = {
 export type RegisterState = {
 	isFirstDone: boolean
 	isFirstBeenCompleted: boolean
-	isSecondBeenCompleted: boolean
+	isSecondDone: boolean
 	firstFormContent: {
 		name: string
 		startDate: string

@@ -26,7 +26,7 @@ export default function NumberInput({
 			error={error}
 			labelText={label}
 			inputId={id}
-			maxWidth={400}
+			maxWidth={500}
 			isBlurred={isBlurred}
 			input={
 				<input

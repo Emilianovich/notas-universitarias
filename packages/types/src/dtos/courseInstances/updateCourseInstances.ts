@@ -38,51 +38,47 @@ const courseBreakdownEntrySchema = z
 		}
 	})
 
-const CourseBreakdownBaseSchema = z
-	.object({
-		name: z
-			.string()
-			.min(
-				1,
-				"El nombre de la subdivisión debería tener por lo menos un caracter"
-			)
-			.max(
-				50,
-				"El nombre de la subdivisión debería tener entre 1 a 50 caracteres"
-			),
-		percentage: z
-			.number()
-			.gte(0, "El porcentaje de la subdivisión no puede ser negativo")
-			.lte(
-				100,
-				"El porcentaje total de la subdivisión no puede ser mayor a 100%"
-			)
-			.multipleOf(0.01, { message: "Máximo 2 decimales" })
-			.transform((val) => val / 100),
-		contribution: z
-			.number()
-			.gte(0, "El porcentaje obtenido no puede ser negativo")
-			.lte(
-				1,
-				"El porcentaje obtenido de la subdivisión no puede ser mayor a 100%"
-			)
-			.transform((val) => Math.round(val * 100) / 100),
-		entries: z.array(courseBreakdownEntrySchema),
-		type: z.enum(
-			["STANDALONE", "NESTED", "NOT-NESTED"],
-			"El tipo de la subdivisión no encaja dentro de los registrados"
+const CourseBreakdownBaseSchema = z.object({
+	name: z
+		.string()
+		.min(
+			1,
+			"El nombre de la subdivisión debería tener por lo menos un caracter"
 		)
-	})
-	// .superRefine((self, ctx) => {
-	// 	if (self.contribution > self.percentage) {
-	// 		ctx.addIssue({
-	// 			code: "custom",
-	// 			message:
-	// 				"El porcentaje obtenido para una subdivisión no puede ser mayor a su porcentaje total",
-	// 			path: ["contribution"]
-	// 		})
-	// 	}
-	// })
+		.max(
+			50,
+			"El nombre de la subdivisión debería tener entre 1 a 50 caracteres"
+		),
+	percentage: z
+		.number()
+		.gt(0, "El porcentaje de la subdivisión no puede ser menor o igual que 0")
+		.lte(100, "El porcentaje total de la subdivisión no puede ser mayor a 100%")
+		.multipleOf(0.01, { message: "Máximo 2 decimales" })
+		.transform((val) => val / 100),
+	contribution: z
+		.number()
+		.gte(0, "El porcentaje obtenido no puede ser negativo")
+		.lte(
+			100,
+			"El porcentaje obtenido de la subdivisión no puede ser mayor a 100%"
+		)
+		.transform((val) => Math.round(val / 100)),
+	entries: z.array(courseBreakdownEntrySchema),
+	type: z.enum(
+		["STANDALONE", "NESTED", "NOT-NESTED"],
+		"El tipo de la subdivisión no encaja dentro de los registrados"
+	)
+})
+// .superRefine((self, ctx) => {
+// 	if (self.contribution > self.percentage) {
+// 		ctx.addIssue({
+// 			code: "custom",
+// 			message:
+// 				"El porcentaje obtenido para una subdivisión no puede ser mayor a su porcentaje total",
+// 			path: ["contribution"]
+// 		})
+// 	}
+// })
 
 const CourseBreakdownSchema = CourseBreakdownBaseSchema.safeExtend({
 	laboratoryDetails: z

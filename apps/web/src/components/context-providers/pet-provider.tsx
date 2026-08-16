@@ -1,8 +1,8 @@
 import { type ReactNode, useState } from "react"
+import defaultSettings from "@/components/context-providers/default-settings.ts"
 import Pet from "@/components/general/Pet.tsx"
 import usePet, { PetContext } from "@/contexts/pet.ts"
 import useSettings from "@/contexts/settings.ts"
-import defaultSettings from "@/components/context-providers/default-settings.ts";
 
 const numberOfCategories = 5
 const numberOfFacts = 15

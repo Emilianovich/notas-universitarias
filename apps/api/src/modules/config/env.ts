@@ -26,7 +26,8 @@ const env = z
 		COOKIE_SAME_SITE: z.enum(
 			["none", "strict", "lax"],
 			"SameSite debe ser 'strict', 'lax' o 'none'"
-		)
+		),
+		TEMP_USER_COOKIE_NAME: z.string().default("temp-user")
 	})
 	.parse(process.env)
 

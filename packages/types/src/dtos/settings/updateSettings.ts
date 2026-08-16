@@ -1,4 +1,4 @@
-import createUserPreferencesSchema from "./createSettings"
+import { createUserPreferencesSchema } from "./createSettings"
 
 const updateUserPreferences = createUserPreferencesSchema
 

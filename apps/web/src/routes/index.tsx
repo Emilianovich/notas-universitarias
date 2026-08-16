@@ -1,9 +1,9 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import PetProvider from "@/components/context-providers/pet-provider.tsx"
 import Button from "@/components/general/Button.tsx"
 import Content from "@/components/general/Content.tsx"
 import Header from "@/components/general/Header.tsx"
-import { Nav, NavOption } from "@/components/general/Nav.tsx"
-import PetProvider from "@/components/context-providers/pet-provider.tsx";
+import { Nav, NavOption, NavToOutside } from "@/components/general/Nav.tsx"
 
 export const Route = createFileRoute("/")({ component: Home })
 
@@ -16,7 +16,7 @@ function Home() {
 					<Nav>
 						<NavOption navigateTo={"/"} text={"Inicio"} />
 						<NavOption navigateTo={"/demo"} text={"Demo"} />
-						<NavOption navigateTo={"/"} text={"Repositorio"} />
+						<NavToOutside href={"https://github.com/Emilianovich/notas-universitarias"} text="Repositorio"/>
 					</Nav>
 				</Header>
 				<main

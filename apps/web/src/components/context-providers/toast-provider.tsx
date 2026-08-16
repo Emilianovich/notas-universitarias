@@ -1,4 +1,4 @@
-import {type ReactNode,  useState} from "react"
+import { type ReactNode, useState } from "react"
 import Toast from "@/components/general/Toast.tsx"
 import {
 	type BuildToastProps,

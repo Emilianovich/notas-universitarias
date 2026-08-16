@@ -1,7 +1,7 @@
+import defaultSettings from "@/components/context-providers/default-settings.ts"
 import { Fact } from "@/components/context-providers/pet-provider.tsx"
 import usePet from "@/contexts/pet.ts"
 import useSettings from "@/contexts/settings.ts"
-import defaultSettings from "@/components/context-providers/default-settings.ts";
 
 export default function Pet() {
 	const { pet } = useSettings() ?? defaultSettings

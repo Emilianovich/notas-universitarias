@@ -8,7 +8,8 @@ export type RadioInputProps = {
 	labelText: string
 	syncValueToState: (e: ChangeEvent<HTMLInputElement>) => void
 	handleBlur: () => void
-	propsForDb?: RadioPropsForDb
+  propsForDb?: RadioPropsForDb
+	currentVal?: BreakdownCategory
 }
 
 type RadioPropsForDb =
@@ -28,7 +29,7 @@ export default function RadioInput({
 	labelText,
 	syncValueToState,
 	handleBlur,
-	propsForDb
+	currentVal
 }: RadioInputProps) {
 	return (
 		<div className={"grid grid-cols-[min-content_1fr] gap-4 w-100"}>
@@ -41,7 +42,7 @@ export default function RadioInput({
 					onChange={syncValueToState}
 					onBlur={handleBlur}
 					checked={
-						propsForDb?.isPreviouslyChecked && propsForDb.defaultValue === value
+					currentVal === value
 					}
 				/>
 			</div>

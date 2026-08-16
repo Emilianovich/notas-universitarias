@@ -1,5 +1,11 @@
-import { addDate, convertToSeconds } from "@notas-universitarias/helpers"
-import type { ChangePasswordDto, LoginDTO } from "@notas-universitarias/types"
+import {addDate, convertToMillis, convertToSeconds} from "@notas-universitarias/helpers"
+import type {
+	ChangePasswordDto,
+	CreateSettingsDto,
+	CreateUserDTO,
+	DataAfterRegister,
+	LoginDTO
+} from "@notas-universitarias/types"
 import argon2, { argon2id } from "argon2"
 import { HTTPException } from "hono/http-exception"
 import { ObjectId } from "mongodb"
@@ -81,5 +87,46 @@ export class AuthService {
 			})
 		user.password = await argon2.hash(dto.password, { type: argon2.argon2id })
 		await this.usersRepository.updateOne(userId, user)
+	}
+	async handleUpdateAfterRegister(dto: DataAfterRegister, userId: ObjectId) {
+		// 1. Validate user exists
+		const user = await this.usersRepository.findById(userId)
+		if (!user)
+			throw new HTTPException(404, {
+				message: "No existe un usuario con esas credenciales"
+			})
+		// 2. Use UserDocument to update user with settings
+		try {
+			if (dto.settings) {
+				user.preferences = {
+					...dto.settings
+				}
+				await this.usersRepository.updateOne(userId, user)
+			}
+			if (dto.academicPeriod) {
+				await this.academicPeriodsRepository.insertOne(dto.academicPeriod, userId)
+			}
+		} catch (_err) {
+			throw new HTTPException(500, {  message: "Ocurrió un error al actualizar sus datos. Redirígese al login."  })
+		}
+	}
+
+	async createUser(dto: CreateUserDTO) {
+		// 1. Validate if user email does not exist
+		const user = await this.usersRepository.findByEmail(dto.email)
+		if (user)
+			throw new HTTPException(400, {
+				message: "Ya existe un usuario con ese correo"
+			})
+		// 2. Hash password
+		dto.password = await argon2.hash(dto.password, { type: argon2.argon2id })
+		// 3. Lower case user email
+		dto.email = dto.email.toLowerCase()
+		// 4. Return new userId
+		const maxAge = convertToMillis({  amount: 30, units: "min"  })
+		return {
+			userId: (await this.usersRepository.insertOne(dto)).insertedId,
+			maxAge
+		}
 	}
 }

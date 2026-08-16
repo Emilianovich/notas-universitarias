@@ -33,7 +33,7 @@ function RouteComponent() {
 			password: ""
 		},
 		isFirstBeenCompleted: false,
-		isSecondBeenCompleted: false
+		isSecondDone: false
 	})
 	const { isFirstDone, progress } = registerState
 	const totalContainerWidth = 550
@@ -54,27 +54,27 @@ function RouteComponent() {
 						style={{ width: totalContainerWidth }}
 					>
 						{!isFirstDone && (
-							<h1 className={"mt-10 text-2xl text-center"}>
+							<>
+								<h1 className={"mt-10 text-2xl text-center"}>
 								Empecemos registrando un periodo académico
-							</h1>
+								</h1>
+								<CreateAcademicPeriodForm
+									setGlobalFormState={setRegisterState}
+									registerState={registerState}
+								/>
+							</>
 						)}
 						<ProgressBar progress={progress} barWidth={totalContainerWidth} />
-						{!isFirstDone && (
-							<CreateAcademicPeriodForm
-								setGlobalFormState={setRegisterState}
-								registerState={registerState}
-							/>
-						)}
 						{isFirstDone && (
-							<h1 className={"mt-10 text-2xl text-center"}>
+							<>
+								<h1 className={"mt-10 text-2xl text-center"}>
 								Cuéntanos sobre ti
-							</h1>
-						)}
-						{isFirstDone && (
-							<UserCredentialsForm
-								registerState={registerState}
-								setGlobalFormState={setRegisterState}
-							/>
+								</h1>
+								<UserCredentialsForm
+									registerState={registerState}
+									setGlobalFormState={setRegisterState}
+								/>
+							</>
 						)}
 					</section>
 				</main>

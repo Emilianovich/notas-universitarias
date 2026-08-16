@@ -62,18 +62,7 @@ export default function CourseInstancesContainer({
 			<h1 className={"text-4xl font-bold text-center text-primary-500 mb-8"}>
 				{!name.trim().length
 					? "Sin periodo académico registrado"
-					: `${name} - ${new Intl.DateTimeFormat(navigator.language, {
-							year: "numeric",
-							month: "2-digit",
-							day: "2-digit"
-						}).format(new Date(startDate))} al ${new Intl.DateTimeFormat(
-							navigator.language,
-							{
-								year: "numeric",
-								month: "2-digit",
-								day: "2-digit"
-							}
-						).format(new Date(endDate))}`}
+					: `${name} - `}
 			</h1>
 			{!isActive ? (
 				<ChildCourseContainerProps
