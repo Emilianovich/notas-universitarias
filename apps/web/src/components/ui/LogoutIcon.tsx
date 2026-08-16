@@ -57,7 +57,7 @@ export default function LogoutIcon() {
 					closeButtonTitle: "No, quiero quedarme un rato",
 					confirmButton: {
 						text: "Sí, cerrar sesión",
-						type: "modal-primary",
+						type: "primary",
 						action: () => mutate()
 					}
 				})

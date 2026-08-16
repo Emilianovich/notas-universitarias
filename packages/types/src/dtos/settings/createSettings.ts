@@ -1,16 +1,24 @@
 import { z } from "zod"
-import {createAcademicPeriodsDTO, CreateAcademicPeriodsDto} from "../academicPeriods";
+import { createAcademicPeriodsDTO } from "../academicPeriods"
 
 export const createUserPreferencesSchema = z.strictObject({
 	fontFamily: z.enum(
 		[
-			"Google Sans Code",
 			"Arima",
 			"Amiko",
-			"DynaPuff",
+			"Playwrite Brasil Guides",
+			"Elsie",
 			"Libertinus Math",
 			"Nunito",
-			"Dancing Script"
+			"Gorditas",
+			"Special Elite",
+			"Short Stack",
+			"Uncial Antiqua",
+			"Saira Stencil",
+			"Cherry Cream Soda",
+			"Metamorphous",
+			"Audiowide",
+			"Cabin Sketch"
 		],
 		{
 			error: "Seleccione una familia tipográfica permitida"
@@ -28,7 +36,7 @@ export const createUserPreferencesSchema = z.strictObject({
 
 export const dataAfterUserRegisterSchema = z.object({
 	settings: z.optional(createUserPreferencesSchema),
-	academicPeriod: z.optional(createAcademicPeriodsDTO),
+	academicPeriod: z.optional(createAcademicPeriodsDTO)
 })
 
 export type CreateSettingsDto = z.infer<typeof createUserPreferencesSchema>

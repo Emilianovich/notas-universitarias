@@ -1,5 +1,4 @@
 import { z } from "zod"
-import type { BreakdownCategory } from "../../db"
 
 const courseBreakdownEntrySchema = z
 	.object({

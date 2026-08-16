@@ -9,7 +9,7 @@ import {
 	type CourseInstance,
 	ON_SUBMIT_INVALID_MSG,
 	type UpdateCourseInstanceDto,
-  updateCourseInstanceSchema,
+	updateCourseInstanceSchema
 } from "@notas-universitarias/types"
 import { useForm, useSelector } from "@tanstack/react-form"
 import { Trash2 } from "lucide-react"
@@ -28,12 +28,10 @@ import useModal from "@/contexts/modal.ts"
 import useToast from "@/contexts/toast.ts"
 import type { InputProps } from "@/types/input.ts"
 
-
 type UpdateCourseInstanceFormProps = {
 	defaultValues: UpdateCourseInstanceDto
 	isForDemo: boolean
 }
-
 
 export function UpdateCourseInstanceForm({
 	defaultValues,
@@ -90,7 +88,7 @@ export function UpdateCourseInstanceForm({
 	const totalPercentage = breakdownList.reduce(
 		(previousVal, currentVal) => previousVal + currentVal.percentage,
 		0
-  )
+	)
 	const laboratoryDetailBreakdown = breakdownList.find(
 		(breakdown) => breakdown.type === "NESTED"
 	)?.laboratoryDetails?.breakdown
@@ -102,11 +100,11 @@ export function UpdateCourseInstanceForm({
 	breakdownList.forEach((currBreakdown) => {
 		if (currBreakdown.type !== "NESTED" && currBreakdown.laboratoryDetails) {
 			currBreakdown.laboratoryDetails = undefined
-    }
-    if (currBreakdown.type === "NESTED" && currBreakdown.laboratoryDetails) {
-      currBreakdown.laboratoryDetails.finalGrade = 0
 		}
-  })
+		if (currBreakdown.type === "NESTED" && currBreakdown.laboratoryDetails) {
+			currBreakdown.laboratoryDetails.finalGrade = 0
+		}
+	})
 
 	const formValue = useSelector(form.store, (state) => state.values)
 	console.log(JSON.stringify(formValue))
@@ -116,10 +114,12 @@ export function UpdateCourseInstanceForm({
 				e.preventDefault()
 				e.stopPropagation()
 				await form.handleSubmit()
-      }}
+			}}
 			className="w-full flex flex-col gap-4 p-4"
 		>
-			{isForDemo && <h1 className={"mt-4 text-4xl font-bold text-center"}>Demo</h1>}
+			{isForDemo && (
+				<h1 className={"mt-4 text-4xl font-bold text-center"}>Demo</h1>
+			)}
 			{!isForDemo && (
 				<Field
 					name={"profesorName"}
@@ -153,9 +153,7 @@ export function UpdateCourseInstanceForm({
 						<div className={"flex flex-col gap-8"}>
 							{fieldApi.state.value.map((breakdown, i) => {
 								return (
-									<div
-										key={`breakdown[${i}]-ctn`}
-									>
+									<div key={`breakdown[${i}]-ctn`}>
 										<div className={"relative"}>
 											<Field
 												name={`breakdown[${i}].name`}
@@ -249,8 +247,8 @@ export function UpdateCourseInstanceForm({
 													handleBlur,
 													syncValueToState: (e) =>
 														handleChange(e.target.value as BreakdownCategory),
-                          radioGroupName: `breakdown[${i}].type`,
-                          currentVal: state.value
+													radioGroupName: `breakdown[${i}].type`,
+													currentVal: state.value
 												}
 												return (
 													<div className={"flex flex-col gap-2"}>
@@ -288,7 +286,7 @@ export function UpdateCourseInstanceForm({
 																</h2>
 																<Field
 																	name={`breakdown[${i}].laboratoryDetails.profesorName`}
-                                  children={(fieldApi) => {
+																	children={(fieldApi) => {
 																		const { errors, isBlurred } =
 																			fieldApi.state.meta
 																		const {
@@ -318,12 +316,12 @@ export function UpdateCourseInstanceForm({
 																			/>
 																		)
 																	}}
-                                />
+																/>
 																<Field
 																	name={`breakdown[${i}].laboratoryDetails.breakdown`}
 																	mode={"array"}
 																>
-                                  {(labDetailBreakdown) => {
+																	{(labDetailBreakdown) => {
 																		return (
 																			<div className={"flex flex-col gap-8"}>
 																				{labDetailBreakdown.state.value?.map(
@@ -408,7 +406,7 @@ export function UpdateCourseInstanceForm({
 																											/>
 																										)
 																									}}
-                                                </Field>
+																								</Field>
 																								<Field
 																									name={`breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].percentage`}
 																								>
@@ -467,9 +465,9 @@ export function UpdateCourseInstanceForm({
 																									{(labDetailTypeField) => {
 																										const {
 																											handleBlur,
-                                                      handleChange,
-                                                      state
-                                                    } = labDetailTypeField
+																											handleChange,
+																											state
+																										} = labDetailTypeField
 																										const generalRadioProps: Omit<
 																											RadioInputProps,
 																											| "value"
@@ -482,7 +480,7 @@ export function UpdateCourseInstanceForm({
 																													e.target
 																														.value as BreakdownCategory
 																												),
-                                                      radioGroupName: `breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].type`,
+																											radioGroupName: `breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].type`,
 																											currentVal: state.value
 																										}
 																										return (
@@ -809,7 +807,9 @@ export function UpdateCourseInstanceForm({
 													breakdown.type === "NOT-NESTED" ||
 													(breakdown.type === "STANDALONE" &&
 														entryField.state.value.length < 1)
-												const hasNameField = breakdown.type !== "STANDALONE" && breakdown.type !== "NESTED"
+												const hasNameField =
+													breakdown.type !== "STANDALONE" &&
+													breakdown.type !== "NESTED"
 												const hasEntryGradeField = breakdown.type !== "NESTED"
 												return (
 													<div>
@@ -837,8 +837,7 @@ export function UpdateCourseInstanceForm({
 																						handleChange(e.currentTarget.value),
 																					isBlurred:
 																						isBlurred || submissionAttempts > 0,
-																					label:
-																						"Agrega un nombre a la nota",
+																					label: "Agrega un nombre a la nota",
 																					placeholder: "Parcial#1",
 																					error: errors[0]?.message,
 																					color: "#F9FCFC",
@@ -879,7 +878,9 @@ export function UpdateCourseInstanceForm({
 																								value: state.value.toString(),
 																								syncValueToState: (e) =>
 																									handleChange(
-																										Number(e.currentTarget.value)
+																										Number(
+																											e.currentTarget.value
+																										)
 																									),
 																								isBlurred:
 																									isBlurred ||
@@ -915,7 +916,9 @@ export function UpdateCourseInstanceForm({
 																								value: state.value.toString(),
 																								syncValueToState: (e) =>
 																									handleChange(
-																										Number(e.currentTarget.value)
+																										Number(
+																											e.currentTarget.value
+																										)
 																									),
 																								isBlurred:
 																									isBlurred ||
@@ -949,7 +952,6 @@ export function UpdateCourseInstanceForm({
 																				/>
 																			</>
 																		)}
-
 																	</div>
 																</div>
 															)
@@ -992,13 +994,13 @@ export function UpdateCourseInstanceForm({
 				}}
 			</Field>
 			{totalPercentage === 100 && (
-        <div className="w-full flex justify-center items-center">
-          <Button
-					text={isForDemo ? "Calcular nota final" : "Guardar cambios"}
-					type={"submit"}
-					styleType={"primary"}
-					isDisabled={false}
-				/>
+				<div className="w-full flex justify-center items-center">
+					<Button
+						text={isForDemo ? "Calcular nota final" : "Guardar cambios"}
+						type={"submit"}
+						styleType={"primary"}
+						isDisabled={false}
+					/>
 				</div>
 			)}
 		</form>

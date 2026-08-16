@@ -1,6 +1,12 @@
 import type { FontFamily } from "@notas-universitarias/types"
 
-export default function PreviewText({ font }: { font: FontFamily }) {
+export default function PreviewText({
+	font,
+	previewText
+}: {
+	font: FontFamily
+	previewText?: string
+}) {
 	return (
 		<div
 			style={{ fontFamily: font }}
@@ -8,7 +14,7 @@ export default function PreviewText({ font }: { font: FontFamily }) {
 				"w-full flex justify-center items-center tracking-wider text-xl"
 			}
 		>
-			<p>Preview Text</p>
+			<p>{previewText ? previewText : "Vista Previa"}</p>
 		</div>
 	)
 }

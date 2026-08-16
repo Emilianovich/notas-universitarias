@@ -249,7 +249,7 @@ function RouteComponent() {
 											label={"Estilo de fuente"}
 											name={name}
 											selectedItem={fontFamily}
-											id={"pet"}
+											id={name}
 											isBlurred={isBlurred || submissionAttempts > 0}
 											iterableItems={allowedFontFamilies}
 											error={errors[0]?.message}
@@ -274,7 +274,7 @@ function RouteComponent() {
 										label={"Tema de la aplicación"}
 										name={name}
 										selectedItem={theme}
-										id={"pet"}
+										id={name}
 										isBlurred={isBlurred || submissionAttempts > 0}
 										iterableItems={allowedThemes}
 										error={errors[0]?.message}

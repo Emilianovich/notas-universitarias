@@ -9,13 +9,21 @@ import GeneralInputContainer from "@/components/form/general/GeneralInputContain
 import type { InputProps } from "@/types/input.ts"
 
 export const allowedFontFamilies: Set<FontFamily> = new Set([
-	"Google Sans Code",
 	"Arima",
 	"Amiko",
-	"DynaPuff",
+	"Playwrite Brasil Guides",
+	"Elsie",
 	"Libertinus Math",
 	"Nunito",
-	"Dancing Script"
+	"Gorditas",
+	"Special Elite",
+	"Short Stack",
+	"Uncial Antiqua",
+	"Saira Stencil",
+	"Cherry Cream Soda",
+	"Metamorphous",
+	"Audiowide",
+	"Cabin Sketch"
 ])
 
 export const allowedThemes: Set<AppTheme> = new Set(["dark", "light"])
@@ -84,7 +92,6 @@ export default function DropdownMenu<
 						className={`p-2 w-100 h-11.25 rounded-[10px] outline-none shadow-[0px_2px_4px_rgba(0,0,0,0.25)] ${borderColor}`}
 						onBlur={handleBlur}
 						onChange={syncValueToState}
-						defaultValue={selectedItem}
 					>
 						{...itemsToRender}
 					</select>

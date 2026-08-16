@@ -1,38 +1,66 @@
-import { createAcademicPeriodsDTO } from "@notas-universitarias/types"
-import { revalidateLogic, useForm, useSelector } from "@tanstack/react-form"
-import { Link } from "@tanstack/react-router"
+import { buildRequest, ServerErrorRes } from "@notas-universitarias/helpers"
+import {
+	createAcademicPeriodsDTO,
+	type DataAfterRegister
+} from "@notas-universitarias/types"
+import { useForm, useSelector } from "@tanstack/react-form"
+import { useMutation } from "@tanstack/react-query"
+import { useNavigate } from "@tanstack/react-router"
 import Input from "@/components/form/general/Input.tsx"
 import Button from "@/components/general/Button.tsx"
 import useToast from "@/contexts/toast.ts"
 import type { RegisterFormProps } from "@/types/input.ts"
 
+const handleRegisterAftermath = async (payload: DataAfterRegister) => {
+	return buildRequest<string, string>({
+		method: "POST",
+		reqBody: payload,
+		path: "/auth/register-after-creation",
+		includeCredentials: true
+	})
+}
+
 export default function CreateAcademicPeriodForm({
 	registerState,
 	setGlobalFormState
 }: RegisterFormProps) {
-	const { name, startDate, endDate } = registerState.firstFormContent
 	const { buildToast } = useToast()
+	const navigate = useNavigate({ from: "/register" })
+	const mutation = useMutation({
+		mutationFn: handleRegisterAftermath,
+		onSuccess: async () => {
+			setTimeout(async () => {
+				await navigate({ to: "/login" })
+			}, 1500)
+			setGlobalFormState({ ...registerState, isFirstDone: true, progress: 99 })
+		},
+		onError: (error) => {
+			if (error instanceof ServerErrorRes) {
+				buildToast({
+					id: Date.now(),
+					type: "error",
+					content: `${error.errors}`
+				})
+			}
+		}
+	})
+	const { mutate, isSuccess } = mutation
 	const form = useForm({
 		defaultValues: {
-			name,
-			startDate,
-			endDate
+			name: "",
+			startDate: "",
+			endDate: ""
 		},
-		validationLogic: revalidateLogic({
-			mode: "submit",
-			modeAfterSubmission: "blur"
-		}),
 		validators: {
 			onDynamic: createAcademicPeriodsDTO,
 			onBlur: createAcademicPeriodsDTO
 		},
 		onSubmit: ({ value }) => {
-			setGlobalFormState({
-				...registerState,
-				firstFormContent: value,
-				isFirstDone: true,
-				progress: 50
-			})
+			const data: DataAfterRegister = {
+				settings: registerState.afterRegisterData.settings,
+				academicPeriod: value
+			}
+			mutate(data)
 		},
 		onSubmitInvalid: () => {
 			buildToast({
@@ -40,8 +68,7 @@ export default function CreateAcademicPeriodForm({
 				type: "error",
 				content: `Asegúrate llenar todos los campos y cumplir con todas las validaciones`
 			})
-		},
-		canSubmitWhenInvalid: false
+		}
 	})
 	const { Field } = form
 	const submissionAttempts = useSelector(
@@ -129,25 +156,32 @@ export default function CreateAcademicPeriodForm({
 					)
 				}}
 			/>
-			<div
-				className={
-					"flex flex-col gap-4 justify-center items-center w-full h-fit absolute top-[80%]"
-				}
-			>
-				<p>
-					¿Ya tienes cuenta?{" "}
-					<Link to={"/login"}>
-						<strong
-							className={
-								"cursor-pointer font-medium hover:scale-105 hover:text-primary-400 transition-all duration-300 ease-in-out underline"
-							}
-						>
-							Inicia sesión
-						</strong>
-					</Link>
-				</p>
+			<div className={"w-full flex justify-center items-center"}>
 				<Button
-					text={"Guardar & Seguir"}
+					text={"Hacer más tarde"}
+					type={"button"}
+					styleType={"secondary"}
+					isDisabled={false}
+					clickAction={async () => {
+						if (registerState.afterRegisterData.settings) {
+							const data: DataAfterRegister = {
+								settings: registerState.afterRegisterData.settings
+							}
+							mutate(data)
+						}
+						if (isSuccess) {
+							setGlobalFormState({ ...registerState, progress: 99 })
+							buildToast({
+								id: Date.now(),
+								type: "info",
+								content: "Redirigiéndote al login..."
+							})
+							setTimeout(async () => navigate({ to: "/login" }), 1500)
+						}
+					}}
+				/>
+				<Button
+					text={"Guardar periodo académico"}
 					type={"submit"}
 					styleType={"primary"}
 					isDisabled={false}

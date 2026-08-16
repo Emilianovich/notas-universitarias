@@ -16,7 +16,10 @@ function Home() {
 					<Nav>
 						<NavOption navigateTo={"/"} text={"Inicio"} />
 						<NavOption navigateTo={"/demo"} text={"Demo"} />
-						<NavToOutside href={"https://github.com/Emilianovich/notas-universitarias"} text="Repositorio"/>
+						<NavToOutside
+							href={"https://github.com/Emilianovich/notas-universitarias"}
+							text="Repositorio"
+						/>
 					</Nav>
 				</Header>
 				<main
