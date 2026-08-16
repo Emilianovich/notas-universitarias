@@ -1,12 +1,12 @@
 import {
 	type ChangePasswordDto,
-	changePasswordSchema,
+	changePasswordSchema, type CreateUserDTO, createUserDto, type DataAfterRegister, dataAfterUserRegisterSchema,
 	type LoginDTO,
 	loginDTO
 } from "@notas-universitarias/types"
 import { Hono } from "hono"
 import { deleteCookie, getCookie, setCookie } from "hono/cookie"
-import { getContextVars } from "../helpers/helpers.js"
+import getValidObjectId, { getContextVars } from "../helpers/helpers.js"
 import type { MiddlewareVars } from "../index.js"
 import authMiddleware from "../middlewares/auth.js"
 import { ZodMiddleware } from "../middlewares/zod.js"
@@ -14,6 +14,30 @@ import env from "../modules/config/env.js"
 import { AuthService } from "../services/auth/AuthService.js"
 
 const authRoutes = new Hono<MiddlewareVars>().basePath("/auth")
+
+authRoutes.post("/register", ZodMiddleware("json", createUserDto),async (ctx) => {
+	const { mongoService } = getContextVars(ctx)
+	const dto : CreateUserDTO = ctx.req.valid("json")
+	const {userId, maxAge} = await (new AuthService(mongoService)).createUser(dto)
+	setCookie(ctx, env.TEMP_USER_COOKIE_NAME, userId.toString(), {
+		path: "/",
+		secure: env.SESSION_COOKIE_SECURE,
+		sameSite: env.COOKIE_SAME_SITE,
+		httpOnly: true,
+		maxAge
+	})
+	// TODO REVIEW: cambiar quizás el nombre
+	return ctx.json("Tu cuenta fue creada. Si quieres, puedes terminar unas configuraciones")
+})
+
+authRoutes.post("/register-after-creation", ZodMiddleware("json", dataAfterUserRegisterSchema),async (ctx) => {
+	const userId = getValidObjectId(getCookie(ctx, env.TEMP_USER_COOKIE_NAME))
+	const { mongoService } = getContextVars(ctx)
+	const dto : DataAfterRegister = ctx.req.valid("json")
+	const authService = new AuthService(mongoService)
+	await authService.handleUpdateAfterRegister(dto, userId)
+	return ctx.json("¡Tu cuenta está preparada!")
+})
 
 authRoutes.post("/login", ZodMiddleware("json", loginDTO), async (ctx) => {
 	const authService = new AuthService(getContextVars(ctx).mongoService)

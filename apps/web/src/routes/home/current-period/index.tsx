@@ -8,6 +8,7 @@ import useToast from "@/contexts/toast.ts"
 import authMiddleware from "@/middlewares/auth.ts"
 import { queryClient } from "@/routes/__root.tsx"
 import CourseInstancesContainer from "@/routes/home/current-period/-CourseInstancesContainer.tsx"
+import {Suspense} from "react";
 
 const getCurrentAcademicPeriod = async () => {
 	return buildRequest<CurrentAcademicPeriod, string>({
@@ -31,27 +32,28 @@ export const Route = createFileRoute("/home/current-period/")({
 			}
 		]
 	}),
-	ssr: true,
 	server: {
 		middleware: [authMiddleware]
-	}
+	},
 })
 
 function CurrentPeriodPage() {
-	const { data, isPending, isError, isSuccess } = useGetCurrentAcademicPeriod()
+	const { data, error } = useSuspenseQuery({
+		queryKey: ["currentAcademicPeriod"],
+		queryFn: () => getCurrentAcademicPeriod()
+	})
 	return (
 		<main className={"flex flex-col items-center justify-center"}>
-			{isPending && (
-				<LoadingComponent text={"Cargando tu periodo académico actual..."} />
-			)}
-			{isError && (
-				<ErrorComponent
-					text={
-						"Ocurrió un error al buscar tu periodo académico actual. Intenta nuevamente"
-					}
-				/>
-			)}
-			{isSuccess && <CourseInstancesContainer {...data.content} />}
+			<Suspense fallback={<LoadingComponent text={"Cargando tu periodo académico actual..."} />}>
+				<CourseInstancesContainer {...data.content} />
+				{error && (
+					<ErrorComponent
+						text={
+							"Ocurrió un error al buscar tu periodo académico actual. Intenta nuevamente"
+						}
+					/>
+				)}
+			</Suspense>
 		</main>
 	)
 }

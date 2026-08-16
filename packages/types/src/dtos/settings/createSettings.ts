@@ -1,6 +1,7 @@
 import { z } from "zod"
+import {createAcademicPeriodsDTO, CreateAcademicPeriodsDto} from "../academicPeriods";
 
-const createUserPreferencesSchema = z.strictObject({
+export const createUserPreferencesSchema = z.strictObject({
 	fontFamily: z.enum(
 		[
 			"Google Sans Code",
@@ -25,4 +26,10 @@ const createUserPreferencesSchema = z.strictObject({
 	})
 })
 
-export default createUserPreferencesSchema
+export const dataAfterUserRegisterSchema = z.object({
+	settings: z.optional(createUserPreferencesSchema),
+	academicPeriod: z.optional(createAcademicPeriodsDTO),
+})
+
+export type CreateSettingsDto = z.infer<typeof createUserPreferencesSchema>
+export type DataAfterRegister = z.infer<typeof dataAfterUserRegisterSchema>

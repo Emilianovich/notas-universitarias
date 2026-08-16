@@ -43,15 +43,15 @@ export default function UserCredentialsForm({
 	const mutation = useMutation({
 		mutationFn: registerUser,
 		onSuccess: async (data) => {
-			setGlobalFormState({ ...registerState, progress: 100 })
-			setTimeout(async () => {
-				await navigate({ to: "/login" })
-				buildToast({
-					id: Date.now(),
-					type: "success",
-					content: data.content
-				})
-			}, 500)
+			setGlobalFormState({ ...registerState, progress: 66 })
+			// setTimeout(async () => {
+			// 	await navigate({ to: "/login" })
+			// 	buildToast({
+			// 		id: Date.now(),
+			// 		type: "success",
+			// 		content: data.content
+			// 	})
+			// }, 500)
 		},
 		onError: (error) => {
 			setGlobalFormState({ ...registerState, progress: 80 })

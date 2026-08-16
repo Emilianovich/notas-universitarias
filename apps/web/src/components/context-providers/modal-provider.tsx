@@ -1,4 +1,5 @@
 import { type ReactNode, useState } from "react"
+import defaultSettings from "@/components/context-providers/default-settings.ts"
 import Button from "@/components/general/Button.tsx"
 import {
 	type ModalBuilderProps,
@@ -7,7 +8,6 @@ import {
 	type ModalProps
 } from "@/contexts/modal.ts"
 import useSettings from "@/contexts/settings.ts"
-import defaultSettings from "@/components/context-providers/default-settings.ts";
 
 const defaultModalContextComponentProps: ModalContextComponentProps = {
 	isOpen: false,
