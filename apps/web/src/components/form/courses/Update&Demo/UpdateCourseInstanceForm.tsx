@@ -1,17 +1,24 @@
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
 
 import {
+	buildRequest,
 	gradeToLetter,
+	ServerErrorRes,
 	updateCourseInstanceFinalGrade
 } from "@notas-universitarias/helpers"
 import {
 	type BreakdownCategory,
 	type CourseInstance,
+	NESTED_LABEL,
+	NOT_NESTED_LABEL,
 	ON_SUBMIT_INVALID_MSG,
+	STANDALONE_LABEL,
 	type UpdateCourseInstanceDto,
 	updateCourseInstanceSchema
 } from "@notas-universitarias/types"
 import { useForm, useSelector } from "@tanstack/react-form"
+import { useMutation } from "@tanstack/react-query"
+import { useNavigate } from "@tanstack/react-router"
 import { Trash2 } from "lucide-react"
 import DeleteFormValue from "@/components/form/general/DeleteFormValue.tsx"
 import ErrorMessage from "@/components/form/general/ErrorMessage.tsx"
@@ -28,17 +35,61 @@ import useModal from "@/contexts/modal.ts"
 import useToast from "@/contexts/toast.ts"
 import type { InputProps } from "@/types/input.ts"
 
-type UpdateCourseInstanceFormProps = {
-	defaultValues: UpdateCourseInstanceDto
-	isForDemo: boolean
+type UpdateCourseInstanceFormProps =
+	| {
+			defaultValues: UpdateCourseInstanceDto
+			isForDemo: true
+	  }
+	| {
+			defaultValues: UpdateCourseInstanceDto
+			isForDemo: false
+			courseInstanceId: string
+	  }
+// type UpdateCourseInstanceReq = {
+// 	dto: UpdateCourseInstanceDto
+// 	id: string
+// }
+const updateCourseInstance = async (
+	dto: UpdateCourseInstanceDto,
+	id: string
+) => {
+	return buildRequest<string, string>({
+		method: "PUT",
+		reqBody: dto,
+		path: `/course-instances/${id}`,
+		includeCredentials: true
+	})
 }
-
-export function UpdateCourseInstanceForm({
-	defaultValues,
-	isForDemo
-}: UpdateCourseInstanceFormProps) {
+export function UpdateCourseInstanceForm(props: UpdateCourseInstanceFormProps) {
+	const { isForDemo, defaultValues } = props
 	const { buildModal, closeModal } = useModal()
 	const { buildToast } = useToast()
+	const navigate = useNavigate()
+	const mutation = useMutation({
+		mutationFn: (dto: UpdateCourseInstanceDto) => {
+			if (!isForDemo) return updateCourseInstance(dto, props.courseInstanceId)
+			// NOTE has to be a cleaner way to do this
+			return updateCourseInstance(dto, "")
+		},
+		onSuccess: async (data) => {
+			await navigate({ to: "/home/current-period" })
+			buildToast({
+				id: Date.now(),
+				type: "success",
+				content: data.content
+			})
+		},
+		onError: (error) => {
+			if (error instanceof ServerErrorRes) {
+				buildToast({
+					id: Date.now(),
+					type: "error",
+					content: error.errors
+				})
+			}
+		}
+	})
+	const { mutate } = mutation
 	const form = useForm({
 		validators: {
 			onBlur: updateCourseInstanceSchema
@@ -52,31 +103,30 @@ export function UpdateCourseInstanceForm({
 			})
 		},
 		onSubmit: async ({ value }) => {
-			// if (isForDemo && !value.breakdown) {
-			//     buildToast({
-			//         id: Date.now(),
-			//         type: "info",
-			//         content: "Para calcular tu nota es necesario especificar la subdivisión de la materia"
-			//     })
-			//     return
-			// }
 			if (isForDemo) {
+				const breakdown = updateCourseInstanceSchema.parse(value).breakdown
 				const courseInstance: CourseInstance = {
 					finalGrade: 0,
-					breakdown: value.breakdown,
+					breakdown,
 					profesorName: value.profesorName ?? ""
 				}
 				updateCourseInstanceFinalGrade(courseInstance)
+				const finalGrade = Number((courseInstance.finalGrade * 100).toFixed(2))
 				buildToast({
 					id: Date.now(),
 					type: "info",
-					content: `Tu nota final sería ${courseInstance.finalGrade} y la letra ${gradeToLetter(courseInstance.finalGrade)}`
+					content: `Tu nota final sería ${finalGrade} y la letra ${gradeToLetter(finalGrade)}`
 				})
 				return
 			}
+			mutate(value)
 		}
 	})
 	const { Field } = form
+	const isDefaultValue = useSelector(
+		form.store,
+		(state) => state.isDefaultValue
+	)
 	const submissionAttempts = useSelector(
 		form.store,
 		(state) => state.submissionAttempts
@@ -97,17 +147,25 @@ export function UpdateCourseInstanceForm({
 			(previousVal, currentVal) => previousVal + currentVal.percentage,
 			0
 		) ?? -1
-	breakdownList.forEach((currBreakdown) => {
+	// let someBreakdownWithLab = false
+	// let indexOfBreakdownWithLab : number
+	breakdownList.forEach((currBreakdown, _i) => {
 		if (currBreakdown.type !== "NESTED" && currBreakdown.laboratoryDetails) {
 			currBreakdown.laboratoryDetails = undefined
 		}
-		if (currBreakdown.type === "NESTED" && currBreakdown.laboratoryDetails) {
+		if (currBreakdown.laboratoryDetails && isForDemo) {
+			currBreakdown.laboratoryDetails.profesorName = "Sam"
 			currBreakdown.laboratoryDetails.finalGrade = 0
 		}
+		// if (currBreakdown.laboratoryDetails) {
+		// 	someBreakdownWithLab = true
+		// 	indexOfBreakdownWithLab = i
+		// }
 	})
-
-	const formValue = useSelector(form.store, (state) => state.values)
-	console.log(JSON.stringify(formValue))
+	const formErrors = useSelector(form.store, (state) => state.errors)
+	console.log(JSON.stringify(formErrors))
+	// const formValue = useSelector(form.store, (state) => state.values)
+	// console.log(JSON.stringify(formValue))
 	return (
 		<form
 			onSubmit={async (e) => {
@@ -254,25 +312,27 @@ export function UpdateCourseInstanceForm({
 													<div className={"flex flex-col gap-2"}>
 														<h2 className={"text-xl"}>La evaluación tiene</h2>
 														<RadioInput
-															value={"NESTED"}
-															labelText={"Parte de teoría y laboratorio"}
-															radioId={`breakdown[${i}].nested`}
-															{...generalRadioProps}
-															key={`breakdown[${i}].nested`}
-														/>
-														<RadioInput
-															value={"NOT-NESTED"}
-															labelText={"Tiene subdivisiones"}
-															radioId={`breakdown[${i}].not-nested`}
-															{...generalRadioProps}
-															key={`breakdown[${i}].not-nested`}
-														/>
-														<RadioInput
 															value={"STANDALONE"}
-															labelText={"Es un solo porcentaje"}
+															labelText={STANDALONE_LABEL}
 															radioId={`breakdown[${i}].standalone`}
 															{...generalRadioProps}
 															key={`breakdown[${i}].standalone`}
+														/>
+														{
+															<RadioInput
+																value={"NESTED"}
+																labelText={NESTED_LABEL}
+																radioId={`breakdown[${i}].nested`}
+																{...generalRadioProps}
+																key={`breakdown[${i}].nested`}
+															/>
+														}
+														<RadioInput
+															value={"NOT-NESTED"}
+															labelText={NOT_NESTED_LABEL}
+															radioId={`breakdown[${i}].not-nested`}
+															{...generalRadioProps}
+															key={`breakdown[${i}].not-nested`}
 														/>
 														{errors && isBlurred && (
 															<ErrorMessage
@@ -284,39 +344,41 @@ export function UpdateCourseInstanceForm({
 																<h2 className={"text-xl mt-4"}>
 																	Evaluación del curso de laboratorio
 																</h2>
-																<Field
-																	name={`breakdown[${i}].laboratoryDetails.profesorName`}
-																	children={(fieldApi) => {
-																		const { errors, isBlurred } =
-																			fieldApi.state.meta
-																		const {
-																			name,
-																			handleBlur,
-																			handleChange,
-																			state
-																		} = fieldApi
-																		return (
-																			<Input
-																				key={`breakdown[${i}].laboratoryDetails.profesorName`}
-																				label={"¿Cómo se llama tu profesor?"}
-																				type={"text"}
-																				name={name}
-																				value={state.value as string}
-																				error={errors[0]?.message}
-																				syncValueToState={(e) =>
-																					handleChange(e.target.value)
-																				}
-																				handleBlur={handleBlur}
-																				isBlurred={
-																					isBlurred || submissionAttempts > 0
-																				}
-																				color={"#F9FCFC"}
-																				id={`breakdown[${i}].laboratoryDetails.profesorName`}
-																				originallyPassword={false}
-																			/>
-																		)
-																	}}
-																/>
+																{!isForDemo && (
+																	<Field
+																		name={`breakdown[${i}].laboratoryDetails.profesorName`}
+																		children={(fieldApi) => {
+																			const { errors, isBlurred } =
+																				fieldApi.state.meta
+																			const {
+																				name,
+																				handleBlur,
+																				handleChange,
+																				state
+																			} = fieldApi
+																			return (
+																				<Input
+																					key={`breakdown[${i}].laboratoryDetails.profesorName`}
+																					label={"¿Cómo se llama tu profesor?"}
+																					type={"text"}
+																					name={name}
+																					value={state.value as string}
+																					error={errors[0]?.message}
+																					syncValueToState={(e) =>
+																						handleChange(e.target.value)
+																					}
+																					handleBlur={handleBlur}
+																					isBlurred={
+																						isBlurred || submissionAttempts > 0
+																					}
+																					color={"#F9FCFC"}
+																					id={`breakdown[${i}].laboratoryDetails.profesorName`}
+																					originallyPassword={false}
+																				/>
+																			)
+																		}}
+																	/>
+																)}
 																<Field
 																	name={`breakdown[${i}].laboratoryDetails.breakdown`}
 																	mode={"array"}
@@ -495,22 +557,22 @@ export function UpdateCourseInstanceForm({
 																													La evaluación tiene
 																												</h2>
 																												<RadioInput
-																													value={"NOT-NESTED"}
-																													labelText={
-																														"Tiene subdivisiones"
-																													}
-																													radioId={`breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].not-nested`}
-																													{...generalRadioProps}
-																													key={`breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].not-nested`}
-																												/>
-																												<RadioInput
 																													value={"STANDALONE"}
 																													labelText={
-																														"Es un solo porcentaje"
+																														STANDALONE_LABEL
 																													}
 																													radioId={`breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].standalone`}
 																													{...generalRadioProps}
 																													key={`breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].standalone`}
+																												/>
+																												<RadioInput
+																													value={"NOT-NESTED"}
+																													labelText={
+																														NOT_NESTED_LABEL
+																													}
+																													radioId={`breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].not-nested`}
+																													{...generalRadioProps}
+																													key={`breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].not-nested`}
 																												/>
 																											</div>
 																										)
@@ -761,7 +823,7 @@ export function UpdateCourseInstanceForm({
 																																{
 																																	name: undefined,
 																																	rawScore: 0,
-																																	maxScore: 0
+																																	maxScore: 100
 																																}
 																															)
 																														}
@@ -801,6 +863,7 @@ export function UpdateCourseInstanceForm({
 												)
 											}}
 										</Field>
+
 										<Field name={`breakdown[${i}].entries`} mode={"array"}>
 											{(entryField) => {
 												const canAddEntry =
@@ -812,10 +875,13 @@ export function UpdateCourseInstanceForm({
 													breakdown.type !== "NESTED"
 												const hasEntryGradeField = breakdown.type !== "NESTED"
 												return (
-													<div>
+													<div className={"flex flex-col gap-4 mt-4"}>
 														{entryField.state.value.map((_, entryIndex) => {
 															return (
-																<div key={`breakdown-${i}-entry-${entryIndex}`}>
+																<div
+																	key={`breakdown-${i}-entry-${entryIndex}`}
+																	className={"border border-primary-300"}
+																>
 																	{hasNameField && (
 																		<Field
 																			name={`breakdown[${i}].entries[${entryIndex}].name`}
@@ -963,7 +1029,7 @@ export function UpdateCourseInstanceForm({
 																	entryField.pushValue({
 																		name: undefined,
 																		rawScore: 0,
-																		maxScore: 0
+																		maxScore: 100
 																	})
 																}
 															/>
@@ -999,7 +1065,7 @@ export function UpdateCourseInstanceForm({
 						text={isForDemo ? "Calcular nota final" : "Guardar cambios"}
 						type={"submit"}
 						styleType={"primary"}
-						isDisabled={false}
+						isDisabled={isDefaultValue}
 					/>
 				</div>
 			)}

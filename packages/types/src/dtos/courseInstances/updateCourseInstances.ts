@@ -156,7 +156,6 @@ export const updateCourseInstanceSchema = z
 			}
 		})
 	})
-	.strict()
 export type UpdateCourseInstanceDto = z.infer<typeof updateCourseInstanceSchema>
 export const demoCourseInstanceSchema = updateCourseInstanceSchema.required({
 	breakdown: true

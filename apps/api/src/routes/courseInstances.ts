@@ -1,11 +1,11 @@
+import type { CourseDocument } from "@notas-universitarias/types"
 import {
+	CreateCourseInstanceSchema,
 	type UpdateCourseInstanceDto,
 	updateCourseInstanceSchema
 } from "@notas-universitarias/types"
 import { Hono } from "hono"
 import type { ObjectId } from "mongodb"
-import { CreateCourseInstanceSchema } from "../../../../packages/types/src/dtos/courseInstances/createCourseInstances.js"
-import type { CourseDocument } from "../collection-schema/courses.js"
 import getValidObjectId, { getContextVars } from "../helpers/helpers.js"
 import type { MiddlewareVars } from "../index.js"
 import authMiddleware from "../middlewares/auth.js"
@@ -38,10 +38,13 @@ courseInstancesRoutes.get("/", async (ctx) => {
 courseInstancesRoutes.get("/:id", async (ctx) => {
 	const courseInstanceId = getValidObjectId(ctx.req.param("id"))
 	const { mongoService, userId } = getContextVars(ctx)
-	const { courseInstance } = await new CourseService(
+	const { courseInstance, courseName } = await new CourseService(
 		mongoService
 	).getCourseInstance(courseInstanceId, userId)
-	return ctx.json(courseInstance)
+	return ctx.json({
+		courseInstance,
+		courseName
+	})
 })
 
 // Create a course instance and maybe a Course

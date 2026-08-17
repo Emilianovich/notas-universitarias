@@ -172,8 +172,7 @@ export const CreateCourseInstanceSchema = z
 			ctx.addIssue({
 				code: "custom",
 				path: ["name"],
-				message:
-					"Como no ha dado esta materia, no es necesario el ID, pero es importante que facilite el nombre"
+				message: "Es importante que facilites el nombre de la materia"
 			})
 		}
 		if (!self.isRegistered && self.previousCourseId) {

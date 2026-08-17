@@ -29,10 +29,15 @@ export default function CreateAcademicPeriodForm({
 	const mutation = useMutation({
 		mutationFn: handleRegisterAftermath,
 		onSuccess: async () => {
+			setGlobalFormState({ ...registerState, isFirstDone: true, progress: 99 })
+			buildToast({
+				id: Date.now(),
+				type: "info",
+				content: "Redirigiéndote al login..."
+			})
 			setTimeout(async () => {
 				await navigate({ to: "/login" })
 			}, 1500)
-			setGlobalFormState({ ...registerState, isFirstDone: true, progress: 99 })
 		},
 		onError: (error) => {
 			if (error instanceof ServerErrorRes) {
@@ -44,7 +49,7 @@ export default function CreateAcademicPeriodForm({
 			}
 		}
 	})
-	const { mutate, isSuccess } = mutation
+	const { mutate } = mutation
 	const form = useForm({
 		defaultValues: {
 			name: "",
@@ -82,7 +87,9 @@ export default function CreateAcademicPeriodForm({
 				e.stopPropagation()
 				await form.handleSubmit()
 			}}
-			className={"grid grid-rows-4 gap-2 justify-center items-center relative"}
+			className={
+				"grid grid-rows-[auto_auto_auto_1fr] gap-2 justify-center items-center relative"
+			}
 		>
 			<Field
 				name={"name"}
@@ -156,7 +163,7 @@ export default function CreateAcademicPeriodForm({
 					)
 				}}
 			/>
-			<div className={"w-full flex justify-center items-center"}>
+			<div className={"w-full flex justify-between justify-self-center"}>
 				<Button
 					text={"Hacer más tarde"}
 					type={"button"}
@@ -168,15 +175,16 @@ export default function CreateAcademicPeriodForm({
 								settings: registerState.afterRegisterData.settings
 							}
 							mutate(data)
-						}
-						if (isSuccess) {
+						} else {
 							setGlobalFormState({ ...registerState, progress: 99 })
 							buildToast({
 								id: Date.now(),
 								type: "info",
 								content: "Redirigiéndote al login..."
 							})
-							setTimeout(async () => navigate({ to: "/login" }), 1500)
+							setTimeout(async () => {
+								await navigate({ to: "/login" })
+							}, 1500)
 						}
 					}}
 				/>

@@ -2,7 +2,9 @@ import {
 	type AppTheme,
 	type FontFamily,
 	ON_SUBMIT_INVALID_MSG,
-	type PetName
+	type PetName,
+	PREVIEW_PET_HEIGHT,
+	PREVIEW_TEXT_HEIGHT
 } from "@notas-universitarias/types"
 import {
 	type CreateSettingsDto,
@@ -79,7 +81,7 @@ export default function UserSettingsForm({
 				e.stopPropagation()
 				await form.handleSubmit()
 			}}
-			className={"flex flex-col justify-center items-center gap-4 p-4"}
+			className={`grid grid-rows-[auto_${PREVIEW_TEXT_HEIGHT}px_auto_auto_${PREVIEW_PET_HEIGHT}_1fr] justify-center items-center gap-4`}
 		>
 			<Field
 				name={"fontFamily"}

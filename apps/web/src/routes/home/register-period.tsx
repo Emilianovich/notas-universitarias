@@ -6,7 +6,7 @@ import {
 } from "@notas-universitarias/types"
 import { revalidateLogic, useForm, useSelector } from "@tanstack/react-form"
 import { useMutation } from "@tanstack/react-query"
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import Input from "@/components/form/general/Input.tsx"
 import Button from "@/components/general/Button.tsx"
 import useToast from "@/contexts/toast.ts"
@@ -61,6 +61,7 @@ function RegisterPeriodPage() {
 
 export default function AcademicPeriodForm() {
 	const { buildToast } = useToast()
+	const navigate = useNavigate()
 	const mutation = useMutation({
 		mutationFn: createNewAcademicPeriod,
 		onError: (error) => {
@@ -71,6 +72,14 @@ export default function AcademicPeriodForm() {
 					content: error.errors
 				})
 			}
+		},
+		onSuccess: async (data) => {
+			await navigate({ to: "/home/current-period" })
+			buildToast({
+				id: Date.now(),
+				type: "success",
+				content: data.content
+			})
 		}
 	})
 	const { mutate } = mutation

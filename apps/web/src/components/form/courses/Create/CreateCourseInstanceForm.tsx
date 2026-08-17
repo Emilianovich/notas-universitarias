@@ -6,12 +6,16 @@ import {
 	type CourseInstanceToBeCreated,
 	type CoursesInfo,
 	CreateCourseInstanceSchema,
-	ON_SUBMIT_INVALID_MSG
+	NESTED_LABEL,
+	NOT_NESTED_LABEL,
+	ON_SUBMIT_INVALID_MSG,
+	STANDALONE_LABEL
 } from "@notas-universitarias/types"
 import { useForm, useSelector } from "@tanstack/react-form"
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import { Trash2 } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
 import DropdownMenu from "@/components/form/general/DropdownMenu.tsx"
 import ErrorMessage from "@/components/form/general/ErrorMessage.tsx"
 import GeneralInputContainer from "@/components/form/general/GeneralInputContainer.tsx"
@@ -47,6 +51,7 @@ const getPreviousCoursesInfo = async () => {
 
 // TODO handle pending and error cases for getPreviousCoursesInfo
 export default function CreateCourseInstanceForm() {
+	const [_formCount, _setFormCount] = useState(0)
 	const { data } = useSuspenseQuery({
 		queryFn: getPreviousCoursesInfo,
 		queryKey: ["getPreviousCoursesInfo"]
@@ -76,6 +81,13 @@ export default function CreateCourseInstanceForm() {
 			await navigate({ to: "/home/current-period" })
 		}
 	})
+	const formRef = useRef<HTMLFormElement | null>(null)
+	useEffect(() => {
+		if (!formRef.current) return
+		console.log(`Current form height ${formRef.current.scrollHeight}`)
+		const currentHeight = formRef.current.scrollHeight
+		window.scrollTo({ top: currentHeight, behavior: "smooth" })
+	}, [])
 	const { mutate } = mutation
 	const form = useForm({
 		validators: {
@@ -145,13 +157,14 @@ export default function CreateCourseInstanceForm() {
 				e.stopPropagation()
 				await form.handleSubmit()
 			}}
+			ref={formRef}
 			className={`flex flex-col p-4 w-[90%] gap-2 ${isRegistered ? "h-fit" : "h-[80%]"} transition-all duration-300 ease-in-out`}
 		>
 			{data.content.length !== 0 && (
 				<Field
 					name={"isRegistered"}
 					children={(fieldApi) => {
-						const { name, handleBlur, handleChange } = fieldApi
+						const { name, handleBlur, handleChange, state } = fieldApi
 						const { isBlurred } = fieldApi.state.meta
 						return (
 							<GeneralInputContainer
@@ -162,6 +175,7 @@ export default function CreateCourseInstanceForm() {
 								input={
 									<div className={"flex flex-col gap-2"}>
 										<RadioInput
+											currentVal={state.value ? "1" : "0"}
 											radioGroupName={name}
 											value={"1"}
 											radioId={"hasNotBeenRegistered"}
@@ -174,6 +188,7 @@ export default function CreateCourseInstanceForm() {
 										<RadioInput
 											radioGroupName={name}
 											value={"0"}
+											currentVal={state.value ? "1" : "0"}
 											radioId={"hasBeenRegistered"}
 											labelText={"No"}
 											syncValueToState={(e) =>
@@ -264,13 +279,10 @@ export default function CreateCourseInstanceForm() {
 			<Field name={"breakdown"} mode={"array"}>
 				{(fieldApi) => {
 					return (
-						<div className={"flex flex-col gap-8 border border-red-400"}>
+						<div className={"flex flex-col gap-8"}>
 							{fieldApi.state.value.map((breakdown, i) => {
 								return (
-									<div
-										key={`breakdown[${i}]-ctn`}
-										className={"border border-primary-300"}
-									>
+									<div key={`breakdown[${i}]-ctn`}>
 										<div className={"relative"}>
 											<Field
 												name={`breakdown[${i}].name`}
@@ -355,7 +367,7 @@ export default function CreateCourseInstanceForm() {
 											key={`breakdown[${i}].type`}
 										>
 											{(typeField) => {
-												const { handleBlur, handleChange } = typeField
+												const { handleBlur, handleChange, state } = typeField
 												const { errors, isBlurred } = typeField.state.meta
 												const generalRadioProps: Omit<
 													RadioInputProps,
@@ -364,31 +376,32 @@ export default function CreateCourseInstanceForm() {
 													handleBlur,
 													syncValueToState: (e) =>
 														handleChange(e.target.value as BreakdownCategory),
-													radioGroupName: `breakdown[${i}].type`
+													radioGroupName: `breakdown[${i}].type`,
+													currentVal: state.value
 												}
 												return (
 													<div className={"flex flex-col gap-2"}>
 														<h2 className={"text-xl"}>La evaluación tiene</h2>
 														<RadioInput
+															value={"STANDALONE"}
+															labelText={STANDALONE_LABEL}
+															radioId={`breakdown[${i}].standalone`}
+															{...generalRadioProps}
+															key={`breakdown[${i}].standalone`}
+														/>
+														<RadioInput
 															value={"NESTED"}
-															labelText={"Parte de teoría y laboratorio"}
+															labelText={NESTED_LABEL}
 															radioId={`breakdown[${i}].nested`}
 															{...generalRadioProps}
 															key={`breakdown[${i}].nested`}
 														/>
 														<RadioInput
 															value={"NOT-NESTED"}
-															labelText={"Tiene subdivisiones"}
+															labelText={NOT_NESTED_LABEL}
 															radioId={`breakdown[${i}].not-nested`}
 															{...generalRadioProps}
 															key={`breakdown[${i}].not-nested`}
-														/>
-														<RadioInput
-															value={"STANDALONE"}
-															labelText={"Es un solo porcentaje"}
-															radioId={`breakdown[${i}].standalone`}
-															{...generalRadioProps}
-															key={`breakdown[${i}].standalone`}
 														/>
 														{errors && isBlurred && (
 															<ErrorMessage
@@ -581,7 +594,8 @@ export default function CreateCourseInstanceForm() {
 																									{(labDetailTypeField) => {
 																										const {
 																											handleBlur,
-																											handleChange
+																											handleChange,
+																											state
 																										} = labDetailTypeField
 																										const generalRadioProps: Omit<
 																											RadioInputProps,
@@ -595,6 +609,7 @@ export default function CreateCourseInstanceForm() {
 																													e.target
 																														.value as BreakdownCategory
 																												),
+																											currentVal: state.value,
 																											radioGroupName: `breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].type`
 																										}
 																										return (
@@ -609,22 +624,22 @@ export default function CreateCourseInstanceForm() {
 																													La evaluación tiene
 																												</h2>
 																												<RadioInput
-																													value={"NOT-NESTED"}
-																													labelText={
-																														"Tiene subdivisiones"
-																													}
-																													radioId={`breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].not-nested`}
-																													{...generalRadioProps}
-																													key={`breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].not-nested`}
-																												/>
-																												<RadioInput
 																													value={"STANDALONE"}
 																													labelText={
-																														"Es un solo porcentaje"
+																														STANDALONE_LABEL
 																													}
 																													radioId={`breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].standalone`}
 																													{...generalRadioProps}
 																													key={`breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].standalone`}
+																												/>
+																												<RadioInput
+																													value={"NOT-NESTED"}
+																													labelText={
+																														NOT_NESTED_LABEL
+																													}
+																													radioId={`breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].not-nested`}
+																													{...generalRadioProps}
+																													key={`breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].not-nested`}
 																												/>
 																											</div>
 																										)
@@ -639,13 +654,13 @@ export default function CreateCourseInstanceForm() {
 																						title={
 																							"Agregar evaluación para el laboratorio"
 																						}
-																						action={() =>
+																						action={() => {
 																							labDetailBreakdown.pushValue({
 																								name: "",
 																								percentage: 0,
 																								type: "STANDALONE"
 																							})
-																						}
+																						}}
 																					/>
 																				)}
 																			</div>
@@ -664,13 +679,13 @@ export default function CreateCourseInstanceForm() {
 							{totalPercentage < 100 && (
 								<AddItem
 									title={"Agregar Evaluación"}
-									action={() =>
+									action={() => {
 										fieldApi.pushValue({
 											name: "",
 											percentage: 0,
 											type: "STANDALONE"
 										})
-									}
+									}}
 								/>
 							)}
 						</div>
