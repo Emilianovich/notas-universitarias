@@ -7,11 +7,17 @@ import {
 import { revalidateLogic, useForm, useSelector } from "@tanstack/react-form"
 import { useMutation } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import ErrorComponent from "@/components/error-components/current-period/ErrorComponent.tsx"
 import Input from "@/components/form/general/Input.tsx"
 import Button from "@/components/general/Button.tsx"
+import LoadingComponent from "@/components/loading-components/current-period/LoadingComponent.tsx"
 import useToast from "@/contexts/toast.ts"
 import authMiddleware from "@/middlewares/auth.ts"
-import { useGetCurrentAcademicPeriod } from "@/routes/home/current-period"
+import { queryClient } from "@/routes/__root.tsx"
+import {
+	getAcademicPeriodQueryOpts,
+	useGetCurrentAcademicPeriod
+} from "@/routes/home/current-period"
 
 const createNewAcademicPeriod = async (dto: CreateAcademicPeriodsDto) => {
 	return buildRequest<string, string>({
@@ -33,7 +39,16 @@ export const Route = createFileRoute("/home/register-period")({
 	}),
 	server: {
 		middleware: [authMiddleware]
-	}
+	},
+	loader: () => queryClient.ensureQueryData(getAcademicPeriodQueryOpts),
+	pendingComponent: () => <LoadingComponent text={"Cargando contenido..."} />,
+	errorComponent: () => (
+		<ErrorComponent
+			text={
+				"Ocurrió un error al cargar el formulario para registrar un nuevo periodo académico"
+			}
+		/>
+	)
 })
 
 // TODO use isPending, isError

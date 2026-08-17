@@ -7,7 +7,8 @@ export const Route = createFileRoute("/home/current-period/course-instance/")({
 
 function RouteComponent() {
 	return (
-		<main className={"flex flex-col justify-center items-center gap-4"}>
+		<main className={"flex flex-col justify-start items-center gap-4"}>
+			<h1 className={"text-4xl text-primary-600 mt-4"}>Registra una materia</h1>
 			<CreateCourseInstanceForm />
 		</main>
 	)

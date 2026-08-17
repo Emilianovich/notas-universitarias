@@ -20,6 +20,7 @@ import { useForm, useSelector } from "@tanstack/react-form"
 import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import { Trash2 } from "lucide-react"
+import { useRef } from "react"
 import DeleteFormValue from "@/components/form/general/DeleteFormValue.tsx"
 import ErrorMessage from "@/components/form/general/ErrorMessage.tsx"
 import Input from "@/components/form/general/Input.tsx"
@@ -34,6 +35,7 @@ import Button from "@/components/general/Button.tsx"
 import useModal from "@/contexts/modal.ts"
 import useToast from "@/contexts/toast.ts"
 import type { InputProps } from "@/types/input.ts"
+import scrollTo from "@/utils/scroll.ts"
 
 type UpdateCourseInstanceFormProps =
 	| {
@@ -162,10 +164,8 @@ export function UpdateCourseInstanceForm(props: UpdateCourseInstanceFormProps) {
 		// 	indexOfBreakdownWithLab = i
 		// }
 	})
-	const formErrors = useSelector(form.store, (state) => state.errors)
-	console.log(JSON.stringify(formErrors))
-	// const formValue = useSelector(form.store, (state) => state.values)
-	// console.log(JSON.stringify(formValue))
+	const scrollToEnd = useRef<HTMLDivElement>(null)
+	const scrollToLabEnd = useRef<HTMLDivElement>(null)
 	return (
 		<form
 			onSubmit={async (e) => {
@@ -404,10 +404,13 @@ export function UpdateCourseInstanceForm(props: UpdateCourseInstanceFormProps) {
 																											confirmButton: {
 																												type: "modal-primary",
 																												action: () => {
-																													fieldApi.removeValue(
-																														i
+																													labDetailBreakdown.removeValue(
+																														labIndex
 																													)
 																													closeModal()
+																													scrollTo(
+																														scrollToLabEnd
+																													)
 																												},
 																												text: "Sí, eliminar"
 																											},
@@ -837,12 +840,13 @@ export function UpdateCourseInstanceForm(props: UpdateCourseInstanceFormProps) {
 																						)
 																					}
 																				)}
+																				<div ref={scrollToLabEnd}></div>
 																				{labDetailTotalPercentage < 100 && (
 																					<AddItem
 																						title={
 																							"Agregar evaluación para el laboratorio"
 																						}
-																						action={() =>
+																						action={() => {
 																							labDetailBreakdown.pushValue({
 																								name: "",
 																								percentage: 0,
@@ -850,7 +854,7 @@ export function UpdateCourseInstanceForm(props: UpdateCourseInstanceFormProps) {
 																								type: "STANDALONE",
 																								entries: []
 																							})
-																						}
+																						}}
 																					/>
 																				)}
 																			</div>
@@ -1044,7 +1048,7 @@ export function UpdateCourseInstanceForm(props: UpdateCourseInstanceFormProps) {
 							{totalPercentage < 100 && (
 								<AddItem
 									title={"Agregar Evaluación"}
-									action={() =>
+									action={() => {
 										fieldApi.pushValue({
 											name: "",
 											percentage: 0,
@@ -1052,7 +1056,8 @@ export function UpdateCourseInstanceForm(props: UpdateCourseInstanceFormProps) {
 											contribution: 0,
 											entries: []
 										})
-									}
+										scrollTo(scrollToEnd)
+									}}
 								/>
 							)}
 						</div>
@@ -1069,6 +1074,7 @@ export function UpdateCourseInstanceForm(props: UpdateCourseInstanceFormProps) {
 					/>
 				</div>
 			)}
+			<div ref={scrollToEnd}></div>
 		</form>
 	)
 }
