@@ -11,6 +11,11 @@ type BaseRes = {
 }
 export const ON_SUBMIT_INVALID_MSG =
 	"Asegúrate llenar todos los campos y cumplir con todas las validaciones"
+export const STANDALONE_LABEL = "Es un solo porcentaje"
+export const NESTED_LABEL = "Parte de teoría y laboratorio"
+export const NOT_NESTED_LABEL = "Tiene subdivisiones"
+export const PREVIEW_PET_HEIGHT = 120
+export const PREVIEW_TEXT_HEIGHT = 32
 export type SuccessRes<T> = BaseRes & { content: T }
 export type ErrorRes<T> = BaseRes & { errors: T }
 export * from "./db.js"

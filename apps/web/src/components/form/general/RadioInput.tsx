@@ -9,7 +9,7 @@ export type RadioInputProps = {
 	syncValueToState: (e: ChangeEvent<HTMLInputElement>) => void
 	handleBlur: () => void
 	propsForDb?: RadioPropsForDb
-	currentVal?: BreakdownCategory
+	currentVal?: BreakdownCategory | string
 }
 
 type RadioPropsForDb =

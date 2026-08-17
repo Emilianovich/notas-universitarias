@@ -16,7 +16,7 @@ export function SettingsContainer({
 	const imgSrc = disabled ? "/editing-pencil.svg" : "/pencil-cancel-edit.svg"
 	return (
 		<section className={"ml-4 w-full flex flex-col gap-4 p-4"}>
-			<div className={"flex gap-4 w-[20%]"}>
+			<div className={"flex gap-4 w-[30%]"}>
 				<h2 className={"font-bold text-2xl"}>{title}</h2>
 				<img
 					alt={imgAlt}

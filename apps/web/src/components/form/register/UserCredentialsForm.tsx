@@ -91,7 +91,9 @@ export default function UserCredentialsForm({
 				e.stopPropagation()
 				await form.handleSubmit()
 			}}
-			className={"grid grid-rows-4 gap-2 justify-center items-center relative"}
+			className={
+				"grid grid-rows-[auto_auto_auto_50px_1fr] gap-2 justify-center items-center relative"
+			}
 		>
 			<Field
 				name={"username"}
@@ -164,19 +166,7 @@ export default function UserCredentialsForm({
 			/>
 			<div
 				className={
-					"flex flex-col justify-center items-center gap-4 w-full h-fit"
-				}
-			>
-				<Button
-					text={"Crear usuario"}
-					type={"submit"}
-					styleType={"primary"}
-					isDisabled={isPending}
-				/>
-			</div>
-			<div
-				className={
-					"flex flex-col gap-4 justify-center items-center w-full h-fit absolute top-[80%]"
+					"flex flex-col gap-4 justify-center items-center w-full h-fit"
 				}
 			>
 				<p>
@@ -191,6 +181,18 @@ export default function UserCredentialsForm({
 						</strong>
 					</Link>
 				</p>
+			</div>
+			<div
+				className={
+					"flex flex-col justify-center items-center gap-4 w-full h-fit"
+				}
+			>
+				<Button
+					text={"Crear usuario"}
+					type={"submit"}
+					styleType={"primary"}
+					isDisabled={isPending}
+				/>
 			</div>
 		</form>
 	)

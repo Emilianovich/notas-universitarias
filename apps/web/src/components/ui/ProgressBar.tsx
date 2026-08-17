@@ -19,7 +19,7 @@ export default function ProgressBar({ progress, barWidth }: ProgressBarProps) {
 		}
 	}, [newWidth, barWidth])
 	return (
-		<div style={{ width: barWidth }} className={"h-5 absolute top-0"}>
+		<div style={{ width: barWidth }} className={"h-5 absolute top-0 right-0"}>
 			<div
 				className={
 					"rounded-[2.5px] h-4 bg-primary-300 w-0 transition-all duration-300 ease-in-out"

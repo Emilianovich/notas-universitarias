@@ -18,3 +18,7 @@ export type CoursesInfo = {
 	_id: ObjectId
 	name: string
 }
+export type CourseInstanceForEdit = {
+	courseInstance: CourseInstance
+	courseName: string
+}

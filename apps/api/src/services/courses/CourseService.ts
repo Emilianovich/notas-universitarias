@@ -114,8 +114,9 @@ export class CourseService {
 		courseInstanceId: ObjectId,
 		userId: ObjectId
 	): Promise<{
-		courseInstance: CourseInstance
+		courseInstance: Omit<CourseInstance, "finalGrade">
 		courseInstanceDoc: CourseInstanceDocument
+		courseName: string
 	}> {
 		const courseInstanceDoc =
 			await this.courseInstancesRepository.findById(courseInstanceId)
@@ -133,21 +134,34 @@ export class CourseService {
 			throw new HTTPException(404, {
 				message: "Usted no tiene cursos registrados todavía"
 			})
-
 		const copyCourseInstance = { ...courseInstanceDoc }
 		let courseInstanceBelongToUser = false
+		let courseName: string = "Nombre no definido"
 		for (const course of courses) {
-			courseInstanceBelongToUser = course.courseInstances.some((id) =>
-				id.equals(courseInstanceId)
-			)
+			courseInstanceBelongToUser = course.courseInstances.some((id) => {
+				if (id.equals(courseInstanceId)) {
+					courseName = course.name
+					return true
+				} else return false
+			})
 			if (courseInstanceBelongToUser) break
 		}
 		if (!courseInstanceBelongToUser)
 			throw new HTTPException(404, {
 				message: "Usted no tiene una materia registrada con ese id"
 			})
-		const { _id, ...courseInstance } = copyCourseInstance
-		return { courseInstance, courseInstanceDoc }
+		const { _id, ...rest } = copyCourseInstance
+		const { finalGrade, ...courseInstance } = rest
+		// TODO REVIEW: consider moving fully to client
+		courseInstance.breakdown.forEach((breakdown) => {
+			breakdown.percentage *= 100
+			if (breakdown.laboratoryDetails) {
+				breakdown.laboratoryDetails.breakdown.forEach((detail) => {
+					detail.percentage *= 100
+				})
+			}
+		})
+		return { courseInstance, courseInstanceDoc, courseName }
 	}
 
 	// OPTIMIZE

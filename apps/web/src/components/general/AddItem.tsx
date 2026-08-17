@@ -9,7 +9,7 @@ export function AddItem({ title, action }: AddItemProps) {
 				alt={`Botón para ${title}`}
 				title={title}
 				className={
-					"w-10 h-10 hover:scale-110 cursor-pointer transition-all duration-300 ease-in-out"
+					"w-7 h-7 hover:scale-110 cursor-pointer transition-all duration-300 ease-in-out"
 				}
 				onClick={action}
 			/>

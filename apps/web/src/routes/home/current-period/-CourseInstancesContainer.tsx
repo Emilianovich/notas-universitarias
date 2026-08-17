@@ -41,7 +41,6 @@ export default function CourseInstancesContainer({
 	const navigate = useNavigate({ from: "/home/current-period/" })
 	const registeredCourseInstances = courseInstances.map(
 		(instance: CurrentAcademicPeriodSubjects) => {
-			console.log(JSON.stringify(instance))
 			return (
 				<CourseInstanceBox
 					courseInstanceId={instance.id}
@@ -60,9 +59,7 @@ export default function CourseInstancesContainer({
 	return (
 		<section className={"flex flex-col items-center justify-center gap-10"}>
 			<h1 className={"text-4xl font-bold text-center text-primary-500 mb-8"}>
-				{!name.trim().length
-					? "Sin periodo académico registrado"
-					: `${name} - `}
+				{!name.trim().length ? "Sin periodo académico registrado" : `${name}`}
 			</h1>
 			{!isActive ? (
 				<ChildCourseContainerProps
