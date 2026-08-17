@@ -1,14 +1,15 @@
 import { buildRequest } from "@notas-universitarias/helpers"
 import type { CurrentAcademicPeriod } from "@notas-universitarias/types"
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { queryOptions, useQuery, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
-import { Suspense } from "react"
 import ErrorComponent from "@/components/error-components/current-period/ErrorComponent.tsx"
 import LoadingComponent from "@/components/loading-components/current-period/LoadingComponent.tsx"
 import authMiddleware from "@/middlewares/auth.ts"
+import { queryClient } from "@/routes/__root.tsx"
 import CourseInstancesContainer from "@/routes/home/current-period/-CourseInstancesContainer.tsx"
 
 const getCurrentAcademicPeriod = async () => {
+	await new Promise((resolve) => setTimeout(resolve, 1000))
 	return buildRequest<CurrentAcademicPeriod, string>({
 		method: "GET",
 		path: "/academic-periods",
@@ -21,6 +22,11 @@ export const useGetCurrentAcademicPeriod = () =>
 		queryFn: () => getCurrentAcademicPeriod()
 	})
 
+export const getAcademicPeriodQueryOpts = queryOptions({
+	queryKey: ["currentAcademicPeriod"],
+	queryFn: () => getCurrentAcademicPeriod()
+})
+
 export const Route = createFileRoute("/home/current-period/")({
 	component: CurrentPeriodPage,
 	head: () => ({
@@ -32,30 +38,25 @@ export const Route = createFileRoute("/home/current-period/")({
 	}),
 	server: {
 		middleware: [authMiddleware]
-	}
+	},
+	loader: () => queryClient.ensureQueryData(getAcademicPeriodQueryOpts),
+	pendingComponent: () => (
+		<LoadingComponent text={"Cargando tu periodo académico actual..."} />
+	),
+	errorComponent: () => (
+		<ErrorComponent
+			text={
+				"Ocurrió un error al buscar tu periodo académico actual. Intenta nuevamente"
+			}
+		/>
+	)
 })
 
 function CurrentPeriodPage() {
-	const { data, error } = useSuspenseQuery({
-		queryKey: ["currentAcademicPeriod"],
-		queryFn: () => getCurrentAcademicPeriod()
-	})
+	const { data } = useGetCurrentAcademicPeriod()
 	return (
 		<main className={"flex flex-col items-center justify-center"}>
-			<Suspense
-				fallback={
-					<LoadingComponent text={"Cargando tu periodo académico actual..."} />
-				}
-			>
-				<CourseInstancesContainer {...data.content} />
-				{error && (
-					<ErrorComponent
-						text={
-							"Ocurrió un error al buscar tu periodo académico actual. Intenta nuevamente"
-						}
-					/>
-				)}
-			</Suspense>
+			<CourseInstancesContainer {...data.content} />
 		</main>
 	)
 }

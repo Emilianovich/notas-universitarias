@@ -7,7 +7,7 @@ import type {
 	AcademicPeriodPresentation,
 	CourseInstancePresentation
 } from "@notas-universitarias/types"
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { Triangle } from "lucide-react"
 import { useMemo, useState } from "react"
@@ -15,15 +15,20 @@ import ErrorComponent from "@/components/error-components/current-period/ErrorCo
 import Button from "@/components/general/Button.tsx"
 import LoadingComponent from "@/components/loading-components/current-period/LoadingComponent.tsx"
 import authMiddleware from "@/middlewares/auth.ts"
+import { queryClient } from "@/routes/__root.tsx"
 
 const getUserHistory = async () => {
+	await new Promise((resolve) => setTimeout(resolve, 1000))
 	return await buildRequest<AcademicPeriodPresentation[], string>({
 		method: "GET",
 		path: "/academic-periods/history",
 		includeCredentials: true
 	})
 }
-
+const getHistoryQueryOpts = queryOptions({
+	queryKey: ["userHistory"],
+	queryFn: getUserHistory
+})
 export const Route = createFileRoute("/home/history")({
 	component: RouteComponent,
 	head: () => ({
@@ -35,26 +40,26 @@ export const Route = createFileRoute("/home/history")({
 	}),
 	server: {
 		middleware: [authMiddleware]
-	}
+	},
+	loader: () => queryClient.ensureQueryData(getHistoryQueryOpts),
+	pendingComponent: () => (
+		<LoadingComponent text={"Cargando tu historial académico..."} />
+	),
+	errorComponent: () => (
+		<ErrorComponent
+			text={"Ocurrió un error al tratar de cargar tu historial académico"}
+		/>
+	)
 })
 
 function RouteComponent() {
-	const { isError, isPending, isSuccess, data } = useSuspenseQuery({
-		queryKey: ["userHistory"],
-		queryFn: getUserHistory
-	})
+	const { isSuccess, data } = useSuspenseQuery(getHistoryQueryOpts)
 	return (
 		<main
 			className={
 				"flex flex-col items-center justify-start gap-10 transition-all duration-300 ease-in-out"
 			}
 		>
-			{isError && (
-				<ErrorComponent text={"No se pudo cargar tu historial académico"} />
-			)}
-			{isPending && (
-				<LoadingComponent text={"Cargando tu historial académico..."} />
-			)}
 			{isSuccess && isArrayEmpty(data.content) && (
 				<section className={"w-full h-full flex justify-center items-center"}>
 					<h1 className={"text-2xl text-primary-500"}>

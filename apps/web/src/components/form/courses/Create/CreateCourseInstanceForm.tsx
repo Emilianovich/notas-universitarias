@@ -15,7 +15,7 @@ import { useForm, useSelector } from "@tanstack/react-form"
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import { Trash2 } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { useRef } from "react"
 import DropdownMenu from "@/components/form/general/DropdownMenu.tsx"
 import ErrorMessage from "@/components/form/general/ErrorMessage.tsx"
 import GeneralInputContainer from "@/components/form/general/GeneralInputContainer.tsx"
@@ -31,6 +31,7 @@ import Button from "@/components/general/Button.tsx"
 import useModal from "@/contexts/modal.ts"
 import useToast from "@/contexts/toast.ts"
 import type { InputProps } from "@/types/input.ts"
+import scrollTo from "@/utils/scroll.ts"
 
 const registerCourseInstance = async (dto: CourseInstanceToBeCreated) => {
 	return buildRequest<string, string>({
@@ -51,7 +52,6 @@ const getPreviousCoursesInfo = async () => {
 
 // TODO handle pending and error cases for getPreviousCoursesInfo
 export default function CreateCourseInstanceForm() {
-	const [_formCount, _setFormCount] = useState(0)
 	const { data } = useSuspenseQuery({
 		queryFn: getPreviousCoursesInfo,
 		queryKey: ["getPreviousCoursesInfo"]
@@ -81,13 +81,8 @@ export default function CreateCourseInstanceForm() {
 			await navigate({ to: "/home/current-period" })
 		}
 	})
-	const formRef = useRef<HTMLFormElement | null>(null)
-	useEffect(() => {
-		if (!formRef.current) return
-		console.log(`Current form height ${formRef.current.scrollHeight}`)
-		const currentHeight = formRef.current.scrollHeight
-		window.scrollTo({ top: currentHeight, behavior: "smooth" })
-	}, [])
+	const scrollToRef = useRef<HTMLDivElement | null>(null)
+
 	const { mutate } = mutation
 	const form = useForm({
 		validators: {
@@ -137,19 +132,11 @@ export default function CreateCourseInstanceForm() {
 			(previousVal, currentVal) => previousVal + currentVal.percentage,
 			0
 		) ?? -1
-	// const values = useSelector(form.store, (state) => state.values)
 	breakdownArray.forEach((breakdown) => {
 		if (breakdown.type !== "NESTED" && breakdown.laboratoryDetails) {
 			breakdown.laboratoryDetails = undefined
 		}
 	})
-	// if (totalPercentage > 1) {
-	// 	buildToast({
-	// 		id: Date.now(),
-	// 		type: "info",
-	// 		content: `La suma de los porcentajes no puede sumar el 100%. Está en ${(totalPercentage * 100)}`
-	// 	})
-	// }
 	return (
 		<form
 			onSubmit={async (e) => {
@@ -157,7 +144,6 @@ export default function CreateCourseInstanceForm() {
 				e.stopPropagation()
 				await form.handleSubmit()
 			}}
-			ref={formRef}
 			className={`flex flex-col p-4 w-[90%] gap-2 ${isRegistered ? "h-fit" : "h-[80%]"} transition-all duration-300 ease-in-out`}
 		>
 			{data.content.length !== 0 && (
@@ -660,6 +646,7 @@ export default function CreateCourseInstanceForm() {
 																								percentage: 0,
 																								type: "STANDALONE"
 																							})
+																							scrollTo(scrollToRef)
 																						}}
 																					/>
 																				)}
@@ -685,6 +672,7 @@ export default function CreateCourseInstanceForm() {
 											percentage: 0,
 											type: "STANDALONE"
 										})
+										scrollTo(scrollToRef)
 									}}
 								/>
 							)}
@@ -702,7 +690,7 @@ export default function CreateCourseInstanceForm() {
 					/>
 				</div>
 			)}
+			<div ref={scrollToRef}></div>
 		</form>
 	)
 }
-//
