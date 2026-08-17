@@ -131,8 +131,10 @@ function CourseInstanceInHistory({
 	finalGrade,
 	_id
 }: CourseInstancePresentation) {
-	const [isHovered, setIsHovered] = useState(false)
+	const [isLetterGrade, setIsLetterGrade] = useState(false)
 	const computedFinalGrade = finalGrade * 100
+	const presentationGrade =
+		computedFinalGrade === 0 ? 0 : Number(computedFinalGrade.toFixed(2))
 	const letterGrade = gradeToLetter(computedFinalGrade)
 	const navigate = useNavigate({ from: "/home/history" })
 	// TODO change the rounding method
@@ -141,24 +143,15 @@ function CourseInstanceInHistory({
 			<div className={"flex items-center justify-center w-50 text-center"}>
 				<p>{name}</p>
 			</div>
-			<div
-				className={"relative flex items-center justify-center"}
-				onMouseLeave={() => setIsHovered(false)}
-				onMouseEnter={() => setIsHovered(true)}
-			>
-				<p>{isHovered ? computedFinalGrade.toFixed(2) : letterGrade}</p>
+			<div className={"relative flex items-center justify-center"}>
+				<p>{isLetterGrade ? presentationGrade : letterGrade}</p>
 			</div>
 			<Button
-				text={"Ver Detalles"}
+				text={isLetterGrade ? "Ver Notas en números" : "Ver nota en letras"}
 				type={"button"}
 				styleType={"secondary"}
 				isDisabled={false}
-				clickAction={async () =>
-					navigate({
-						to: "/home/course-instance/$courseInstanceId",
-						params: { courseInstanceId: _id.toString() }
-					})
-				}
+				clickAction={() => setIsLetterGrade(!isLetterGrade)}
 			/>
 			<Button
 				text={"Editar"}
