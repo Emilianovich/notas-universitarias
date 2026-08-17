@@ -9,10 +9,10 @@ import { Nav, NavOption } from "@/components/general/Nav.tsx"
 import LogoutIcon from "@/components/ui/LogoutIcon.tsx"
 
 export const Route = createFileRoute("/home")({
-	component: HomeLayout
+	component: RouteComponent
 })
 
-function HomeLayout() {
+function RouteComponent() {
 	return (
 		<SettingsProvider>
 			<HomeContent bodyClasses={"main-body"}>

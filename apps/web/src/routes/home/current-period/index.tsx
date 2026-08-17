@@ -1,6 +1,6 @@
 import { buildRequest } from "@notas-universitarias/helpers"
 import type { CurrentAcademicPeriod } from "@notas-universitarias/types"
-import { queryOptions, useQuery, useSuspenseQuery } from "@tanstack/react-query"
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import ErrorComponent from "@/components/error-components/current-period/ErrorComponent.tsx"
 import LoadingComponent from "@/components/loading-components/current-period/LoadingComponent.tsx"
