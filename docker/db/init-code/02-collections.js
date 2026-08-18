@@ -36,7 +36,7 @@ db.createCollection("users", {
 							enum: [
 								"Arima",
 								"Amiko",
-								"Playwrite Brasil Guides",
+								"Playwrite VN",
 								"Elsie",
 								"Libertinus Math",
 								"Nunito",

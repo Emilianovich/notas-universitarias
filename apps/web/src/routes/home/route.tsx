@@ -5,8 +5,8 @@ import SettingsProvider from "@/components/context-providers/settings-provider.t
 import ToastProvider from "@/components/context-providers/toast-provider.tsx"
 import NotFound from "@/components/error-components/NotFound.tsx"
 import HomeContent from "@/components/general/HomeContent.tsx"
-import HomePending from "@/components/pending-components/home/HomePending.tsx";
-import HomeHeader from "@/components/ui/HomeHeader.tsx";
+import HomePending from "@/components/pending-components/home/HomePending.tsx"
+import HomeHeader from "@/components/ui/HomeHeader.tsx"
 
 export const Route = createFileRoute("/home")({
 	component: RouteComponent,

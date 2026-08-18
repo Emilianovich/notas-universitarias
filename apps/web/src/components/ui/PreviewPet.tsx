@@ -5,7 +5,6 @@ import { Spike } from "@/contexts/settings.ts"
 export default function PreviewPet({ petName }: { petName: PetName }) {
 	const pet = findPetByName(petName)
 	const { alt, sleeping } = pet ?? Spike
-	const width = 150
 	return (
 		<div
 			className={`w-full flex justify-center items-center transition-all h-[${PREVIEW_PET_HEIGHT}px]`}
@@ -13,7 +12,10 @@ export default function PreviewPet({ petName }: { petName: PetName }) {
 			<img
 				src={sleeping.src}
 				alt={alt}
-				style={{ aspectRatio: sleeping.aspectRatio, width }}
+				style={{
+					aspectRatio: sleeping.aspectRatio,
+					width: sleeping.preferredWidth
+				}}
 			/>
 		</div>
 	)

@@ -38,7 +38,13 @@ export const Route = createFileRoute("/home/settings/")({
 	}),
 	server: {
 		middleware: [authMiddleware]
-	}
+	},
+	pendingComponent: () => (
+		<LoadingComponent text={"Cargando sus configuraciones..."} />
+	),
+	errorComponent: () => (
+		<ErrorComponent text={"Ocurrió un error al cargar sus configuraciones"} />
+	)
 })
 
 export const updateUserSettings = async (dto: UpdateUserDTO) => {
