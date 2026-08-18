@@ -56,7 +56,7 @@ export default function LogoutIcon() {
 				buildModal({
 					modalTitle: "Cerrar sesión",
 					modalContent: "¿Está seguro que quiere cerrar la sesión?",
-					closeButtonTitle: "No, quiero quedarme un rato",
+					closeButtonTitle: "Quedarme un rato más",
 					confirmButton: {
 						text: "Sí, cerrar sesión",
 						type: "primary",

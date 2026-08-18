@@ -11,7 +11,7 @@ import type { InputProps } from "@/types/input.ts"
 export const allowedFontFamilies: Set<FontFamily> = new Set([
 	"Arima",
 	"Amiko",
-	"Playwrite Brasil Guides",
+	"Playwrite VN",
 	"Elsie",
 	"Libertinus Math",
 	"Nunito",

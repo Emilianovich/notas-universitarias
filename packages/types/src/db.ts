@@ -48,7 +48,7 @@ export type UserPreferences = {
 export type FontFamily =
 	| "Arima"
 	| "Amiko"
-	| "Playwrite Brasil Guides"
+	| "Playwrite VN"
 	| "Elsie"
 	| "Libertinus Math"
 	| "Nunito"

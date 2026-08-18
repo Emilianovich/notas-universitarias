@@ -17,7 +17,6 @@ export const NOT_NESTED_LABEL = "Tiene subdivisiones"
 export const PREVIEW_PET_HEIGHT = 120
 export const PREVIEW_TEXT_HEIGHT = 32
 export type SuccessRes<T> = BaseRes & { content: T }
-export type ErrorRes<T> = BaseRes & { errors: T }
 export * from "./db.js"
 export * from "./document-schemas/index.js"
 export * from "./dtos/index.js"

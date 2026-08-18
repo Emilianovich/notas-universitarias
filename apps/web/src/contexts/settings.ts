@@ -55,8 +55,8 @@ export const Leon: Pet = {
 	},
 	sleeping: {
 		src: "/leon-sleeping.png",
-		aspectRatio: "3 / 2",
-		preferredWidth: 160
+		aspectRatio: "1 / 1",
+		preferredWidth: 150
 	},
 	shocked: {
 		src: "/leon-shocked.png",
