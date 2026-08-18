@@ -11,12 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as DemoRouteImport } from './routes/demo'
 import { Route as HomeRouteRouteImport } from './routes/home/route'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as LandingRouteRouteImport } from './routes/_landing/route'
 import { Route as HomeIndexRouteImport } from './routes/home/index'
+import { Route as LandingIndexRouteImport } from './routes/_landing/index'
 import { Route as HomeRegisterPeriodRouteImport } from './routes/home/register-period'
 import { Route as HomeHistoryRouteImport } from './routes/home/history'
+import { Route as LandingDemoRouteImport } from './routes/_landing/demo'
 import { Route as HomeSettingsIndexRouteImport } from './routes/home/settings/index'
 import { Route as HomeCurrentPeriodIndexRouteImport } from './routes/home/current-period/index'
 import { Route as HomeCourseInstanceIndexRouteImport } from './routes/home/course-instance/index'
@@ -35,25 +36,24 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoRoute = DemoRouteImport.update({
-  id: '/demo',
-  path: '/demo',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const HomeRouteRoute = HomeRouteRouteImport.update({
   id: '/home',
   path: '/home',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const LandingRouteRoute = LandingRouteRouteImport.update({
+  id: '/_landing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeIndexRoute = HomeIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => HomeRouteRoute,
+} as any)
+const LandingIndexRoute = LandingIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LandingRouteRoute,
 } as any)
 const HomeRegisterPeriodRoute = HomeRegisterPeriodRouteImport.update({
   id: '/register-period',
@@ -64,6 +64,11 @@ const HomeHistoryRoute = HomeHistoryRouteImport.update({
   id: '/history',
   path: '/history',
   getParentRoute: () => HomeRouteRoute,
+} as any)
+const LandingDemoRoute = LandingDemoRouteImport.update({
+  id: '/demo',
+  path: '/demo',
+  getParentRoute: () => LandingRouteRoute,
 } as any)
 const HomeSettingsIndexRoute = HomeSettingsIndexRouteImport.update({
   id: '/settings/',
@@ -106,11 +111,11 @@ const HomeCourseInstanceEditCourseInstanceIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof LandingIndexRoute
   '/home': typeof HomeRouteRouteWithChildren
-  '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/demo': typeof LandingDemoRoute
   '/home/history': typeof HomeHistoryRoute
   '/home/register-period': typeof HomeRegisterPeriodRoute
   '/home/': typeof HomeIndexRoute
@@ -123,12 +128,12 @@ export interface FileRoutesByFullPath {
   '/home/current-period/course-instance/': typeof HomeCurrentPeriodCourseInstanceIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/demo': typeof LandingDemoRoute
   '/home/history': typeof HomeHistoryRoute
   '/home/register-period': typeof HomeRegisterPeriodRoute
+  '/': typeof LandingIndexRoute
   '/home': typeof HomeIndexRoute
   '/home/course-instance/$courseInstanceId': typeof HomeCourseInstanceCourseInstanceIdRoute
   '/home/settings/change-password': typeof HomeSettingsChangePasswordRoute
@@ -140,13 +145,14 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_landing': typeof LandingRouteRouteWithChildren
   '/home': typeof HomeRouteRouteWithChildren
-  '/demo': typeof DemoRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/_landing/demo': typeof LandingDemoRoute
   '/home/history': typeof HomeHistoryRoute
   '/home/register-period': typeof HomeRegisterPeriodRoute
+  '/_landing/': typeof LandingIndexRoute
   '/home/': typeof HomeIndexRoute
   '/home/course-instance/$courseInstanceId': typeof HomeCourseInstanceCourseInstanceIdRoute
   '/home/settings/change-password': typeof HomeSettingsChangePasswordRoute
@@ -161,9 +167,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/home'
-    | '/demo'
     | '/login'
     | '/register'
+    | '/demo'
     | '/home/history'
     | '/home/register-period'
     | '/home/'
@@ -176,12 +182,12 @@ export interface FileRouteTypes {
     | '/home/current-period/course-instance/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/demo'
     | '/login'
     | '/register'
+    | '/demo'
     | '/home/history'
     | '/home/register-period'
+    | '/'
     | '/home'
     | '/home/course-instance/$courseInstanceId'
     | '/home/settings/change-password'
@@ -192,13 +198,14 @@ export interface FileRouteTypes {
     | '/home/current-period/course-instance'
   id:
     | '__root__'
-    | '/'
+    | '/_landing'
     | '/home'
-    | '/demo'
     | '/login'
     | '/register'
+    | '/_landing/demo'
     | '/home/history'
     | '/home/register-period'
+    | '/_landing/'
     | '/home/'
     | '/home/course-instance/$courseInstanceId'
     | '/home/settings/change-password'
@@ -210,9 +217,8 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  LandingRouteRoute: typeof LandingRouteRouteWithChildren
   HomeRouteRoute: typeof HomeRouteRouteWithChildren
-  DemoRoute: typeof DemoRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
 }
@@ -233,13 +239,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo': {
-      id: '/demo'
-      path: '/demo'
-      fullPath: '/demo'
-      preLoaderRoute: typeof DemoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/home': {
       id: '/home'
       path: '/home'
@@ -247,11 +246,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
+    '/_landing': {
+      id: '/_landing'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof LandingRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/home/': {
@@ -260,6 +259,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/home/'
       preLoaderRoute: typeof HomeIndexRouteImport
       parentRoute: typeof HomeRouteRoute
+    }
+    '/_landing/': {
+      id: '/_landing/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof LandingIndexRouteImport
+      parentRoute: typeof LandingRouteRoute
     }
     '/home/register-period': {
       id: '/home/register-period'
@@ -274,6 +280,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/home/history'
       preLoaderRoute: typeof HomeHistoryRouteImport
       parentRoute: typeof HomeRouteRoute
+    }
+    '/_landing/demo': {
+      id: '/_landing/demo'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof LandingDemoRouteImport
+      parentRoute: typeof LandingRouteRoute
     }
     '/home/settings/': {
       id: '/home/settings/'
@@ -327,6 +340,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface LandingRouteRouteChildren {
+  LandingDemoRoute: typeof LandingDemoRoute
+  LandingIndexRoute: typeof LandingIndexRoute
+}
+
+const LandingRouteRouteChildren: LandingRouteRouteChildren = {
+  LandingDemoRoute: LandingDemoRoute,
+  LandingIndexRoute: LandingIndexRoute,
+}
+
+const LandingRouteRouteWithChildren = LandingRouteRoute._addFileChildren(
+  LandingRouteRouteChildren,
+)
+
 interface HomeRouteRouteChildren {
   HomeHistoryRoute: typeof HomeHistoryRoute
   HomeRegisterPeriodRoute: typeof HomeRegisterPeriodRoute
@@ -361,9 +388,8 @@ const HomeRouteRouteWithChildren = HomeRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  LandingRouteRoute: LandingRouteRouteWithChildren,
   HomeRouteRoute: HomeRouteRouteWithChildren,
-  DemoRoute: DemoRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
 }

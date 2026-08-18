@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import defaultSettings from "@/components/context-providers/default-settings.ts"
 import useSettings from "@/contexts/settings.ts"
 
 export type ContentProps = {
@@ -7,9 +8,13 @@ export type ContentProps = {
 }
 
 export default function HomeContent({ bodyClasses, children }: ContentProps) {
-	const { fontFamily } = useSettings()
 	return (
-		<body style={{ fontFamily }} className={bodyClasses}>
+		<body
+			style={{
+				fontFamily: useSettings()?.fontFamily ?? defaultSettings.fontFamily
+			}}
+			className={bodyClasses}
+		>
 			{children}
 		</body>
 	)

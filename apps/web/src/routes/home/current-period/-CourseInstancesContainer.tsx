@@ -6,6 +6,7 @@ import { useNavigate } from "@tanstack/react-router"
 import type { ReactNode } from "react"
 import { AddItem } from "@/components/general/AddItem.tsx"
 import CourseInstanceBox from "@/routes/home/current-period/-CourseInstanceBox.tsx"
+import formatDate from "@/utils/date-formats.ts"
 
 export type AddItemProps = {
 	title: string
@@ -58,9 +59,16 @@ export default function CourseInstancesContainer({
 	)
 	return (
 		<section className={"flex flex-col items-center justify-center gap-10"}>
-			<h1 className={"text-4xl font-bold text-center text-primary-500 mb-8"}>
-				{!name.trim().length ? "Sin periodo académico registrado" : `${name}`}
-			</h1>
+			<div className={"flex flex-col gap-10 mb-8"}>
+				<h1 className={"text-4xl font-bold text-center text-primary-500"}>
+					{!name.trim().length ? "Sin periodo académico registrado" : `${name}`}
+				</h1>
+				{name.trim().length > 0 && (
+					<h2 className={"text-2xl text-center text-primary-500 mb-8"}>
+						{`${formatDate(new Date(startDate))} - ${formatDate(new Date(endDate))}`}
+					</h2>
+				)}
+			</div>
 			{!isActive ? (
 				<ChildCourseContainerProps
 					content={

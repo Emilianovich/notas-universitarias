@@ -1,19 +1,19 @@
 import type { UpdateCourseInstanceDto } from "@notas-universitarias/types"
 import { createFileRoute } from "@tanstack/react-router"
 import ModalProvider from "@/components/context-providers/modal-provider.tsx"
-import PetProvider from "@/components/context-providers/pet-provider"
+import PetProvider from "@/components/context-providers/pet-provider.tsx"
 import ToastProvider from "@/components/context-providers/toast-provider.tsx"
 import { UpdateCourseInstanceForm } from "@/components/form/courses/Update&Demo/UpdateCourseInstanceForm.tsx"
 import Content from "@/components/general/Content.tsx"
-import Header from "@/components/general/Header"
-import { Nav, NavOption, NavToOutside } from "@/components/general/Nav"
+import Header from "@/components/general/Header.tsx"
+import { Nav, NavOption, NavToOutside } from "@/components/general/Nav.tsx"
 
 const defaultValues: UpdateCourseInstanceDto = {
 	profesorName: "Tú mismo",
 	breakdown: []
 }
 
-export const Route = createFileRoute("/demo")({
+export const Route = createFileRoute("/_landing/demo")({
 	component: RouteComponent
 })
 

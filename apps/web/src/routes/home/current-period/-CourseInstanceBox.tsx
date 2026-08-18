@@ -18,7 +18,7 @@ export default function CourseInstanceBox({
 			onClick={navigateTo}
 			title={`Curso de ${courseInstanceName}`}
 		>
-			<p className={"text-xl"}>{courseInstanceName}</p>
+			<p className={"text-xl text-center"}>{courseInstanceName}</p>
 		</article>
 	)
 }

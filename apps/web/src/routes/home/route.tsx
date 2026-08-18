@@ -3,13 +3,15 @@ import ModalProvider from "@/components/context-providers/modal-provider.tsx"
 import PetProvider from "@/components/context-providers/pet-provider.tsx"
 import SettingsProvider from "@/components/context-providers/settings-provider.tsx"
 import ToastProvider from "@/components/context-providers/toast-provider.tsx"
+import NotFound from "@/components/error-components/NotFound.tsx"
 import Header, { SettingsIcon } from "@/components/general/Header.tsx"
 import HomeContent from "@/components/general/HomeContent.tsx"
 import { Nav, NavOption } from "@/components/general/Nav.tsx"
 import LogoutIcon from "@/components/ui/LogoutIcon.tsx"
 
 export const Route = createFileRoute("/home")({
-	component: RouteComponent
+	component: RouteComponent,
+	notFoundComponent: () => <NotFound isHome={true} />
 })
 
 function RouteComponent() {
