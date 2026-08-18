@@ -1,3 +1,4 @@
+import { formatDate } from "@notas-universitarias/helpers"
 import { createAcademicPeriodsDTO } from "@notas-universitarias/types"
 import { Hono } from "hono"
 import { getContextVars } from "../helpers/helpers.js"
@@ -40,7 +41,7 @@ academicPeriodsRoutes.post(
 			userId
 		)
 		return ctx.json(
-			`Registro del periodo académico exitoso. El ${content.name} comienza el ${content.startDate} y termina el ${content.endDate}`
+			`Registro del periodo académico exitoso. El ${content.name} comienza el ${formatDate(content.startDate)} y termina el ${formatDate(content.endDate)}`
 		)
 	}
 )
