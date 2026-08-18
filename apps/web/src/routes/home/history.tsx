@@ -18,7 +18,6 @@ import authMiddleware from "@/middlewares/auth.ts"
 import { queryClient } from "@/routes/__root.tsx"
 
 const getUserHistory = async () => {
-	await new Promise((resolve) => setTimeout(resolve, 1000))
 	return await buildRequest<AcademicPeriodPresentation[], string>({
 		method: "GET",
 		path: "/academic-periods/history",

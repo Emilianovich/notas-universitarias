@@ -3,13 +3,13 @@ import type { CurrentAcademicPeriod } from "@notas-universitarias/types"
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import ErrorComponent from "@/components/error-components/current-period/ErrorComponent.tsx"
-import LoadingComponent from "@/components/loading-components/current-period/LoadingComponent.tsx"
 import authMiddleware from "@/middlewares/auth.ts"
 import { queryClient } from "@/routes/__root.tsx"
 import CourseInstancesContainer from "@/routes/home/current-period/-CourseInstancesContainer.tsx"
+import {CurrentPeriodPending} from "@/components/pending-components/current-period/CurrentPeriodPending.tsx";
 
 const getCurrentAcademicPeriod = async () => {
-	await new Promise((resolve) => setTimeout(resolve, 1000))
+	await new Promise((resolve) => setTimeout(resolve, 5000))
 	return buildRequest<CurrentAcademicPeriod, string>({
 		method: "GET",
 		path: "/academic-periods",
@@ -41,7 +41,7 @@ export const Route = createFileRoute("/home/current-period/")({
 	},
 	loader: () => queryClient.ensureQueryData(getAcademicPeriodQueryOpts),
 	pendingComponent: () => (
-		<LoadingComponent text={"Cargando tu periodo académico actual..."} />
+		<CurrentPeriodPending />
 	),
 	errorComponent: () => (
 		<ErrorComponent
