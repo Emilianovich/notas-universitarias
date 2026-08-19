@@ -36,6 +36,7 @@ import useModal from "@/contexts/modal.ts"
 import useToast from "@/contexts/toast.ts"
 import type { InputProps } from "@/types/input.ts"
 import scrollTo from "@/utils/scroll.ts"
+import {ScrollToBottom} from "@/components/ui/ScrollToBottom.tsx";
 
 type UpdateCourseInstanceFormProps =
 	| {
@@ -1074,6 +1075,7 @@ export function UpdateCourseInstanceForm(props: UpdateCourseInstanceFormProps) {
 					/>
 				</div>
 			)}
+			<ScrollToBottom ref={scrollToEnd} />
 			<div ref={scrollToEnd}></div>
 		</form>
 	)
