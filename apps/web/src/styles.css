@@ -36,7 +36,7 @@
 }
 
 nav {
-	@apply flex w-[40%] h-17 justify-evenly items-center gap-4 bg-secondary rounded-[20px] p-3;
+	@apply flex 2xl:w-[40%] xl:w-[50%] sm:w-[60%] h-17 justify-evenly items-center gap-4 bg-secondary rounded-[20px] p-3;
 }
 
 header {
@@ -57,7 +57,7 @@ main {
 }
 
 .speech-bubble {
-	@apply bg-secondary w-xs h-27 flex items-center justify-center text-sm text-center;
+	@apply bg-secondary lg:w-xs lg:h-27 sm:h-20 sm:w-[275px] flex items-center justify-center sm:text-sm text-center;
 	position: relative;
 	border-radius: 30px;
 	transition: all 0.3s ease-in-out;

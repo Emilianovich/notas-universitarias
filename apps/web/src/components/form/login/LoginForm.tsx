@@ -6,10 +6,11 @@ import {
 } from "@notas-universitarias/types"
 import { useForm, useSelector } from "@tanstack/react-form"
 import { useMutation } from "@tanstack/react-query"
-import { Link, useNavigate } from "@tanstack/react-router"
+import { Link, useNavigate, useRouter } from "@tanstack/react-router"
 import Input from "@/components/form/general/Input.tsx"
 import Button from "@/components/general/Button.tsx"
 import useToast from "@/contexts/toast.ts"
+import { queryClient } from "@/routes/__root.tsx"
 import handleLogin from "@/routes/login.tsx"
 
 export type Redirected = {
@@ -17,6 +18,7 @@ export type Redirected = {
 }
 
 export default function LoginForm({ wasRedirected }: Redirected) {
+	const router = useRouter()
 	const { buildToast } = useToast()
 	// if (wasRedirected) {
 	// 	buildToast({
@@ -38,6 +40,7 @@ export default function LoginForm({ wasRedirected }: Redirected) {
 			}
 		},
 		onSuccess: async (data) => {
+			queryClient.clear()
 			await navigate({ to: "/home/current-period" })
 			buildToast({
 				id: Date.now(),

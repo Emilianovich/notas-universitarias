@@ -58,8 +58,6 @@ export default function UserSettingsForm({
 		}
 	})
 	const { Field } = form
-	const values = useSelector(form.store, (state) => state.values)
-	JSON.stringify(values)
 	const submissionAttempts = useSelector(
 		form.store,
 		(state) => state.submissionAttempts
@@ -81,7 +79,7 @@ export default function UserSettingsForm({
 				e.stopPropagation()
 				await form.handleSubmit()
 			}}
-			className={`grid grid-rows-[auto_${PREVIEW_TEXT_HEIGHT}px_auto_auto_${PREVIEW_PET_HEIGHT}_1fr] justify-center items-center gap-4`}
+			className={`border grid grid-rows-[auto_${PREVIEW_TEXT_HEIGHT}px_auto_auto_${PREVIEW_PET_HEIGHT}_1fr] justify-center items-center gap-4`}
 		>
 			<Field
 				name={"fontFamily"}

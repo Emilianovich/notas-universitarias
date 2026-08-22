@@ -100,23 +100,23 @@ export const Tom: Pet = {
 	alt: "Tom, el gato",
 	awake: {
 		src: "/tom-awake.png",
-		aspectRatio: "1 / 1",
+		aspectRatio: "7 / 10",
 		preferredWidth: 190
 	},
 	sleeping: {
 		src: "/tom-sleeping.png",
-		aspectRatio: "1 / 1",
-		preferredWidth: 175
+		aspectRatio: "3 / 2",
+		preferredWidth: 180
 	},
 	shocked: {
 		src: "/tom-shocked.png",
-		aspectRatio: "1 / 1",
-		preferredWidth: 155
+		aspectRatio: "7 / 10",
+		preferredWidth: 190
 	},
 	lost: {
 		src: "/tom-lost.png",
-		aspectRatio: "1 / 1",
-		preferredWidth: 155
+		aspectRatio: "7 / 10",
+		preferredWidth: 190
 	}
 }
 

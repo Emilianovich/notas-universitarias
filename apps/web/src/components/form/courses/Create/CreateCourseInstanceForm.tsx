@@ -681,7 +681,7 @@ export default function CreateCourseInstanceForm() {
 				}}
 			</Field>
 			{totalPercentage === 100 && (
-				<div className={"w-full flex items-center justify-center"}>
+				<div className={"sm:mt-4 w-full flex items-center justify-center"}>
 					<Button
 						text={"Guardar materia"}
 						type={"submit"}

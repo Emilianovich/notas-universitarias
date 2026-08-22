@@ -57,14 +57,18 @@ function RegisterPeriodPage() {
 	return (
 		<main className={"flex flex-col justify-center items-center w-full gap-8"}>
 			{isSuccess && data.content.isActive && (
-				<h1 className={"text-2xl text-primary-500"}>
+				<h1 className={"text-center sm:text-base lg:text-2xl text-primary-500"}>
 					El periodo académico actual tiene que finalizar para registrar uno
 					nuevo
 				</h1>
 			)}
 			{isSuccess && !data.content.isActive && (
 				<>
-					<h1 className={"text-4xl font-bold text-center text-primary-500"}>
+					<h1
+						className={
+							"sm:text-2xl sm:mt-2 lg:text-3xl lg:mt-0 text-4xl font-bold text-center text-primary-500"
+						}
+					>
 						Registrar nuevo periodo académico
 					</h1>
 					<AcademicPeriodForm />
@@ -141,7 +145,9 @@ export default function AcademicPeriodForm() {
 				e.stopPropagation()
 				await form.handleSubmit()
 			}}
-			className={"grid grid-rows-4 gap-2 justify-center items-center relative"}
+			className={
+				"grid grid-rows-[auto_auto_auto_70px] gap-2 justify-center items-center relative"
+			}
 		>
 			<Field
 				name={"name"}

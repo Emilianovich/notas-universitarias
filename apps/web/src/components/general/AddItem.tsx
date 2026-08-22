@@ -3,13 +3,13 @@ import type { AddItemProps } from "@/routes/home/current-period/-CourseInstances
 export function AddItem({ title, action }: AddItemProps) {
 	return (
 		<div className={"flex flex-col gap-4 justify-center items-center"}>
-			<p className={"text-xl"}>{title}</p>
+			<p className={"sm:text-base lg:text-xl"}>{title}</p>
 			<img
 				src={"/add.svg"}
 				alt={`Botón para ${title}`}
 				title={title}
 				className={
-					"w-7 h-7 hover:scale-110 cursor-pointer transition-all duration-300 ease-in-out"
+					"sm:size-5 lg:size-7 hover:scale-110 cursor-pointer transition-all duration-300 ease-in-out"
 				}
 				onClick={action}
 			/>

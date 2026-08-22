@@ -1,7 +1,7 @@
 import { buildRequest } from "@notas-universitarias/helpers"
 import type { UserPreferences } from "@notas-universitarias/types"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { type ReactNode, useMemo, useState } from "react"
+import { type ReactNode, useEffect, useMemo, useState } from "react"
 import { findPetByName } from "@/contexts/pet.ts"
 import {
 	SettingsContext,
@@ -49,6 +49,12 @@ export default function SettingsProvider({
 		() => ({ ...userSettings, changeUserSettings }),
 		[userSettings]
 	)
+	useEffect(() => {
+		const { fontFamily, theme, pet } = userSettings
+		localStorage.setItem("theme", theme)
+		localStorage.setItem("petName", pet.name)
+		localStorage.setItem("fontFamily", fontFamily)
+	}, [userSettings])
 	return (
 		<SettingsContext.Provider value={value}>
 			{children}

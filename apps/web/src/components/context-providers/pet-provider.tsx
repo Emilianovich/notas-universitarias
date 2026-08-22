@@ -168,10 +168,11 @@ export function Fact() {
 	if (isHovered) {
 		return (
 			<div
+				id="pet-provider-fact"
 				className={`speech-bubble p-4 opacity-100 ${isHovered ? "opacity-100" : ""}`}
 				style={{ fontFamily }}
 			>
-				<p>{generatePetFact(facts)}</p>
+				<p className={"sm:text-xs lg:text-base"}>{generatePetFact(facts)}</p>
 			</div>
 		)
 	}

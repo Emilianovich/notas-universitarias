@@ -17,6 +17,7 @@ export type NavOptions = {
 
 export type HeaderAndNavProps = {
 	children: React.ReactNode
+	fontFamily?: string
 }
 
 export type NavToOutsideProps = {
@@ -24,9 +25,9 @@ export type NavToOutsideProps = {
 	href: string
 }
 
-export function Nav({ children }: HeaderAndNavProps) {
+export function Nav({ children, fontFamily }: HeaderAndNavProps) {
 	return (
-		<nav style={{ boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)" }}>
+		<nav style={{ boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)", fontFamily }}>
 			{children}
 		</nav>
 	)
@@ -34,28 +35,40 @@ export function Nav({ children }: HeaderAndNavProps) {
 
 export function NavOption({ navigateTo, text }: NavOptions) {
 	return (
-		<Link
-			to={navigateTo}
-			className="text-[20px] text-center  w-fit"
-			activeProps={{ className: "text-primary-300 underline" }}
-			inactiveProps={{
-				className:
-					"text-primary-600 hover:scale-[0.95] transition-all duration-200 ease-in-out"
-			}}
+		<div
+			className={
+				"w-[clamp(80px,80px,fit-content)] flex items-center justify-center"
+			}
 		>
-			{text}
-		</Link>
+			<Link
+				to={navigateTo}
+				className="text-center  w-fit sm:text-sm lg:text-xl"
+				activeProps={{ className: "text-primary-300 underline" }}
+				inactiveProps={{
+					className:
+						"text-primary-600 hover:scale-[0.95] transition-all duration-200 ease-in-out"
+				}}
+			>
+				{text}
+			</Link>
+		</div>
 	)
 }
 
 export function NavToOutside({ text, href }: NavToOutsideProps) {
 	return (
-		<Link
-			to={href}
-			target={"_blank"}
-			className="text-[20px] w-25 text-primary-600 hover:scale-[0.95] transition-all duration-200 ease-in-out"
+		<div
+			className={
+				"w-[clamp(80px,80px,fit-content)] flex items-center justify-center"
+			}
 		>
-			{text}
-		</Link>
+			<Link
+				to={href}
+				target={"_blank"}
+				className="text-center  w-fit sm:text-sm lg:text-xl  text-primary-600 hover:scale-[0.95] transition-all duration-200 ease-in-out"
+			>
+				{text}
+			</Link>
+		</div>
 	)
 }
