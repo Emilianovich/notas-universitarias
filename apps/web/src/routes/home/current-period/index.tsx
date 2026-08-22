@@ -52,7 +52,11 @@ export const Route = createFileRoute("/home/current-period/")({
 function CurrentPeriodPage() {
 	const { data } = useGetCurrentAcademicPeriod()
 	return (
-		<main className={"flex flex-col items-center justify-center"}>
+		<main
+			className={
+				"relative flex flex-col items-center sm:justify-evenly lg:justify-center"
+			}
+		>
 			<CourseInstancesContainer {...data.content} />
 		</main>
 	)

@@ -14,7 +14,8 @@ export default function PreviewPet({ petName }: { petName: PetName }) {
 				alt={alt}
 				style={{
 					aspectRatio: sleeping.aspectRatio,
-					width: sleeping.preferredWidth
+					width: sleeping.preferredWidth,
+					objectFit: "contain"
 				}}
 			/>
 		</div>

@@ -32,10 +32,14 @@ function RouteComponent() {
 	return (
 		<Content bodyClasses={"bg-secondary"}>
 			<ToastProvider>
-				<main className={"w-screen h-screen flex items-center justify-center"}>
+				<main
+					className={
+						"w-screen h-screen flex items-center justify-center sm:mt-8 lg:mt-0"
+					}
+				>
 					<section
 						className={
-							"relative flex flex-col gap-8 bg-tertiary rounded-[10px] shadow-[0px_4px_10px_2px_rgba(0,0,0,0.25)] p-8"
+							"relative flex flex-col gap-8 bg-tertiary rounded-[10px] shadow-[0px_4px_10px_2px_rgba(0,0,0,0.25)] p-8 transition-all duration-300 ease-in-out"
 						}
 						style={{ width: totalContainerWidth }}
 					>

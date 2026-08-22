@@ -13,7 +13,7 @@ export const Route = createFileRoute("/_landing")({
 
 function RouteComponent() {
 	return (
-		<Content bodyClasses={"main-body"}>
+		<Content bodyClasses={`main-body`}>
 			<ModalProvider>
 				<ToastProvider>
 					<PetProvider>

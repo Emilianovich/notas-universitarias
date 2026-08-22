@@ -27,13 +27,17 @@ export const Route = createRootRoute({
 			{
 				rel: "stylesheet",
 				href: appCss
+			},
+			{
+				rel: "icon",
+				href: "/logo-favicon.ico"
 			}
 		]
 	}),
 	shellComponent: RootDocument
 })
 
-function RootDocument({ children }: { children: ReactNode }) {
+function RootDocument() {
 	return (
 		<html lang="es">
 			<head>

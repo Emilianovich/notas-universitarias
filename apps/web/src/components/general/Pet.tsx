@@ -1,7 +1,8 @@
 import defaultSettings from "@/components/context-providers/default-settings.ts"
 import { Fact } from "@/components/context-providers/pet-provider.tsx"
-import usePet from "@/contexts/pet.ts"
+import usePet, { findPetByName } from "@/contexts/pet.ts"
 import useSettings from "@/contexts/settings.ts"
+import useLocalStorage from "@/hooks/localStorage.ts"
 
 export default function Pet() {
 	const { pet } = useSettings() ?? defaultSettings
@@ -9,7 +10,8 @@ export default function Pet() {
 	const { togglePetHover, isHovered } = usePet()
 	return (
 		<div
-			className={`fixed flex justify-evenly gap-4 items-center p-4 bottom-4 right-8`}
+			id="pet"
+			className={`fixed flex justify-evenly gap-4 items-center p-4 bottom-4 sm:bottom-0  sm:right-4 lg:right-8`}
 		>
 			<Fact />
 			<img
@@ -30,9 +32,10 @@ export default function Pet() {
 export type PetVariant = {
 	variant: "shocked" | "lost"
 }
-
+// NOTE: testing localStorage
 export function PetVariant({ variant }: PetVariant) {
-	const { pet } = useSettings() ?? defaultSettings
+	const data = useLocalStorage()
+	const pet = findPetByName(data?.petName ?? defaultSettings.pet.name)
 	const { shocked, lost, alt } = pet
 	let src: string
 	let preferredWidth: number
@@ -47,6 +50,11 @@ export function PetVariant({ variant }: PetVariant) {
 		aspectRatio = lost.aspectRatio
 	}
 	return (
-		<img src={src} alt={alt} style={{ width: preferredWidth, aspectRatio }} />
+		<img
+			src={src}
+			alt={alt}
+			style={{ aspectRatio }}
+			className={`xl:w-[${preferredWidth}px] sm:w-42.5`}
+		/>
 	)
 }

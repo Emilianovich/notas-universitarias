@@ -32,7 +32,7 @@ function RouteComponent() {
 	return (
 		<main
 			className={
-				"flex flex-col items-center justify-center gap-10 transition-all duration-300 ease-in-out"
+				"flex flex-col items-center justify-center gap-10 transition-all duration-300 ease-in-out p-4"
 			}
 		>
 			<Suspense

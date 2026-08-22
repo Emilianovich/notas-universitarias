@@ -35,10 +35,10 @@ export default function LogoutIcon() {
 			buildToast({
 				id: Date.now(),
 				type: "info",
-				content: "Redirigiendo al login..."
+				content: "Redirigiendo a la página principal..."
 			})
 			setTimeout(async () => {
-				await navigate({ to: "/login" })
+				await navigate({ to: "/" })
 				queryClient.clear()
 			}, 1000)
 		}
@@ -50,13 +50,13 @@ export default function LogoutIcon() {
 			alt={"Icono para cerrar sesión"}
 			title={"Cerrar sesión"}
 			className={
-				"cursor-pointer w-8.75 h-[37.06px] hover:scale-110 transition-all duration-300 ease-in-out"
+				"cursor-pointer w-8.75 sm:w-5 h-9.25 sm:h-5.5 lg:w-7.5 lg:h-8 hover:scale-110 transition-all duration-300 ease-in-out"
 			}
 			onClick={() => {
 				buildModal({
 					modalTitle: "Cerrar sesión",
 					modalContent: "¿Está seguro que quiere cerrar la sesión?",
-					closeButtonTitle: "Quedarme un rato más",
+					closeButtonTitle: "Quedarme",
 					confirmButton: {
 						text: "Sí, cerrar sesión",
 						type: "primary",

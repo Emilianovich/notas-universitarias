@@ -57,7 +57,7 @@ export const updateUserSettings = async (dto: UpdateUserDTO) => {
 }
 
 function RouteComponent() {
-	const { isError, data, isPending, isSuccess } = useSuspenseQuery({
+	const { data } = useSuspenseQuery({
 		queryKey: ["userPreferences"],
 		queryFn: getUserPreferences
 	})
@@ -65,6 +65,8 @@ function RouteComponent() {
 	const { name, email, preferences } = user
 	const { petName, theme, fontFamily } = preferences
 	const { buildToast } = useToast()
+	// @ts-expect-error
+	// NOTE: this is only used in authenticated routes
 	const { changeUserSettings } = useSettings()
 	const navigate = useNavigate({ from: "/home/settings/" })
 	const mutation = useMutation({
@@ -133,203 +135,195 @@ function RouteComponent() {
 		(state) => state.submissionAttempts
 	)
 	return (
-		<main
-			className={`${isPending || isError ? "flex justify-center items-center" : ""}`}
-		>
-			{isPending && (
-				<LoadingComponent text={"Cargando sus configuraciones..."} />
-			)}
-			{isError && (
-				<ErrorComponent
-					text={"Ocurrió un error al cargar sus configuraciones"}
-				/>
-			)}
-			{isSuccess && (
-				<form
-					onSubmit={async (e) => {
-						e.preventDefault()
-						e.stopPropagation()
-						await form.handleSubmit()
-					}}
-					className={"p-4"}
+		<main>
+			<form
+				onSubmit={async (e) => {
+					e.preventDefault()
+					e.stopPropagation()
+					await form.handleSubmit()
+				}}
+				className={"p-4"}
+			>
+				<SettingsContainer
+					title={"Información personal"}
+					btnText={"Actualizar datos"}
+					btnAction={async () => console.log("Hi")}
 				>
-					<SettingsContainer
-						title={"Información personal"}
-						btnText={"Actualizar datos"}
-						btnAction={async () => console.log("Hi")}
-					>
-						<Field
-							name={"name"}
-							children={(fieldApi) => {
-								const { errors, isBlurred } = fieldApi.state.meta
-								const { name, handleBlur, state, handleChange } = fieldApi
-								return (
-									<Input
-										key={name}
-										id={name}
-										label={"Tu apodo"}
-										type={"text"}
-										name={name}
-										value={state.value}
-										error={errors[0]?.message}
-										syncValueToState={(e) => handleChange(e.target.value)}
-										handleBlur={handleBlur}
-										isBlurred={isBlurred || submissionAttempts > 0}
-										color={"#F9FCFC"}
-										originallyPassword={false}
-									/>
-								)
-							}}
-						/>
-						<Field
-							name={"email"}
-							children={(fieldApi) => {
-								const { errors, isBlurred } = fieldApi.state.meta
-								const { name, handleBlur, state, handleChange } = fieldApi
-								return (
-									<Input
-										key={name}
-										id={name}
-										label={"Tu correo"}
-										type={"text"}
-										name={name}
-										value={state.value}
-										error={errors[0]?.message}
-										syncValueToState={(e) => handleChange(e.target.value)}
-										handleBlur={handleBlur}
-										isBlurred={isBlurred || submissionAttempts > 0}
-										color={"#F9FCFC"}
-										originallyPassword={false}
-									/>
-								)
-							}}
-						/>
-						<div className={"flex gap-4 relative w-150"}>
-							<Input
-								key={name}
-								id={name}
-								label={"Tu contraseña"}
-								type={"password"}
-								name={name}
-								value={"Esto no tu contraseña real sjsjs"}
-								syncValueToState={(_e) =>
-									console.log("Esto literal no hace nada lol")
-								}
-								handleBlur={() =>
-									console.log(
-										"Estás haciendo un cambio que no afecta el legado de Lebrón"
-									)
-								}
-								isBlurred={false}
-								color={"#F9FCFC"}
-								originallyPassword={true}
-								error={"Shhh"}
-							/>
-							<div className={"absolute top-1/2 -translate-y-1/2 right-0"}>
-								<Button
-									// TODO buscar mejor nombre para este botón
-									text={"Actualizar contraseña"}
-									type={"button"}
-									styleType={"secondary"}
-									isDisabled={false}
-									clickAction={async () =>
-										await navigate({ to: "/home/settings/change-password" })
-									}
+					<Field
+						name={"name"}
+						children={(fieldApi) => {
+							const { errors, isBlurred } = fieldApi.state.meta
+							const { name, handleBlur, state, handleChange } = fieldApi
+							return (
+								<Input
+									key={name}
+									id={name}
+									label={"Tu apodo"}
+									type={"text"}
+									name={name}
+									value={state.value}
+									error={errors[0]?.message}
+									syncValueToState={(e) => handleChange(e.target.value)}
+									handleBlur={handleBlur}
+									isBlurred={isBlurred || submissionAttempts > 0}
+									color={"#F9FCFC"}
+									originallyPassword={false}
 								/>
-							</div>
-						</div>
-					</SettingsContainer>
-					<SettingsContainer
-						title={"Preferencias"}
-						btnText={"Guardar Preferencias"}
-						btnAction={async () => console.log("Hi")}
-					>
-						<Field
-							name={"fontFamily"}
-							children={(fieldApi) => {
-								const { errors, isBlurred } = fieldApi.state.meta
-								const { name, handleBlur, handleChange } = fieldApi
-								return (
-									<div className={"flex flex-col"}>
-										<DropdownMenu
-											label={"Estilo de fuente"}
-											name={name}
-											selectedItem={fontFamily}
-											id={name}
-											isBlurred={isBlurred || submissionAttempts > 0}
-											iterableItems={allowedFontFamilies}
-											error={errors[0]?.message}
-											handleBlur={handleBlur}
-											syncValueToState={(e) =>
-												handleChange(e.target.value as FontFamily)
-											}
-											color={"#F9FCFC"}
-										/>
-										<PreviewText font={selectedFontFamily} />
-									</div>
+							)
+						}}
+					/>
+					<Field
+						name={"email"}
+						children={(fieldApi) => {
+							const { errors, isBlurred } = fieldApi.state.meta
+							const { name, handleBlur, state, handleChange } = fieldApi
+							return (
+								<Input
+									key={name}
+									id={name}
+									label={"Tu correo"}
+									type={"text"}
+									name={name}
+									value={state.value}
+									error={errors[0]?.message}
+									syncValueToState={(e) => handleChange(e.target.value)}
+									handleBlur={handleBlur}
+									isBlurred={isBlurred || submissionAttempts > 0}
+									color={"#F9FCFC"}
+									originallyPassword={false}
+								/>
+							)
+						}}
+					/>
+					<div className={"flex gap-4 relative w-150"}>
+						<Input
+							key={name}
+							id={name}
+							label={"Tu contraseña"}
+							type={"password"}
+							name={name}
+							value={"Esto no tu contraseña real sjsjs"}
+							syncValueToState={(_e) =>
+								console.log("Esto literal no hace nada lol")
+							}
+							handleBlur={() =>
+								console.log(
+									"Estás haciendo un cambio que no afecta el legado de Lebrón"
 								)
-							}}
+							}
+							isBlurred={false}
+							color={"#F9FCFC"}
+							originallyPassword={true}
+							error={"Shhh"}
 						/>
-						<Field
-							name={"theme"}
-							children={(fieldApi) => {
-								const { errors, isBlurred } = fieldApi.state.meta
-								const { name, handleBlur, handleChange } = fieldApi
-								return (
+						<div
+							className={
+								"absolute top-1/2 -translate-y-1/2 right-0 xl:-right-10"
+							}
+						>
+							<Button
+								// TODO buscar mejor nombre para este botón
+								text={"Actualizar contraseña"}
+								type={"button"}
+								styleType={"secondary"}
+								isDisabled={false}
+								clickAction={async () =>
+									await navigate({ to: "/home/settings/change-password" })
+								}
+							/>
+						</div>
+					</div>
+				</SettingsContainer>
+				<SettingsContainer
+					title={"Preferencias"}
+					btnText={"Guardar Preferencias"}
+					btnAction={async () => console.log("Hi")}
+				>
+					<Field
+						name={"fontFamily"}
+						children={(fieldApi) => {
+							const { errors, isBlurred } = fieldApi.state.meta
+							const { name, handleBlur, handleChange } = fieldApi
+							return (
+								<div className={"flex flex-col"}>
 									<DropdownMenu
-										label={"Tema de la aplicación"}
+										label={"Estilo de fuente"}
 										name={name}
-										selectedItem={theme}
+										selectedItem={fontFamily}
 										id={name}
 										isBlurred={isBlurred || submissionAttempts > 0}
-										iterableItems={allowedThemes}
+										iterableItems={allowedFontFamilies}
 										error={errors[0]?.message}
 										handleBlur={handleBlur}
 										syncValueToState={(e) =>
-											handleChange(e.target.value as AppTheme)
+											handleChange(e.target.value as FontFamily)
 										}
 										color={"#F9FCFC"}
 									/>
-								)
-							}}
-						/>
-						<Field
-							name={"petName"}
-							children={(fieldApi) => {
-								const { errors, isBlurred } = fieldApi.state.meta
-								const { name, handleBlur, handleChange } = fieldApi
-								return (
-									<div className={"flex flex-col"}>
-										<DropdownMenu
-											label={"Mascota"}
-											name={name}
-											selectedItem={petName}
-											id={"pet"}
-											isBlurred={isBlurred || submissionAttempts > 0}
-											iterableItems={allowedPets}
-											error={errors[0]?.message}
-											handleBlur={handleBlur}
-											syncValueToState={(e) =>
-												handleChange(e.target.value as PetName)
-											}
-											color={"#F9FCFC"}
-										/>
-										<PreviewPet petName={selectedPetName} />
-									</div>
-								)
-							}}
-						/>
-					</SettingsContainer>
-					<div className={"w-full flex justify-center items-center"}>
-						<Button
-							text={"Guardar preferencias"}
-							type={"submit"}
-							styleType={"primary"}
-							isDisabled={false}
-						/>
-					</div>
-				</form>
-			)}
+									<PreviewText font={selectedFontFamily} />
+								</div>
+							)
+						}}
+					/>
+					<Field
+						name={"theme"}
+						children={(fieldApi) => {
+							const { errors, isBlurred } = fieldApi.state.meta
+							const { name, handleBlur, handleChange } = fieldApi
+							return (
+								<DropdownMenu
+									label={"Tema de la aplicación"}
+									name={name}
+									selectedItem={theme}
+									id={name}
+									isBlurred={isBlurred || submissionAttempts > 0}
+									iterableItems={allowedThemes}
+									error={errors[0]?.message}
+									handleBlur={handleBlur}
+									syncValueToState={(e) =>
+										handleChange(e.target.value as AppTheme)
+									}
+									color={"#F9FCFC"}
+								/>
+							)
+						}}
+					/>
+					<Field
+						name={"petName"}
+						children={(fieldApi) => {
+							const { errors, isBlurred } = fieldApi.state.meta
+							const { name, handleBlur, handleChange } = fieldApi
+							return (
+								<div className={"flex flex-col"}>
+									<DropdownMenu
+										label={"Mascota"}
+										name={name}
+										selectedItem={petName}
+										id={"pet"}
+										isBlurred={isBlurred || submissionAttempts > 0}
+										iterableItems={allowedPets}
+										error={errors[0]?.message}
+										handleBlur={handleBlur}
+										syncValueToState={(e) =>
+											handleChange(e.target.value as PetName)
+										}
+										color={"#F9FCFC"}
+									/>
+									<PreviewPet petName={selectedPetName} />
+								</div>
+							)
+						}}
+					/>
+				</SettingsContainer>
+				<div className={"w-full flex justify-center items-center"}>
+					<Button
+						text={"Guardar"}
+						type={"submit"}
+						styleType={"primary"}
+						isDisabled={false}
+					/>
+				</div>
+			</form>
 		</main>
 	)
 }

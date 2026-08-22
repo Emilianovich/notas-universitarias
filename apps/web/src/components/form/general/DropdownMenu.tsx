@@ -66,7 +66,7 @@ export default function DropdownMenu<
 				value={item}
 				selected={selectedItem === item}
 			>
-				{item}
+				{item === "dark" ? "Oscuro" : item === "light" ? "Claro" : item}
 			</option>
 		))
 	} else {

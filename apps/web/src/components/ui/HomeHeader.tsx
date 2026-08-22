@@ -1,10 +1,17 @@
 import Header, { SettingsIcon } from "@/components/general/Header.tsx"
 import { Nav, NavOption } from "@/components/general/Nav.tsx"
 import LogoutIcon from "@/components/ui/LogoutIcon.tsx"
+import { ProfileOrLogoInHeader } from "@/components/ui/ProfileOrLogoInHeader.tsx"
 
 export default function HomeHeader() {
 	return (
 		<Header>
+			<ProfileOrLogoInHeader
+				src={"/logo.png"}
+				direction={"left"}
+				alt={"Logo de Notas Universitarias"}
+				className={"size-17"}
+			/>
 			<Nav>
 				<NavOption
 					navigateTo={"/home/current-period"}
@@ -18,7 +25,7 @@ export default function HomeHeader() {
 			</Nav>
 			<div
 				className={
-					"absolute right-8 top-1/2 -translate-y-1/2 w-fit h-fit flex gap-4"
+					"absolute right-8 top-1/2 -translate-y-1/2 w-fit h-fit flex gap-4 2xl:right-10"
 				}
 			>
 				<LogoutIcon />
