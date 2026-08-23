@@ -1,11 +1,9 @@
 import { redirect } from "@tanstack/react-router"
 import { createMiddleware } from "@tanstack/react-start"
-import { getRequestHeader } from "@tanstack/react-start/server"
 
-const authMiddleware = createMiddleware().server(({ next }) => {
-	// TODO fix that no cookie is present when refreshing a page
-	const cookies = getRequestHeader("cookie")
-	if (!cookies) {
+const authMiddleware = createMiddleware().server(({ next, request }) => {
+	const cookieHeaders= request.headers.get("cookie")
+	if (!cookieHeaders) {
 		throw redirect({
 			to: "/login",
 			search: {
@@ -13,10 +11,11 @@ const authMiddleware = createMiddleware().server(({ next }) => {
 			}
 		})
 	}
-	const individualCookies = cookies.split(";")
+	const individualCookies = cookieHeaders.split(";")
 	const sessionCookie = individualCookies.find((cookie) =>
 		cookie.includes("user_session")
 	)
+	console.log("sessionCookie", sessionCookie)
 	if (!sessionCookie) {
 		throw redirect({
 			to: "/login",

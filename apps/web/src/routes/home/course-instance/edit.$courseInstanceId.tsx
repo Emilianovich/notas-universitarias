@@ -28,7 +28,6 @@ function RouteComponent() {
 		queryFn: () => getCourseInstance(id)
 	})
 	const { courseInstance, courseName } = data.content
-	console.error(courseInstance)
 	return (
 		<main
 			className={

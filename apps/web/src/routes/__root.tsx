@@ -7,7 +7,13 @@ import {
 } from "@tanstack/react-router"
 import type { ReactNode } from "react"
 import appCss from "../styles.css?url"
+import HomePending from "@/components/pending-components/home/HomePending.tsx";
 
+if (import.meta.hot) {
+	import.meta.hot.on('vite:beforeUpdate', () => {
+		console.clear()
+	})
+}
 export const queryClient = new QueryClient()
 export const Route = createRootRoute({
 	head: () => ({
@@ -34,7 +40,8 @@ export const Route = createRootRoute({
 			}
 		]
 	}),
-	shellComponent: RootDocument
+	shellComponent: RootDocument,
+	pendingComponent: () => <HomePending />
 })
 
 function RootDocument() {

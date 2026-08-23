@@ -5,8 +5,9 @@ import { createFileRoute } from "@tanstack/react-router"
 import ErrorComponent from "@/components/error-components/current-period/ErrorComponent.tsx"
 import { CurrentPeriodPending } from "@/components/pending-components/current-period/CurrentPeriodPending.tsx"
 import authMiddleware from "@/middlewares/auth.ts"
-import { queryClient } from "@/routes/__root.tsx"
 import CourseInstancesContainer from "@/routes/home/current-period/-CourseInstancesContainer.tsx"
+import {Suspense} from "react";
+import HomePending from "@/components/pending-components/home/HomePending.tsx";
 
 const getCurrentAcademicPeriod = async () => {
 	return buildRequest<CurrentAcademicPeriod, string>({
@@ -15,11 +16,8 @@ const getCurrentAcademicPeriod = async () => {
 		includeCredentials: true
 	})
 }
-export const useGetCurrentAcademicPeriod = () =>
-	useSuspenseQuery({
-		queryKey: ["currentAcademicPeriod"],
-		queryFn: () => getCurrentAcademicPeriod()
-	})
+export const useGetCurrentAcademicPeriod = () => useSuspenseQuery(getAcademicPeriodQueryOpts)
+
 
 export const getAcademicPeriodQueryOpts = queryOptions({
 	queryKey: ["currentAcademicPeriod"],
@@ -38,7 +36,6 @@ export const Route = createFileRoute("/home/current-period/")({
 	server: {
 		middleware: [authMiddleware]
 	},
-	loader: () => queryClient.ensureQueryData(getAcademicPeriodQueryOpts),
 	pendingComponent: () => <CurrentPeriodPending />,
 	errorComponent: () => (
 		<ErrorComponent
@@ -52,12 +49,14 @@ export const Route = createFileRoute("/home/current-period/")({
 function CurrentPeriodPage() {
 	const { data } = useGetCurrentAcademicPeriod()
 	return (
-		<main
-			className={
-				"relative flex flex-col items-center sm:justify-evenly lg:justify-center"
-			}
-		>
-			<CourseInstancesContainer {...data.content} />
-		</main>
+		<Suspense fallback={<HomePending />}>
+			<main
+				className={
+					"relative flex flex-col items-center sm:justify-evenly lg:justify-center"
+				}
+			>
+				<CourseInstancesContainer {...data.content} />
+			</main>
+		</Suspense>
 	)
 }
