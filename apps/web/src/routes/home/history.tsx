@@ -10,12 +10,11 @@ import type {
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { Triangle } from "lucide-react"
-import { useMemo, useState } from "react"
+import { useMemo, useState} from "react"
 import ErrorComponent from "@/components/error-components/current-period/ErrorComponent.tsx"
 import LoadingComponent from "@/components/loading-components/current-period/LoadingComponent.tsx"
 import IconButton from "@/components/ui/IconButton.tsx"
 import authMiddleware from "@/middlewares/auth.ts"
-import { queryClient } from "@/routes/__root.tsx"
 
 const getUserHistory = async () => {
 	return await buildRequest<AcademicPeriodPresentation[], string>({
@@ -40,10 +39,7 @@ export const Route = createFileRoute("/home/history")({
 	server: {
 		middleware: [authMiddleware]
 	},
-	loader: () => queryClient.ensureQueryData(getHistoryQueryOpts),
-	pendingComponent: () => (
-		<LoadingComponent text={"Cargando tu historial académico..."} />
-	),
+	pendingComponent: () => <LoadingComponent text={"Cargando tu historial académico..."} />,
 	errorComponent: () => (
 		<ErrorComponent
 			text={"Ocurrió un error al tratar de cargar tu historial académico"}
@@ -54,42 +50,42 @@ export const Route = createFileRoute("/home/history")({
 function RouteComponent() {
 	const { isSuccess, data } = useSuspenseQuery(getHistoryQueryOpts)
 	return (
-		<main
-			className={
-				"flex flex-col items-center justify-start gap-10 transition-all duration-300 ease-in-out"
-			}
-		>
-			{isSuccess && isArrayEmpty(data.content) && (
-				<section className={"w-full h-full flex justify-center items-center"}>
-					<h1 className={"text-2xl text-primary-500"}>
-						No tienes historial académico todavía
-					</h1>
-				</section>
-			)}
-			{isSuccess && data.content.length > 0 && (
-				<>
-					<h1
-						className={
-							"sm:text-2xl lg:text-4xl 2xl:text-5xl font-bold text-primary-500 mt-10"
-						}
-					>
-						Historial académico
-					</h1>
-					<section
-						className={
-							"flex flex-col items-center justify-center gap-10 md:w-full"
-						}
-					>
-						{data.content.map((academicPeriod) => (
-							<AcademicPeriodContainer
-								{...academicPeriod}
-								key={academicPeriod._id.toString()}
-							/>
-						))}
+			<main
+				className={
+					"flex flex-col items-center justify-start gap-10 transition-all duration-300 ease-in-out"
+				}
+			>
+				{isSuccess && isArrayEmpty(data.content) && (
+					<section className={"w-full h-full flex justify-center items-center"}>
+						<h1 className={"text-2xl text-primary-500"}>
+							No tienes historial académico todavía
+						</h1>
 					</section>
-				</>
-			)}
-		</main>
+				)}
+				{isSuccess && data.content.length > 0 && (
+					<>
+						<h1
+							className={
+								"sm:text-2xl lg:text-4xl 2xl:text-5xl font-bold text-primary-500 mt-10"
+							}
+						>
+							Historial académico
+						</h1>
+						<section
+							className={
+								"flex flex-col items-center justify-center gap-10 md:w-full"
+							}
+						>
+							{data.content.map((academicPeriod) => (
+								<AcademicPeriodContainer
+									{...academicPeriod}
+									key={academicPeriod._id.toString()}
+								/>
+							))}
+						</section>
+					</>
+				)}
+			</main>
 	)
 }
 
