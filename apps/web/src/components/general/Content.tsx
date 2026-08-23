@@ -1,8 +1,11 @@
-import type { FontFamily } from "@notas-universitarias/types"
 import type { ContentProps } from "@/components/general/HomeContent.tsx"
+import useLocalStorage from "@/hooks/localStorage.ts";
+import defaultSettings from "@/components/context-providers/default-settings.ts";
 
 export default function Content({ bodyClasses, children }: ContentProps) {
-	const fontFamily: FontFamily = "Arima"
+	const persistentData = useLocalStorage()
+	const fontFamily = typeof window !== "undefined" ? persistentData?.fontFamily ?? defaultSettings.fontFamily : defaultSettings.fontFamily
+	console.log(fontFamily)
 	return (
 		<body style={{ fontFamily }} className={bodyClasses}>
 			{children}

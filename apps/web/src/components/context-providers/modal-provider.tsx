@@ -1,5 +1,4 @@
 import { type ReactNode, useState } from "react"
-import defaultSettings from "@/components/context-providers/default-settings.ts"
 import Button from "@/components/general/Button.tsx"
 import {
 	type ModalBuilderProps,
@@ -7,7 +6,6 @@ import {
 	type ModalContextComponentProps,
 	type ModalProps
 } from "@/contexts/modal.ts"
-import useSettings from "@/contexts/settings.ts"
 
 const defaultModalContextComponentProps: ModalContextComponentProps = {
 	isOpen: false,
@@ -41,12 +39,10 @@ export default function ModalProvider({ children }: { children: ReactNode }) {
 		})
 	}
 	const closeModal = () => setModalProps({ ...modalProps, isOpen: false })
-	const { fontFamily } = useSettings() ?? defaultSettings
 	return (
 		<ModalContext value={{ buildModal, closeModal }}>
 			{children}
 			<div
-				style={{ fontFamily }}
 				className={`${modalProps.isOpen ? "fixed inset-0 bg-[rgba(0,0,0,0.4)] flex justify-center items-center z-200 transition-opacity duration-700 opacity-100" : "opacity-0 -z-1"}`}
 			>
 				{modalProps.isOpen && (
