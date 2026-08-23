@@ -1,8 +1,6 @@
 import { type ReactNode, useState } from "react"
-import defaultSettings from "@/components/context-providers/default-settings.ts"
 import Pet from "@/components/general/Pet.tsx"
 import usePet, { PetContext } from "@/contexts/pet.ts"
-import useSettings from "@/contexts/settings.ts"
 
 const numberOfCategories = 5
 const numberOfFacts = 15
@@ -164,13 +162,11 @@ export default function PetProvider({ children }: { children: ReactNode }) {
 
 export function Fact() {
 	const { isHovered } = usePet()
-	const { fontFamily } = useSettings() ?? defaultSettings
 	if (isHovered) {
 		return (
 			<div
 				id="pet-provider-fact"
 				className={`speech-bubble p-4 opacity-100 ${isHovered ? "opacity-100" : ""}`}
-				style={{ fontFamily }}
 			>
 				<p className={"sm:text-xs lg:text-base"}>{generatePetFact(facts)}</p>
 			</div>

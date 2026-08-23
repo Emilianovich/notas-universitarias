@@ -1,8 +1,10 @@
 import Header from "@/components/general/Header.tsx"
 import { Nav, NavOption, NavToOutside } from "@/components/general/Nav.tsx"
 import { ProfileOrLogoInHeader } from "@/components/ui/ProfileOrLogoInHeader.tsx"
+import useLocalStorage from "@/hooks/localStorage.ts";
 
 export default function LandingHeader() {
+	const data = useLocalStorage()
 	return (
 		<Header>
 			<ProfileOrLogoInHeader
@@ -11,7 +13,7 @@ export default function LandingHeader() {
 				alt={"Icono para redirigir el usuario al perfil"}
 				className={"size-10"}
 			/>
-			<Nav>
+			<Nav fontFamily={data?.fontFamily}>
 				<NavOption navigateTo={"/"} text={"Inicio"} />
 				<NavOption navigateTo={"/demo"} text={"Demo"} />
 				<NavToOutside

@@ -7,6 +7,7 @@ import Content from "@/components/general/Content.tsx"
 import LandingHeader from "@/components/ui/LandingHeader.tsx"
 
 export const Route = createFileRoute("/_landing")({
+	ssr: false,
 	component: RouteComponent,
 	notFoundComponent: () => <NotFound isHome={false} />
 })
