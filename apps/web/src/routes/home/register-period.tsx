@@ -10,12 +10,10 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import ErrorComponent from "@/components/error-components/current-period/ErrorComponent.tsx"
 import Input from "@/components/form/general/Input.tsx"
 import Button from "@/components/general/Button.tsx"
+import LoadingComponent from "@/components/loading-components/current-period/LoadingComponent.tsx"
 import useToast from "@/contexts/toast.ts"
 import authMiddleware from "@/middlewares/auth.ts"
-import {
-	useGetCurrentAcademicPeriod
-} from "@/routes/home/current-period"
-import LoadingComponent from "@/components/loading-components/current-period/LoadingComponent.tsx";
+import { useGetCurrentAcademicPeriod } from "@/routes/home/current-period"
 
 const createNewAcademicPeriod = async (dto: CreateAcademicPeriodsDto) => {
 	return buildRequest<string, string>({
@@ -51,26 +49,26 @@ export const Route = createFileRoute("/home/register-period")({
 function RegisterPeriodPage() {
 	const { data, isSuccess } = useGetCurrentAcademicPeriod()
 	return (
-			<main className={"flex flex-col justify-center items-center w-full gap-8"}>
-				{isSuccess && data.content.isActive && (
-					<h1 className={"text-center sm:text-base lg:text-2xl text-primary-500"}>
-						El periodo académico actual tiene que finalizar para registrar uno
-						nuevo
+		<main className={"flex flex-col justify-center items-center w-full gap-8"}>
+			{isSuccess && data.content.isActive && (
+				<h1 className={"text-center sm:text-base lg:text-2xl text-primary-500"}>
+					El periodo académico actual tiene que finalizar para registrar uno
+					nuevo
+				</h1>
+			)}
+			{isSuccess && !data.content.isActive && (
+				<>
+					<h1
+						className={
+							"sm:text-2xl sm:mt-2 lg:text-3xl lg:mt-0 text-4xl font-bold text-center text-primary-500"
+						}
+					>
+						Registrar nuevo periodo académico
 					</h1>
-				)}
-				{isSuccess && !data.content.isActive && (
-					<>
-						<h1
-							className={
-								"sm:text-2xl sm:mt-2 lg:text-3xl lg:mt-0 text-4xl font-bold text-center text-primary-500"
-							}
-						>
-							Registrar nuevo periodo académico
-						</h1>
-						<AcademicPeriodForm />
-					</>
-				)}
-			</main>
+					<AcademicPeriodForm />
+				</>
+			)}
+		</main>
 	)
 }
 

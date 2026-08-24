@@ -2,12 +2,12 @@ import { buildRequest } from "@notas-universitarias/helpers"
 import type { CurrentAcademicPeriod } from "@notas-universitarias/types"
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
+import { Suspense } from "react"
 import ErrorComponent from "@/components/error-components/current-period/ErrorComponent.tsx"
 import { CurrentPeriodPending } from "@/components/pending-components/current-period/CurrentPeriodPending.tsx"
+import HomePending from "@/components/pending-components/home/HomePending.tsx"
 import authMiddleware from "@/middlewares/auth.ts"
 import CourseInstancesContainer from "@/routes/home/current-period/-CourseInstancesContainer.tsx"
-import {Suspense} from "react";
-import HomePending from "@/components/pending-components/home/HomePending.tsx";
 
 const getCurrentAcademicPeriod = async () => {
 	return buildRequest<CurrentAcademicPeriod, string>({
@@ -16,8 +16,8 @@ const getCurrentAcademicPeriod = async () => {
 		includeCredentials: true
 	})
 }
-export const useGetCurrentAcademicPeriod = () => useSuspenseQuery(getAcademicPeriodQueryOpts)
-
+export const useGetCurrentAcademicPeriod = () =>
+	useSuspenseQuery(getAcademicPeriodQueryOpts)
 
 export const getAcademicPeriodQueryOpts = queryOptions({
 	queryKey: ["currentAcademicPeriod"],

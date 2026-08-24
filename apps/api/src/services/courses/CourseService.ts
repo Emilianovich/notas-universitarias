@@ -243,6 +243,7 @@ export class CourseService {
 		}
 		// NOTE probably should do something like a rollback if anything goes bad but bruuhhh
 		await this.coursesRepository.updateCourse(courseDoc, updatedCourse)
+		return updatedCourseInstance
 	}
 
 	async getAvailableCoursesInAcademicPeriod(

@@ -5,12 +5,11 @@ import {
 	Outlet,
 	Scripts
 } from "@tanstack/react-router"
-import type { ReactNode } from "react"
+import HomePending from "@/components/pending-components/home/HomePending.tsx"
 import appCss from "../styles.css?url"
-import HomePending from "@/components/pending-components/home/HomePending.tsx";
 
 if (import.meta.hot) {
-	import.meta.hot.on('vite:beforeUpdate', () => {
+	import.meta.hot.on("vite:beforeUpdate", () => {
 		console.clear()
 	})
 }

@@ -12,6 +12,7 @@ const redirectedSchema = z.object({
 
 export const Route = createFileRoute("/login")({
 	component: RouteComponent,
+	ssr: false,
 	head: () => ({
 		meta: [
 			{
