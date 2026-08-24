@@ -1,5 +1,3 @@
-// import { stringSlicer } from "@notas-universitarias/helpers"
-
 type CourseInstanceBoxProps = {
 	courseInstanceId: string
 	courseInstanceName: string

@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router"
+import defaultSettings from "@/components/context-providers/default-settings.ts"
 import Header from "@/components/general/Header.tsx"
 import { Nav, NavOption, NavToOutside } from "@/components/general/Nav.tsx"
 import useLocalStorage from "@/hooks/localStorage.ts"
@@ -15,6 +16,7 @@ export default function LandingHeader() {
 					className={
 						"sm:text-sm lg:text-base hover:underline hover:text-primary-400"
 					}
+					style={{ fontFamily: data?.fontFamily ?? defaultSettings.fontFamily }}
 				>
 					Iniciar sesión
 				</Link>

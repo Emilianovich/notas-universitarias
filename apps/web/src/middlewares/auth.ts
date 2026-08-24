@@ -15,7 +15,6 @@ const authMiddleware = createMiddleware().server(({ next, request }) => {
 	const sessionCookie = individualCookies.find((cookie) =>
 		cookie.includes("user_session")
 	)
-	console.log("sessionCookie", sessionCookie)
 	if (!sessionCookie) {
 		throw redirect({
 			to: "/login",

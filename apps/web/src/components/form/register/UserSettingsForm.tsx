@@ -79,7 +79,7 @@ export default function UserSettingsForm({
 				e.stopPropagation()
 				await form.handleSubmit()
 			}}
-			className={`border grid grid-rows-[auto_${PREVIEW_TEXT_HEIGHT}px_auto_auto_${PREVIEW_PET_HEIGHT}_1fr] justify-center items-center gap-4`}
+			className={`grid grid-rows-[auto_${PREVIEW_TEXT_HEIGHT}px_auto_auto_${PREVIEW_PET_HEIGHT}_1fr] justify-center items-center gap-4`}
 		>
 			<Field
 				name={"fontFamily"}

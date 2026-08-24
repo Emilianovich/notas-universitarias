@@ -9,6 +9,7 @@ import {
 	Spike,
 	type UserSettings
 } from "@/contexts/settings.ts"
+import { baseUrl } from "@/routes/__root.tsx"
 
 type User = {
 	user: {
@@ -20,6 +21,7 @@ type User = {
 
 export const getUserPreferences = async () => {
 	return buildRequest<User, string>({
+		baseUrl,
 		includeCredentials: true,
 		path: "/users",
 		method: "GET"

@@ -68,7 +68,7 @@ export function Modal({
 }: ModalProps) {
 	return (
 		<div
-			className={`flex text-primary-400 items-center justify-center p-4 gap-4 bg-secondary h-[min(300px,calc(100dvh-32px))] rounded-[20px] transition-all ease-in-out duration-300`}
+			className={`flex text-primary-400 items-center justify-center p-8 gap-4 bg-secondary h-[min(300px,calc(100dvh-32px))] rounded-[20px] transition-all ease-in-out duration-300`}
 			style={{ aspectRatio: "151 / 89" }}
 		>
 			<div className={"modal-wrapper w-[90%]"}>

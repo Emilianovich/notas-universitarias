@@ -26,6 +26,7 @@ import { findPetByName } from "@/contexts/pet.ts"
 import useSettings from "@/contexts/settings.ts"
 import useToast from "@/contexts/toast.ts"
 import authMiddleware from "@/middlewares/auth.ts"
+import { baseUrl } from "@/routes/__root.tsx"
 
 export const Route = createFileRoute("/home/settings/")({
 	component: RouteComponent,
@@ -49,6 +50,7 @@ export const Route = createFileRoute("/home/settings/")({
 
 export const updateUserSettings = async (dto: UpdateUserDTO) => {
 	return await buildRequest<string, string>({
+		baseUrl,
 		method: "PUT",
 		path: "/users",
 		includeCredentials: true,

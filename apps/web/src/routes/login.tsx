@@ -5,6 +5,7 @@ import { z } from "zod"
 import ToastProvider from "@/components/context-providers/toast-provider.tsx"
 import LoginForm from "@/components/form/login/LoginForm.tsx"
 import Content from "@/components/general/Content"
+import { baseUrl } from "@/routes/__root.tsx"
 
 const redirectedSchema = z.object({
 	wasRedirected: z.enum(["true"]).optional()
@@ -25,6 +26,7 @@ export const Route = createFileRoute("/login")({
 
 const handleLogin = async (dto: LoginDTO) => {
 	return buildRequest<string, string>({
+		baseUrl,
 		method: "POST",
 		includeCredentials: true,
 		path: "/auth/login",

@@ -11,10 +11,12 @@ import type { z } from "zod"
 import Input from "@/components/form/general/Input.tsx"
 import Button from "@/components/general/Button.tsx"
 import useToast from "@/contexts/toast.ts"
+import { baseUrl } from "@/routes/__root.tsx"
 import type { RegisterFormProps } from "@/types/input.ts"
 
 const registerUser = async (payload: z.infer<typeof createUserDto>) => {
 	return buildRequest<AfterRegisterRes, string>({
+		baseUrl,
 		method: "POST",
 		reqBody: payload,
 		path: "/auth/register",

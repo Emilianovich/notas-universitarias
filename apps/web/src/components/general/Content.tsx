@@ -8,7 +8,6 @@ export default function Content({ bodyClasses, children }: ContentProps) {
 		typeof window !== "undefined"
 			? (persistentData?.fontFamily ?? defaultSettings.fontFamily)
 			: defaultSettings.fontFamily
-	console.log(fontFamily)
 	return (
 		<body style={{ fontFamily }} className={bodyClasses}>
 			{children}

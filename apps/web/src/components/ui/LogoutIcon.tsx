@@ -3,10 +3,11 @@ import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import useModal from "@/contexts/modal.ts"
 import useToast from "@/contexts/toast.ts"
-import { queryClient } from "@/routes/__root.tsx"
+import { baseUrl, queryClient } from "@/routes/__root.tsx"
 
 const handleLogout = async () => {
 	return buildRequest<string, string>({
+		baseUrl,
 		method: "DELETE",
 		includeCredentials: true,
 		path: "/auth/logout"

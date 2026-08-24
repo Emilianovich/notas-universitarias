@@ -1,3 +1,4 @@
+name: notas-universitarias-dev
 services:
   mongodb:
     image: mongo:8

@@ -248,9 +248,9 @@ export async function buildRequest<T, U>({
 	method,
 	path,
 	reqBody,
-	includeCredentials
+	includeCredentials,
+	baseUrl
 }: RequestBuilder): Promise<SuccessRes<T>> {
-	const baseUrl = "http://localhost:3035/api/v1"
 	const url = `${baseUrl}${path}`
 	if (!includeCredentials) {
 		if (method === "POST") {

@@ -1,0 +1,10 @@
+import { z } from "zod"
+
+const env = z
+	.object({
+		VITE_API_URL: z.url(),
+		VITE_INTERNAL_URL: z.url()
+	})
+	.parse(import.meta.env)
+
+export default env

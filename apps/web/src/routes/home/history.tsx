@@ -15,9 +15,11 @@ import ErrorComponent from "@/components/error-components/current-period/ErrorCo
 import LoadingComponent from "@/components/loading-components/current-period/LoadingComponent.tsx"
 import IconButton from "@/components/ui/IconButton.tsx"
 import authMiddleware from "@/middlewares/auth.ts"
+import { baseUrl } from "@/routes/__root.tsx"
 
 const getUserHistory = async () => {
 	return await buildRequest<AcademicPeriodPresentation[], string>({
+		baseUrl,
 		method: "GET",
 		path: "/academic-periods/history",
 		includeCredentials: true

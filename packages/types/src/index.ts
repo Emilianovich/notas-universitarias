@@ -1,5 +1,6 @@
 export type GradeLetter = "A" | "B" | "C" | "D" | "F"
 export type RequestBuilder = {
+	baseUrl: string
 	method: "GET" | "POST" | "PUT" | "DELETE"
 	includeCredentials: boolean
 	reqBody?: object
@@ -11,9 +12,10 @@ type BaseRes = {
 }
 export const ON_SUBMIT_INVALID_MSG =
 	"Asegúrate llenar todos los campos y cumplir con todas las validaciones"
-export const STANDALONE_LABEL = "Es un solo porcentaje"
-export const NESTED_LABEL = "Parte de teoría y laboratorio"
-export const NOT_NESTED_LABEL = "Tiene subdivisiones"
+export const STANDALONE_LABEL = "Registrar una sola nota"
+export const NESTED_LABEL = "Agregar una evaluación de laboratorio"
+export const NOT_NESTED_LABEL = "Registrar varias notas"
+export const ADD_BREAKDOWN_TEXT = "¿Qué quieres hacer con esta evaluación?"
 export const PREVIEW_PET_HEIGHT = 120
 export const PREVIEW_TEXT_HEIGHT = 32
 export type SuccessRes<T> = BaseRes & { content: T }

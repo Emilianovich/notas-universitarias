@@ -16,9 +16,11 @@ export const createUserPreferencesSchema = z.strictObject({
 			"Uncial Antiqua",
 			"Saira Stencil",
 			"Cherry Cream Soda",
-			"Metamorphous",
 			"Audiowide",
-			"Cabin Sketch"
+			"Cabin Sketch",
+			"Chalkboard SE",
+			"Fredoka",
+			"Erzieherisch"
 		],
 		{
 			error: "Seleccione una familia tipográfica permitida"
