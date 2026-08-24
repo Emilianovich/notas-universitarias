@@ -11,6 +11,7 @@ import type { RegisterState } from "@/types/input.ts"
 
 export const Route = createFileRoute("/register")({
 	component: RouteComponent,
+	ssr: false,
 	head: () => ({
 		meta: [
 			{

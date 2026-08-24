@@ -1,14 +1,16 @@
 import defaultSettings from "@/components/context-providers/default-settings.ts"
 import { Fact } from "@/components/context-providers/pet-provider.tsx"
 import usePet, { findPetByName } from "@/contexts/pet.ts"
+import useSettings from "@/contexts/settings.ts"
 import useLocalStorage from "@/hooks/localStorage.ts"
-import useSettings from "@/contexts/settings.ts";
 
 // NOTE: i'm now using data from localStorage to make sure in landing page selected pet is there
 export default function Pet() {
 	const data = useLocalStorage()
 	const userSettings = useSettings()
-	const pet = findPetByName(userSettings?.pet.name ?? data?.petName ?? defaultSettings.pet.name)
+	const pet = findPetByName(
+		userSettings?.pet.name ?? data?.petName ?? defaultSettings.pet.name
+	)
 	const { alt, awake, sleeping } = pet
 	const { togglePetHover, isHovered } = usePet()
 	return (

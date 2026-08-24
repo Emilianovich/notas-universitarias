@@ -8,7 +8,8 @@ const defaultValues: UpdateCourseInstanceDto = {
 }
 
 export const Route = createFileRoute("/_landing/demo")({
-	component: RouteComponent
+	component: RouteComponent,
+	ssr: false
 })
 
 function RouteComponent() {

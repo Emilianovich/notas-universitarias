@@ -2,7 +2,7 @@ import { redirect } from "@tanstack/react-router"
 import { createMiddleware } from "@tanstack/react-start"
 
 const authMiddleware = createMiddleware().server(({ next, request }) => {
-	const cookieHeaders= request.headers.get("cookie")
+	const cookieHeaders = request.headers.get("cookie")
 	if (!cookieHeaders) {
 		throw redirect({
 			to: "/login",

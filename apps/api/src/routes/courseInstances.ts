@@ -1,3 +1,4 @@
+import { roundNumber } from "@notas-universitarias/helpers"
 import type { CourseDocument } from "@notas-universitarias/types"
 import {
 	CreateCourseInstanceSchema,
@@ -70,12 +71,12 @@ courseInstancesRoutes.put(
 		const courseInstanceId = getValidObjectId(ctx.req.param("id"))
 		const { mongoService, userId } = getContextVars(ctx)
 		const dto: UpdateCourseInstanceDto = ctx.req.valid("json")
-		await new CourseService(mongoService).handleCourseInstanceUpdate(
-			dto,
-			courseInstanceId,
-			userId
+		const updatedCourseInstance = await new CourseService(
+			mongoService
+		).handleCourseInstanceUpdate(dto, courseInstanceId, userId)
+		return ctx.json(
+			`La materia fue actualizada exitosamente. Tu nota es ${roundNumber({ number: updatedCourseInstance.finalGrade * 100, amountOfDecimals: 2 })}`
 		)
-		return ctx.json("La materia fue actualizada exitosamente")
 	}
 )
 

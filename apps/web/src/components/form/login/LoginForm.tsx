@@ -18,7 +18,7 @@ export type Redirected = {
 }
 
 export default function LoginForm({ wasRedirected }: Redirected) {
-	const router = useRouter()
+	const _router = useRouter()
 	const { buildToast } = useToast()
 	// if (wasRedirected) {
 	// 	buildToast({
