@@ -58,9 +58,11 @@ export type FontFamily =
 	| "Uncial Antiqua"
 	| "Saira Stencil"
 	| "Cherry Cream Soda"
-	| "Metamorphous"
 	| "Audiowide"
 	| "Cabin Sketch"
+	| "Chalkboard SE"
+	| "Fredoka"
+	| "Erzieherisch"
 export type AppTheme = "dark" | "light"
 export type PetName = "Spike" | "Leon" | "Tom" | "Nita" | "Mila"
 export type CurrentAcademicPeriod = {

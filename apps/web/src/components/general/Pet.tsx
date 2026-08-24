@@ -41,7 +41,6 @@ export type PetVariant = {
 export function PetVariant({ variant }: PetVariant) {
 	const data = useLocalStorage()
 	const pet = findPetByName(data?.petName ?? defaultSettings.pet.name)
-	console.log("pet", JSON.stringify(pet))
 	const { shocked, lost, alt } = pet
 	let src: string
 	let preferredWidth: number

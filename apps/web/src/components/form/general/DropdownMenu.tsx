@@ -21,9 +21,11 @@ export const allowedFontFamilies: Set<FontFamily> = new Set([
 	"Uncial Antiqua",
 	"Saira Stencil",
 	"Cherry Cream Soda",
-	"Metamorphous",
 	"Audiowide",
-	"Cabin Sketch"
+	"Cabin Sketch",
+	"Chalkboard SE",
+	"Fredoka",
+	"Erzieherisch"
 ])
 
 export const allowedThemes: Set<AppTheme> = new Set(["dark", "light"])

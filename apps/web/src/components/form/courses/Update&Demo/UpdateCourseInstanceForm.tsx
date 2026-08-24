@@ -7,6 +7,7 @@ import {
 	updateCourseInstanceFinalGrade
 } from "@notas-universitarias/helpers"
 import {
+	ADD_BREAKDOWN_TEXT,
 	type BreakdownCategory,
 	type CourseInstance,
 	NESTED_LABEL,
@@ -35,6 +36,7 @@ import Button from "@/components/general/Button.tsx"
 import { ScrollToBottom } from "@/components/ui/ScrollToBottom.tsx"
 import useModal from "@/contexts/modal.ts"
 import useToast from "@/contexts/toast.ts"
+import { baseUrl } from "@/routes/__root.tsx"
 import type { InputProps } from "@/types/input.ts"
 import scrollTo from "@/utils/scroll.ts"
 
@@ -57,6 +59,7 @@ const updateCourseInstance = async (
 	id: string
 ) => {
 	return buildRequest<string, string>({
+		baseUrl,
 		method: "PUT",
 		reqBody: dto,
 		path: `/course-instances/${id}`,
@@ -311,7 +314,7 @@ export function UpdateCourseInstanceForm(props: UpdateCourseInstanceFormProps) {
 												}
 												return (
 													<div className={"flex flex-col gap-2"}>
-														<h2 className={"text-xl"}>La evaluación tiene</h2>
+														<h2 className={"text-xl"}>{ADD_BREAKDOWN_TEXT}</h2>
 														<RadioInput
 															value={"STANDALONE"}
 															labelText={STANDALONE_LABEL}
@@ -558,7 +561,7 @@ export function UpdateCourseInstanceForm(props: UpdateCourseInstanceFormProps) {
 																												<h2
 																													className={"text-xl"}
 																												>
-																													La evaluación tiene
+																													{ADD_BREAKDOWN_TEXT}
 																												</h2>
 																												<RadioInput
 																													value={"STANDALONE"}

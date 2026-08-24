@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Amiko:wght@400;600;700&family=Arima:wght@100..700&family=Audiowide&family=Cabin+Sketch:wght@400;700&family=Cherry+Cream+Soda&family=Elsie:wght@400;900&family=Gorditas:wght@400;700&family=Libertinus+Math&family=Metamorphous&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Playwrite+VN:wght@100..400&family=Saira+Stencil:ital,wght@0,100..900;1,100..900&family=Short+Stack&family=Special+Elite&family=Uncial+Antiqua&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Amiko:wght@400;600;700&family=Arima:wght@100..700&family=Audiowide&family=Cabin+Sketch:wght@400;700&family=Cherry+Cream+Soda&family=Elsie:wght@400;900&family=Fredoka:wght@300..700&family=Gorditas:wght@400;700&family=Libertinus+Math&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Playwrite+VN:wght@100..400&family=Saira+Stencil:ital,wght@0,100..900;1,100..900&family=Short+Stack&family=Special+Elite&family=Uncial+Antiqua&display=swap");
 @import "tailwindcss";
 :root {
 	scroll-behavior: smooth;
@@ -9,7 +9,29 @@
 		padding: 0;
 	}
 }
+@font-face {
+	font-family: "Chalkboard SE";
+	src: url("/fonts/chalkboardse.otf") format("opentype");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
 
+@font-face {
+	font-family: "PB Pixel";
+	src: url("/fonts/PB-Pixel.ttf") format("truetype");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Erzieherisch";
+	src: url("/fonts/Erzieherisch-Regular.otf") format("opentype");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
 @theme {
 	--color-primary-300: #057e7e;
 	--color-primary-400: #035151;

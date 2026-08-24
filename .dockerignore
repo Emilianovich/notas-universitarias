@@ -1,0 +1,17 @@
+node_modules
+**/node_modules
+
+.turbo
+**/.turbo
+
+.git
+.github
+.idea
+
+**/dist
+**/.output
+**/build
+**/coverage
+
+.env
+.env.*

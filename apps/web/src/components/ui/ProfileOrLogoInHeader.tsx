@@ -1,5 +1,6 @@
 import { useNavigate } from "@tanstack/react-router"
 import IconButton from "@/components/ui/IconButton.tsx"
+import useModal from "@/contexts/modal.ts"
 
 export type ProfileOrLogoInHeaderProps =
 	| {
@@ -21,14 +22,28 @@ export function ProfileOrLogoInHeader({
 	direction,
 	className
 }: ProfileOrLogoInHeaderProps) {
+	const { buildModal } = useModal()
 	const navigate = useNavigate()
 	return (
 		<div className={`absolute ${direction}-8 top-1/2 -translate-y-1/2`}>
 			<IconButton
 				className={className}
-				action={async () =>
-					navigate({ to: src === "/profile.svg" ? "/home/settings" : "/" })
-				}
+				action={() => {
+					buildModal({
+						modalTitle: "Navegar a la landing page",
+						modalContent:
+							"Irás a la landing page. Para regresar tu perfil agrega /home/settings al final de tu URL actual",
+						closeButtonTitle: "No navegar",
+						confirmButton: {
+							type: "primary",
+							text: "Navegar",
+							action: async () =>
+								navigate({
+									to: src === "/profile.svg" ? "/home/settings" : "/"
+								})
+						}
+					})
+				}}
 				img={{
 					alt,
 					src

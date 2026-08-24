@@ -46,9 +46,11 @@ db.createCollection("users", {
 								"Uncial Antiqua",
 								"Saira Stencil",
 								"Cherry Cream Soda",
-								"Metamorphous",
 								"Audiowide",
-								"Cabin Sketch"
+								"Cabin Sketch",
+								"Chalkboard SE",
+								"Fredoka",
+								"Erzieherisch"
 							],
 							description: "A valid font family is required"
 						},

@@ -7,10 +7,12 @@ import ErrorComponent from "@/components/error-components/current-period/ErrorCo
 import { CurrentPeriodPending } from "@/components/pending-components/current-period/CurrentPeriodPending.tsx"
 import HomePending from "@/components/pending-components/home/HomePending.tsx"
 import authMiddleware from "@/middlewares/auth.ts"
+import { baseUrl } from "@/routes/__root.tsx"
 import CourseInstancesContainer from "@/routes/home/current-period/-CourseInstancesContainer.tsx"
 
 const getCurrentAcademicPeriod = async () => {
 	return buildRequest<CurrentAcademicPeriod, string>({
+		baseUrl,
 		method: "GET",
 		path: "/academic-periods",
 		includeCredentials: true

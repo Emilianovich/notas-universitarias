@@ -16,6 +16,7 @@ export class MongoService {
 		const connection = await this.client.connect()
 		this.db = connection.db()
 	}
+	private isConnected: boolean = false
 	constructor() {
 		this.client = new MongoClient(
 			env.IS_PROD ? env.DB_URI_PROD : env.DB_URI_DEV,
@@ -43,6 +44,12 @@ export class MongoService {
 	}
 	async connect() {
 		await this.handleMongoErrors(this.tryConnect)
+		this.isConnected = true
+	}
+	async disconnect() {
+		if (this.isConnected) {
+			await this.db.client.close()
+		}
 	}
 	collection<T extends Document>(name: ValidCollections) {
 		return this.db.collection<T>(name)

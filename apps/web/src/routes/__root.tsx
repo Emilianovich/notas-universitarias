@@ -6,13 +6,13 @@ import {
 	Scripts
 } from "@tanstack/react-router"
 import HomePending from "@/components/pending-components/home/HomePending.tsx"
+import env from "../../env.ts"
 import appCss from "../styles.css?url"
 
-if (import.meta.hot) {
-	import.meta.hot.on("vite:beforeUpdate", () => {
-		console.clear()
-	})
-}
+export const baseUrl = import.meta.env.SSR
+	? env.VITE_INTERNAL_URL
+	: env.VITE_API_URL
+
 export const queryClient = new QueryClient()
 export const Route = createRootRoute({
 	head: () => ({

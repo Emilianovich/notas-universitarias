@@ -6,9 +6,11 @@ import { Suspense } from "react"
 import { UpdateCourseInstanceForm } from "@/components/form/courses/Update&Demo/UpdateCourseInstanceForm.tsx"
 import ErrorMessage from "@/components/form/general/ErrorMessage.tsx"
 import LoadingComponent from "@/components/loading-components/current-period/LoadingComponent.tsx"
+import { baseUrl } from "@/routes/__root.tsx"
 
 export const getCourseInstance = async (id: string) => {
 	return buildRequest<CourseInstanceForEdit, string>({
+		baseUrl,
 		method: "GET",
 		path: `/course-instances/${id}`,
 		includeCredentials: true

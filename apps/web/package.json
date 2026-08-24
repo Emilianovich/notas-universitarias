@@ -11,7 +11,8 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"typecheck": "tsc --noEmit",
-		"test": "vitest run"
+		"test": "vitest run",
+		"start": "node .output/server/index.mjs"
 	},
 	"dependencies": {
 		"@notas-universitarias/helpers": "workspace:*",
@@ -26,6 +27,7 @@
 		"@tanstack/react-start": "latest",
 		"@tanstack/router-plugin": "^1.132.0",
 		"clsx": "^2.1.1",
+		"dotenv": "^17.4.2",
 		"lucide-react": "^0.545.0",
 		"motion": "^13.1.0",
 		"react": "^19.2.0",
@@ -38,7 +40,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.4.5",
 		"@tailwindcss/typography": "^0.5.16",
-		"@tanstack/devtools-vite": "latest",
+		"@tanstack/devtools-vite": "0.8.5",
 		"@tanstack/react-form-devtools": "^0.2.32",
 		"@tanstack/router-cli": "^1.132.0",
 		"@testing-library/dom": "^10.4.1",
@@ -49,6 +51,7 @@
 		"@vitejs/plugin-react": "^6.0.1",
 		"add": "^2.0.9",
 		"jsdom": "^28.1.0",
+		"nitro": "3.0.260610-beta",
 		"pnpm": "^11.18.0",
 		"typescript": "^6.0.2",
 		"vite": "^8.0.0",

@@ -1,6 +1,7 @@
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
 import { buildRequest, ServerErrorRes } from "@notas-universitarias/helpers"
 import {
+	ADD_BREAKDOWN_TEXT,
 	type BreakdownCategory,
 	type CourseBreakdownToBeCreated,
 	type CourseInstanceToBeCreated,
@@ -30,11 +31,13 @@ import { AddItem } from "@/components/general/AddItem.tsx"
 import Button from "@/components/general/Button.tsx"
 import useModal from "@/contexts/modal.ts"
 import useToast from "@/contexts/toast.ts"
+import { baseUrl } from "@/routes/__root.tsx"
 import type { InputProps } from "@/types/input.ts"
 import scrollTo from "@/utils/scroll.ts"
 
 const registerCourseInstance = async (dto: CourseInstanceToBeCreated) => {
 	return buildRequest<string, string>({
+		baseUrl,
 		path: "/course-instances",
 		includeCredentials: true,
 		method: "POST",
@@ -44,6 +47,7 @@ const registerCourseInstance = async (dto: CourseInstanceToBeCreated) => {
 
 const getPreviousCoursesInfo = async () => {
 	return buildRequest<CoursesInfo[], string>({
+		baseUrl,
 		path: "/courses",
 		method: "GET",
 		includeCredentials: true
@@ -219,7 +223,6 @@ export default function CreateCourseInstanceForm() {
 					children={(fieldApi) => {
 						const { errors, isBlurred } = fieldApi.state.meta
 						const { name, handleBlur, handleChange } = fieldApi
-						console.log(JSON.stringify(errors))
 						return (
 							<DropdownMenu
 								selectedItem={data.content[0].name}
@@ -367,7 +370,7 @@ export default function CreateCourseInstanceForm() {
 												}
 												return (
 													<div className={"flex flex-col gap-2"}>
-														<h2 className={"text-xl"}>La evaluación tiene</h2>
+														<h2 className={"text-xl"}>{ADD_BREAKDOWN_TEXT}</h2>
 														<RadioInput
 															value={"STANDALONE"}
 															labelText={STANDALONE_LABEL}
@@ -607,7 +610,7 @@ export default function CreateCourseInstanceForm() {
 																												<h2
 																													className={"text-xl"}
 																												>
-																													La evaluación tiene
+																													{ADD_BREAKDOWN_TEXT}
 																												</h2>
 																												<RadioInput
 																													value={"STANDALONE"}

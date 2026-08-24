@@ -189,7 +189,7 @@ export default function CreateAcademicPeriodForm({
 					}}
 				/>
 				<Button
-					text={"Guardar periodo académico"}
+					text={"Guardar información"}
 					type={"submit"}
 					styleType={"primary"}
 					isDisabled={false}

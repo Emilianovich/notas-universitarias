@@ -10,6 +10,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import Input from "@/components/form/general/Input.tsx"
 import Button from "@/components/general/Button.tsx"
 import useToast from "@/contexts/toast.ts"
+import { baseUrl } from "@/routes/__root.tsx"
 
 export const Route = createFileRoute("/home/settings/change-password")({
 	component: RouteComponent
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/home/settings/change-password")({
 
 const handlePasswordChange = async (dto: ChangePasswordDto) => {
 	return buildRequest<string, string>({
+		baseUrl,
 		method: "PUT",
 		path: "/auth/change-password",
 		reqBody: dto,

@@ -13,10 +13,12 @@ import Button from "@/components/general/Button.tsx"
 import LoadingComponent from "@/components/loading-components/current-period/LoadingComponent.tsx"
 import useToast from "@/contexts/toast.ts"
 import authMiddleware from "@/middlewares/auth.ts"
+import { baseUrl } from "@/routes/__root.tsx"
 import { useGetCurrentAcademicPeriod } from "@/routes/home/current-period"
 
 const createNewAcademicPeriod = async (dto: CreateAcademicPeriodsDto) => {
 	return buildRequest<string, string>({
+		baseUrl,
 		method: "POST",
 		path: "/academic-periods",
 		reqBody: dto,
@@ -118,8 +120,7 @@ export default function AcademicPeriodForm() {
 				endDate
 			})
 		},
-		onSubmitInvalid: ({ value }) => {
-			console.log(value)
+		onSubmitInvalid: () => {
 			buildToast({
 				id: Date.now(),
 				type: "error",
