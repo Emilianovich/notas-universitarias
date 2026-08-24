@@ -303,3 +303,33 @@ db.createCollection("courseInstances", {
 		]
 	}
 })
+db.createCollection("migrations", {
+	validationLevel: "strict",
+	validationAction: "error",
+	validator: {
+		$jsonSchema: {
+			bsonType: "object",
+			title: "Migrations Validations",
+			required: ["name", "ranAt"],
+			properties: {
+				name: {
+					bsonType: "string",
+					minLength: 1,
+					description: "Migration name is required"
+				},
+				ranAt: {
+					bsonType: "date",
+					description: "Date when the migration was executed"
+				}
+			}
+		}
+	}
+})
+
+db.migrations.createIndex(
+	{ name: 1 },
+	{
+		name: "unique_migration_name",
+		unique: true
+	}
+)

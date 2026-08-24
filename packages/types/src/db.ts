@@ -39,7 +39,7 @@ export type ValidCollections =
 	| "academicPeriods"
 	| "courseInstances"
 	| "courses"
-	| "userPreferences"
+	| "migrations"
 export type UserPreferences = {
 	fontFamily: FontFamily
 	theme: AppTheme
