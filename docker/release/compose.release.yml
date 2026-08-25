@@ -1,23 +1,21 @@
-name: notas-universitarias-staging
+name: notas-universitarias-release
 
 x-api-image: &api-image
   build:
-    context: ..
+    context: ../..
     dockerfile: docker/apps/api.Dockerfile
-  image: notas-universitarias-api:staging
+  image: notas-universitarias-api:release
 
 services:
   mongodb:
     image: mongo:8
-    container_name: mongodb-staging
-    ports:
-      - "27018:27017"
+    container_name: mongodb-release
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
-      - mongodb-data-staging:/data/db
-      - ./db/init-code:/docker-entrypoint-initdb.d:ro
+      - mongodb-data-release:/data/db
+      - ../db/init-code:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test:
         [
@@ -64,12 +62,12 @@ services:
 
   web:
     build:
-      context: ..
+      context: ../..
       dockerfile: docker/apps/web.Dockerfile
       args:
         VITE_API_URL: http://localhost:3035/api/v1
         VITE_INTERNAL_API_URL: http://api:3035/api/v1
-    image: notas-universitarias-web:staging
+    image: notas-universitarias-web:release
     ports:
       - "3987:3987"
     environment:
@@ -81,5 +79,5 @@ services:
     restart: unless-stopped
 
 volumes:
-  mongodb-data-staging:
-    name: notas-universitarias-mongodb-staging
+  mongodb-data-release:
+    name: notas-universitarias-mongodb-release
