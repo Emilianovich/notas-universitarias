@@ -10,7 +10,7 @@ import env from "../../env.ts"
 import appCss from "../styles.css?url"
 
 export const baseUrl = import.meta.env.SSR
-	? env.VITE_INTERNAL_URL
+	? env.VITE_INTERNAL_API_URL
 	: env.VITE_API_URL
 
 export const queryClient = new QueryClient()
