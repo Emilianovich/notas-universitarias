@@ -47,7 +47,7 @@ Notas Universitarias aims to provide a platform for university students to organ
 #### Steps
 1. Open your terminal and clone the repository:
 	```git
-	git clone https://github.com/meh/notas-universitarias.git](https://github.com/Emilianovich/notas-universitarias.git
+	git clone https://github.com/Emilianovich/notas-universitarias.git
 	```
 	También puedes descargar el ZIP de la rama **master**.
 
