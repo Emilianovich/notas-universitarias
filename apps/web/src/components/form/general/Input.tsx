@@ -1,3 +1,4 @@
+import { INPUT_MAX_WIDTH } from "@notas-universitarias/types"
 import { useState } from "react"
 import GeneralInputContainer from "@/components/form/general/GeneralInputContainer.tsx"
 import type { InputProps, PasswordImageProps } from "@/types/input.ts"
@@ -22,12 +23,11 @@ export default function Input({
 	const bgColor = `bg-[${color}]`
 	const borderColor =
 		error && isBlurred ? "border border-red-400" : "transparent"
-	const maxWidth = 400
 	return (
 		<GeneralInputContainer
 			labelText={label}
 			inputId={id}
-			maxWidth={maxWidth}
+			maxWidth={INPUT_MAX_WIDTH}
 			isBlurred={isBlurred}
 			input={
 				<div className={"relative"}>

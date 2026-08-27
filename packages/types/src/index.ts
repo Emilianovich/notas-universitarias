@@ -18,6 +18,7 @@ export const NOT_NESTED_LABEL = "Registrar varias notas"
 export const ADD_BREAKDOWN_TEXT = "¿Qué quieres hacer con esta evaluación?"
 export const PREVIEW_PET_HEIGHT = 120
 export const PREVIEW_TEXT_HEIGHT = 32
+export const INPUT_MAX_WIDTH = 400
 export type SuccessRes<T> = BaseRes & { content: T }
 export * from "./db.js"
 export * from "./document-schemas/index.js"
