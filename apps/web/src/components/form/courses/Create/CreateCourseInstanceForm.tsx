@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: <following tanstack docs> */
 import { buildRequest, ServerErrorRes } from "@notas-universitarias/helpers"
 import {
 	ADD_BREAKDOWN_TEXT,
@@ -17,7 +17,6 @@ import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import { Trash2 } from "lucide-react"
 import { useRef } from "react"
-import DropdownMenu from "@/components/form/general/DropdownMenu.tsx"
 import ErrorMessage from "@/components/form/general/ErrorMessage.tsx"
 import GeneralInputContainer from "@/components/form/general/GeneralInputContainer.tsx"
 import Input from "@/components/form/general/Input.tsx"
@@ -27,8 +26,9 @@ import NumberInput, {
 import RadioInput, {
 	type RadioInputProps
 } from "@/components/form/general/RadioInput.tsx"
+import SelectField from "@/components/form/tanstack-fields/SelectField.tsx"
+import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import { AddItem } from "@/components/general/AddItem.tsx"
-import Button from "@/components/general/Button.tsx"
 import useModal from "@/contexts/modal.ts"
 import useToast from "@/contexts/toast.ts"
 import { baseUrl } from "@/routes/__root.tsx"
@@ -220,21 +220,13 @@ export default function CreateCourseInstanceForm() {
 			{isRegistered && (
 				<Field
 					name={"previousCourseId"}
-					children={(fieldApi) => {
-						const { errors, isBlurred } = fieldApi.state.meta
-						const { name, handleBlur, handleChange } = fieldApi
+					children={(field) => {
 						return (
-							<DropdownMenu
+							<SelectField
 								selectedItem={data.content[0].name}
 								iterableItems={data.content}
 								label={"¿Cómo se llama la materia?"}
-								name={name}
-								error={errors[0]?.message}
-								syncValueToState={(e) => handleChange(e.target.value)}
-								handleBlur={handleBlur}
-								isBlurred={isBlurred || submissionAttempts > 0}
-								color={"#F9FCFC"}
-								id={name}
+								inputId={field.name}
 							/>
 						)
 					}}
@@ -685,12 +677,7 @@ export default function CreateCourseInstanceForm() {
 			</Field>
 			{totalPercentage === 100 && (
 				<div className={"sm:mt-4 w-full flex items-center justify-center"}>
-					<Button
-						text={"Guardar materia"}
-						type={"submit"}
-						styleType={"primary"}
-						isDisabled={false}
-					/>
+					<SubmitBtn text={"Guardar materia"} />
 				</div>
 			)}
 			<div ref={scrollToRef}></div>

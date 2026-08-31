@@ -9,7 +9,7 @@ import { useMutation } from "@tanstack/react-query"
 import { Link, useNavigate, useRouter } from "@tanstack/react-router"
 import EmailField from "@/components/form/tanstack-fields/EmailField.tsx"
 import PasswordField from "@/components/form/tanstack-fields/PasswordField.tsx"
-import Button from "@/components/general/Button.tsx"
+import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import useToast from "@/contexts/toast.ts"
 import { fieldContext, formContext } from "@/hooks/form.ts"
 import { queryClient } from "@/routes/__root.tsx"
@@ -26,7 +26,7 @@ const { useAppForm } = createFormHook({
 		EmailField,
 		PasswordField
 	},
-	formComponents: { EmailField }
+	formComponents: {}
 })
 
 export default function LoginForm({ wasRedirected }: Redirected) {
@@ -61,7 +61,7 @@ export default function LoginForm({ wasRedirected }: Redirected) {
 			})
 		}
 	})
-	const { mutate, isPending } = mutation
+	const { mutate } = mutation
 	const form = useAppForm({
 		defaultValues: {
 			email: "",
@@ -137,12 +137,7 @@ export default function LoginForm({ wasRedirected }: Redirected) {
 							</strong>
 						</Link>
 					</p>
-					<Button
-						text={"Iniciar sesión"}
-						type={"submit"}
-						styleType={"primary"}
-						isDisabled={isPending}
-					/>
+					<SubmitBtn text={"Iniciar sesión"} />
 				</div>
 			</form>
 		</AppForm>

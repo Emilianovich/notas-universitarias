@@ -4,9 +4,10 @@ import type {
 	FontFamily,
 	PetName
 } from "@notas-universitarias/types"
+import { useSelector } from "@tanstack/react-form"
 import type { JSX } from "react"
 import GeneralInputContainer from "@/components/form/general/GeneralInputContainer.tsx"
-import type { InputProps } from "@/types/input.ts"
+import { useFieldContext, useFormContext } from "@/hooks/form.ts"
 
 export const allowedFontFamilies: Set<FontFamily> = new Set([
 	"Arima",
@@ -41,30 +42,31 @@ export const allowedPets: Set<PetName> = new Set([
 type DropdownMenuProps<T> = {
 	selectedItem: T
 	iterableItems: Set<T> | Array<CoursesInfo>
-} & Omit<
-	InputProps<string>,
-	"originallyPassword" | "type" | "placeholder" | "value"
->
+	inputId: string
+	label: string
+}
 
-export default function DropdownMenu<
+export default function SelectField<
 	T extends string | number | readonly string[] | undefined
->({
-	selectedItem,
-	iterableItems,
-	id,
-	isBlurred,
-	label,
-	error,
-	handleBlur,
-	syncValueToState
-}: DropdownMenuProps<T>) {
+>({ selectedItem, iterableItems, inputId, label }: DropdownMenuProps<T>) {
+	const field = useFieldContext<string>()
+	const form = useFormContext()
+	const { errors, isBlurred } = field.state.meta
+	const { name, handleBlur, handleChange } = field
+	const submissionAttempts = useSelector(
+		form.store,
+		(state) => state.submissionAttempts
+	)
 	const borderColor =
-		error && isBlurred ? "border border-red-400" : "transparent"
-	let itemsToRender: JSX.Element[] = []
+		errors[0]?.message && isBlurred ? "border border-red-400" : "transparent"
+	let itemsToRender: JSX.Element[]
 	if (iterableItems instanceof Set) {
 		itemsToRender = [...iterableItems].map((item, i) => (
 			<option
-				key={`${item}-${i}`}
+				key={`${item}-${
+					// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+					i
+				}`}
 				value={item}
 				selected={selectedItem === item}
 			>
@@ -85,21 +87,22 @@ export default function DropdownMenu<
 	return (
 		<GeneralInputContainer
 			labelText={label}
-			inputId={id}
+			inputId={inputId}
 			maxWidth={400}
-			isBlurred={isBlurred}
+			isBlurred={isBlurred || submissionAttempts > 0}
 			input={
 				<div className={"w-fit h-fit relative"}>
 					<select
 						className={`p-2 w-100 h-11.25 rounded-[10px] outline-none shadow-[0px_2px_4px_rgba(0,0,0,0.25)] ${borderColor}`}
 						onBlur={handleBlur}
-						onChange={syncValueToState}
+						onChange={(e) => handleChange(e.target.value)}
+						name={name}
 					>
 						{...itemsToRender}
 					</select>
 				</div>
 			}
-			error={error}
+			error={errors[0]?.message}
 		/>
 	)
 }

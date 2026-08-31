@@ -7,7 +7,7 @@ export type TanstackFieldTextInputProps = {
 	label: string
 	inputId: string
 	isPassword: boolean
-	type: "text" | "password" | "email" | "number"
+	type: "text" | "password" | "email" | "number" | "date"
 	placeholder: string
 }
 

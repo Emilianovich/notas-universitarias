@@ -3,7 +3,7 @@ import type { CourseInstanceForEdit } from "@notas-universitarias/types"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { Suspense } from "react"
-import { UpdateCourseInstanceForm } from "@/components/form/courses/Update&Demo/UpdateCourseInstanceForm.tsx"
+import CourseInstanceForm from "@/components/form/courses/CourseInstanceForm.tsx"
 import ErrorMessage from "@/components/form/general/ErrorMessage.tsx"
 import LoadingComponent from "@/components/loading-components/current-period/LoadingComponent.tsx"
 import { baseUrl } from "@/routes/__root.tsx"
@@ -46,10 +46,11 @@ function RouteComponent() {
 				) : (
 					<>
 						<h1 className={"text-4xl text-primary-500 mt-4"}>{courseName}</h1>
-						<UpdateCourseInstanceForm
+						<CourseInstanceForm
 							defaultValues={courseInstance}
 							isForDemo={false}
 							courseInstanceId={id}
+							mode={"edit"}
 						/>
 					</>
 				)}

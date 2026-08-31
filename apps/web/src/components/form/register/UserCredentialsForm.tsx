@@ -4,13 +4,16 @@ import {
 	createUserDto,
 	ON_SUBMIT_INVALID_MSG
 } from "@notas-universitarias/types"
-import { useForm, useSelector } from "@tanstack/react-form"
+import { createFormHook } from "@tanstack/react-form"
 import { useMutation } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import type { z } from "zod"
-import Input from "@/components/form/general/Input.tsx"
-import Button from "@/components/general/Button.tsx"
+import EmailField from "@/components/form/tanstack-fields/EmailField.tsx"
+import PasswordField from "@/components/form/tanstack-fields/PasswordField.tsx"
+import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
+import TextField from "@/components/form/tanstack-fields/TextField.tsx"
 import useToast from "@/contexts/toast.ts"
+import { fieldContext, formContext } from "@/hooks/form.ts"
 import { baseUrl } from "@/routes/__root.tsx"
 import type { RegisterFormProps } from "@/types/input.ts"
 
@@ -23,6 +26,17 @@ const registerUser = async (payload: z.infer<typeof createUserDto>) => {
 		includeCredentials: true
 	})
 }
+
+const { useAppForm } = createFormHook({
+	fieldContext,
+	formContext,
+	fieldComponents: {
+		EmailField,
+		PasswordField,
+		TextField
+	},
+	formComponents: {}
+})
 
 export default function UserCredentialsForm({
 	setGlobalFormState,
@@ -54,8 +68,8 @@ export default function UserCredentialsForm({
 			}
 		}
 	})
-	const { mutate, isPending } = mutation
-	const form = useForm({
+	const { mutate } = mutation
+	const form = useAppForm({
 		defaultValues: {
 			username: "",
 			email: "",
@@ -81,121 +95,74 @@ export default function UserCredentialsForm({
 			mutate(payload)
 		}
 	})
-	const { Field } = form
-	const submissionAttempts = useSelector(
-		form.store,
-		(state) => state.submissionAttempts
-	)
+	const { AppField, AppForm } = form
 	return (
-		<form
-			onSubmit={async (e) => {
-				e.preventDefault()
-				e.stopPropagation()
-				await form.handleSubmit()
-			}}
-			className={
-				"grid grid-rows-[auto_auto_auto_50px_1fr] gap-2 justify-center items-center relative"
-			}
-		>
-			<Field
-				name={"username"}
-				children={(fieldApi) => {
-					const { errors, isBlurred } = fieldApi.state.meta
-					const { name, handleBlur, state, handleChange } = fieldApi
-					return (
-						<Input
-							id={name}
-							label={"¿Cómo te llaman?"}
-							type={"text"}
-							name={name}
-							value={state.value}
-							error={errors[0]?.message}
-							syncValueToState={(e) => handleChange(e.target.value)}
-							handleBlur={handleBlur}
-							isBlurred={isBlurred || submissionAttempts > 0}
-							color={"#F9FCFC"}
-							originallyPassword={false}
-							placeholder={"Ej. Eminola"}
-						/>
-					)
+		<AppForm>
+			<form
+				onSubmit={async (e) => {
+					e.preventDefault()
+					e.stopPropagation()
+					await form.handleSubmit()
 				}}
-			/>
-			<Field
-				name={"email"}
-				children={(fieldApi) => {
-					const { errors, isBlurred } = fieldApi.state.meta
-					const { name, handleBlur, state, handleChange } = fieldApi
-					return (
-						<Input
-							id={name}
+				className={
+					"grid grid-rows-[auto_auto_auto_50px_1fr] gap-2 justify-center items-center relative"
+				}
+			>
+				<AppField
+					name={"username"}
+					children={(field) => (
+						<field.TextField
+							placeholder={"Ej. Eminola"}
+							label={"¿Cómo te llaman?"}
+							inputId={field.name}
+						/>
+					)}
+				/>
+				<AppField
+					name={"email"}
+					children={(field) => (
+						<field.EmailField
 							label={"¿Cuál es tu correo?"}
-							type={"email"}
-							name={name}
-							value={state.value}
-							error={errors[0]?.message}
-							syncValueToState={(e) => handleChange(e.target.value)}
-							handleBlur={handleBlur}
-							isBlurred={isBlurred || submissionAttempts > 0}
-							color={"#F9FCFC"}
-							originallyPassword={false}
+							inputId={field.name}
 							placeholder={"Ej. eminola@correo.com"}
 						/>
-					)
-				}}
-			/>
-			<Field
-				name={"password"}
-				children={(fieldApi) => {
-					const { errors, isBlurred } = fieldApi.state.meta
-					const { name, handleBlur, state, handleChange } = fieldApi
-					return (
-						<Input
-							id={name}
-							label={"¿Cuál es tu contraseña?"}
-							type={"password"}
-							name={name}
-							value={state.value}
-							error={errors[0]?.message}
-							syncValueToState={(e) => handleChange(e.target.value)}
-							handleBlur={handleBlur}
-							isBlurred={isBlurred || submissionAttempts > 0}
-							color={"#F9FCFC"}
-							originallyPassword={true}
-							placeholder={"********"}
-						/>
-					)
-				}}
-			/>
-			<div
-				className={
-					"flex flex-col gap-4 justify-center items-center w-full h-fit"
-				}
-			>
-				<p>
-					¿Ya tienes cuenta?{" "}
-					<Link to={"/login"}>
-						<strong
-							className={
-								"cursor-pointer font-medium hover:scale-105 hover:text-primary-400 transition-all duration-300 ease-in-out underline"
-							}
-						>
-							Inicia sesión
-						</strong>
-					</Link>
-				</p>
-			</div>
-			<div
-				className={
-					"flex flex-col justify-center items-center gap-4 w-full h-fit"
-				}
-			>
-				<Button
-					text={"Crear usuario"}
-					type={"submit"}
-					styleType={"primary"}
-					isDisabled={isPending}
+					)}
 				/>
-			</div>
-		</form>
+				<AppField
+					name={"password"}
+					children={(field) => (
+						<field.PasswordField
+							label={"¿Cuál es tu contraseña?"}
+							inputId={field.name}
+						/>
+					)}
+				/>
+				<div
+					className={
+						"flex flex-col gap-4 justify-center items-center w-full h-fit"
+					}
+				>
+					<p>
+						¿Ya tienes cuenta?{" "}
+						<Link to={"/login"}>
+							<strong
+								className={
+									"cursor-pointer font-medium hover:scale-105 hover:text-primary-400 transition-all duration-300 ease-in-out underline"
+								}
+							>
+								Inicia sesión
+							</strong>
+						</Link>
+					</p>
+				</div>
+				<div
+					className={
+						"flex flex-col justify-center items-center gap-4 w-full h-fit"
+					}
+				>
+					<SubmitBtn text={"Crear usuario"} />
+				</div>
+			</form>
+		</AppForm>
 	)
 }

@@ -4,12 +4,14 @@ import {
 	type ChangePasswordDto,
 	changePasswordSchema
 } from "@notas-universitarias/types/dtos"
-import { useForm, useSelector } from "@tanstack/react-form"
+import { createFormHook } from "@tanstack/react-form"
 import { useMutation } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
-import Input from "@/components/form/general/Input.tsx"
+import PasswordField from "@/components/form/tanstack-fields/PasswordField.tsx"
+import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import Button from "@/components/general/Button.tsx"
 import useToast from "@/contexts/toast.ts"
+import { fieldContext, formContext } from "@/hooks/form.ts"
 import { baseUrl } from "@/routes/__root.tsx"
 
 export const Route = createFileRoute("/home/settings/change-password")({
@@ -25,6 +27,15 @@ const handlePasswordChange = async (dto: ChangePasswordDto) => {
 		includeCredentials: true
 	})
 }
+
+const { useAppForm } = createFormHook({
+	fieldContext,
+	formContext,
+	fieldComponents: {
+		PasswordField
+	},
+	formComponents: {}
+})
 
 function RouteComponent() {
 	const { buildToast } = useToast()
@@ -48,8 +59,8 @@ function RouteComponent() {
 			})
 		}
 	})
-	const { mutate, isPending } = mutation
-	const form = useForm({
+	const { mutate } = mutation
+	const form = useAppForm({
 		validators: {
 			onBlur: changePasswordSchema
 		},
@@ -68,88 +79,53 @@ function RouteComponent() {
 			mutate(value)
 		}
 	})
-	const { Field } = form
-	const submissionAttempts = useSelector(
-		form.store,
-		(state) => state.submissionAttempts
-	)
+	const { AppField, AppForm } = form
 	return (
 		<main className={"w-full flex justify-center items-center"}>
-			<form
-				onSubmit={async (e) => {
-					e.preventDefault()
-					e.stopPropagation()
-					await form.handleSubmit()
-				}}
-				className={
-					"relative grid grid-rows-4 box-border p-4 w-125 items-center justify-center bg-tertiary rounded-[10px] shadow-[0px_4px_10px_2px_rgba(0,0,0,0.25)]"
-				}
-			>
-				<h1 className={"text-2xl text-center"}>Cambio de contraseña</h1>
-				<Field
-					name={"password"}
-					children={(fieldApi) => {
-						const { errors, isBlurred } = fieldApi.state.meta
-						const { name, handleBlur, state, handleChange } = fieldApi
-						return (
-							<Input
-								key={name}
-								id={name}
+			<AppForm>
+				<form
+					onSubmit={async (e) => {
+						e.preventDefault()
+						e.stopPropagation()
+						await form.handleSubmit()
+					}}
+					className={
+						"relative grid grid-rows-4 box-border p-4 w-125 items-center justify-center bg-tertiary rounded-[10px] shadow-[0px_4px_10px_2px_rgba(0,0,0,0.25)]"
+					}
+				>
+					<h1 className={"text-2xl text-center"}>Cambio de contraseña</h1>
+					<AppField
+						name={"password"}
+						children={(field) => (
+							<field.PasswordField
 								label={"Tu nueva contraseña"}
-								type={"password"}
-								name={name}
-								value={state.value}
-								error={errors[0]?.message}
-								syncValueToState={(e) => handleChange(e.target.value)}
-								handleBlur={handleBlur}
-								isBlurred={isBlurred || submissionAttempts > 0}
-								color={"#F9FCFC"}
-								originallyPassword={true}
-								placeholder={"********"}
+								inputId={field.name}
 							/>
-						)
-					}}
-				/>
-				<Field
-					name={"confirmPassword"}
-					children={(fieldApi) => {
-						const { errors, isBlurred } = fieldApi.state.meta
-						const { name, handleBlur, state, handleChange } = fieldApi
-						return (
-							<Input
-								key={name}
-								id={name}
+						)}
+					/>
+					<AppField
+						name={"confirmPassword"}
+						children={(field) => (
+							<field.PasswordField
 								label={"Confirma tu nueva contraseña"}
-								type={"password"}
-								name={name}
-								value={state.value}
-								error={errors[0]?.message}
-								syncValueToState={(e) => handleChange(e.target.value)}
-								handleBlur={handleBlur}
-								isBlurred={isBlurred || submissionAttempts > 0}
-								color={"#F9FCFC"}
-								originallyPassword={true}
-								placeholder={"********"}
+								inputId={field.name}
 							/>
-						)
-					}}
-				/>
-				<div className={"flex justify-center items-center gap-4 w-full h-fit"}>
-					<Button
-						text={"Cancelar"}
-						type={"button"}
-						styleType={"secondary"}
-						isDisabled={false}
-						clickAction={async () => await navigate({ to: "/home/settings" })}
+						)}
 					/>
-					<Button
-						text={"Cambiar contraseña"}
-						type={"submit"}
-						styleType={"primary"}
-						isDisabled={isPending}
-					/>
-				</div>
-			</form>
+					<div
+						className={"flex justify-center items-center gap-4 w-full h-fit"}
+					>
+						<Button
+							text={"Cancelar"}
+							type={"button"}
+							styleType={"secondary"}
+							isDisabled={false}
+							clickAction={async () => await navigate({ to: "/home/settings" })}
+						/>
+						<SubmitBtn text={"Cambiar contraseña"} />
+					</div>
+				</form>
+			</AppForm>
 		</main>
 	)
 }
