@@ -1,7 +1,4 @@
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: <following tanstack docs> */
-
-import { createFormHook } from "@tanstack/react-form"
-import { Trash2 } from "lucide-react"
 import { useRef } from "react"
 import {
 	type BreakdownFormProps,
@@ -9,27 +6,11 @@ import {
 	defaultValues
 } from "@/components/form/courses/types/types.ts"
 import { LaboratoryDetailsForm } from "@/components/form/courses/Update&Demo/LaboratoryDetailsForm.tsx"
-import DeleteFormValue from "@/components/form/general/DeleteFormValue.tsx"
-import BreakdownTypeGroup from "@/components/form/tanstack-fields/BreakdownTypeGroup.tsx"
-import NumberField from "@/components/form/tanstack-fields/NumberField.tsx"
-import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
-import TextField from "@/components/form/tanstack-fields/TextField.tsx"
 import { AddItem } from "@/components/general/AddItem.tsx"
 import { ScrollToBottom } from "@/components/ui/ScrollToBottom.tsx"
-import useModal from "@/contexts/modal.ts"
-import { fieldContext, formContext } from "@/hooks/form.ts"
 import scrollTo from "@/utils/scroll.ts"
-
-const { withForm } = createFormHook({
-	fieldComponents: {
-		TextField,
-		NumberField,
-		BreakdownTypeGroup
-	},
-	formComponents: { SubmitBtn },
-	fieldContext,
-	formContext
-})
+import {BreakdownSharedContent, withForm} from "@/components/form/courses/BreakdownSharedContent.tsx";
+import BreakdownEntries from "@/components/form/courses/BreakdownEntries.tsx";
 
 function BreakdownFormContent({
 	form,
@@ -38,7 +19,6 @@ function BreakdownFormContent({
 	labTotalPercentage,
 	isForDemo
 }: BreakdownFormProps) {
-	const { buildModal, closeModal } = useModal()
 	const scrollToEnd = useRef<HTMLDivElement>(null)
 	const { AppField, AppForm } = form
 	return (
@@ -49,62 +29,19 @@ function BreakdownFormContent({
 						{field.state.value.map((breakdown, i) => {
 							return (
 								<div key={`breakdown[${i}]-ctn`}>
-									<div className={"relative"}>
-										<Trash2
-											className={
-												"text-red-700 cursor-pointer hover:scale-110 transition-all duration-300 ease-in-out absolute top-4 left-110"
-											}
-											onClick={() => {
-												buildModal({
-													modalTitle: "Eliminar evaluación",
-													confirmButton: {
-														type: "modal-primary",
-														action: () => {
-															field.removeValue(i)
-															closeModal()
-														},
-														text: "Sí, eliminar"
-													},
-													closeButtonTitle: "No, me arrepentí",
-													modalContent:
-														"Eliminarás completamente la evaluación. No podrás recuperar el progreso que tenías"
-												})
+										<BreakdownSharedContent
+											form={form}
+											fields={{
+												name: `breakdown[${i}].name`,
+												percentage: `breakdown[${i}].percentage`,
+												type: `breakdown[${i}].type`,
 											}}
+											confirmBtnAction={() => {
+											field.removeValue(i)
+										}}
+											modalTitle={"Eliminar evaluación"}
+											isLabDetail={false}
 										/>
-										<AppField
-											name={`breakdown[${i}].name`}
-											key={`breakdown[${i}].name`}
-											children={(nameField) => (
-												<nameField.TextField
-													label={"¿Cómo se llama la evaluación?"}
-													placeholder={"Asistencia"}
-													inputId={`${nameField.name}-${i}-name`}
-													key={`${nameField.name}-${i}-name`}
-												/>
-											)}
-										/>
-									</div>
-									<AppField
-										name={`breakdown[${i}].percentage`}
-										key={`breakdown[${i}].percentage`}
-										children={(percentageField) => (
-											<percentageField.NumberField
-												label={"¿Cuál es el porcentaje de la evaluación?"}
-												inputId={`${field.name}-${i}-percentage`}
-												placeholder={"21"}
-											/>
-										)}
-									/>
-									<AppField
-										name={`breakdown[${i}].type`}
-										key={`breakdown[${i}].type`}
-										children={(typeField) => (
-											<typeField.BreakdownTypeGroup
-												index={i}
-												isLabDetail={false}
-											/>
-										)}
-									/>
 									{breakdown.type === "NESTED" && (
 										<LaboratoryDetailsForm
 											form={form}
@@ -136,62 +73,14 @@ function BreakdownFormContent({
 																	key={`breakdown-${i}-entry-${entryIndex}`}
 																	className={"border border-primary-300"}
 																>
-																	{hasNameField && (
-																		<AppField
-																			name={`breakdown[${i}].entries[${entryIndex}].name`}
-																			children={(nameEntryField) => (
-																				<nameEntryField.TextField
-																					label={"Agrega un nombre a la nota"}
-																					placeholder={"Parcial#1"}
-																					inputId={`${nameEntryField.name}-${i}-name`}
-																				/>
-																			)}
-																		/>
-																	)}
-																	<div
-																		className={
-																			"flex w-full justify-evenly items-center"
-																		}
-																	>
-																		{hasEntryGradeField && (
-																			<>
-																				<AppField
-																					name={`breakdown[${i}].entries[${entryIndex}].rawScore`}
-																					children={(rawScoreField) => (
-																						<rawScoreField.NumberField
-																							inputId={`${rawScoreField.name}-${i}-rawScore`}
-																							label={"Puntaje Obtenido"}
-																							placeholder={""}
-																						/>
-																					)}
-																				/>
-																				<AppField
-																					name={`breakdown[${i}].entries[${entryIndex}].maxScore`}
-																					children={(maxScoreField) => (
-																						<maxScoreField.NumberField
-																							inputId={`${maxScoreField.name}-${i}-maxScore`}
-																							label={"Puntaje Máximo"}
-																							placeholder={""}
-																						/>
-																					)}
-																				/>
-																				<DeleteFormValue
-																					className={""}
-																					modalTitle={"Eliminar nota"}
-																					modalContent={
-																						"Si aceptas, estarás eliminando permanentemente esta nota"
-																					}
-																					confirmButton={{
-																						type: "modal-primary",
-																						text: "Sí, eliminar nota",
-																						action: () =>
-																							entryField.removeValue(entryIndex)
-																					}}
-																					closeButtonTitle={"No, me arrepentí"}
-																				/>
-																			</>
-																		)}
-																	</div>
+																	<BreakdownEntries
+																		form={form}
+																		fields={`breakdown[${i}].entries[${entryIndex}]`}
+																		hasNameField={hasNameField}
+																		hasEntryGradeField={hasEntryGradeField}
+																		modalTitle={"Eliminar nota"}
+																		confirmBtnAction={() => entryField.removeValue(entryIndex)}
+																	/>
 																</div>
 															)
 														})}
@@ -244,3 +133,6 @@ export const BreakdownForm = withForm({
 	defaultValues,
 	render: (props) => <BreakdownFormContent {...props} />
 })
+
+
+

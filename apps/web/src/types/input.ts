@@ -14,7 +14,6 @@ export type InputProps<T> = {
 	handleBlur: () => void
 	isBlurred: boolean
 	color: "#F9FCFC"
-	id: string
 	originallyPassword: boolean
 }
 

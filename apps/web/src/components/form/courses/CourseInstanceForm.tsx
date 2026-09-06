@@ -1,16 +1,14 @@
 import { buildRequest, ServerErrorRes } from "@notas-universitarias/helpers"
 import type { UpdateCourseInstanceDto } from "@notas-universitarias/types"
-import { createFormHook, useSelector } from "@tanstack/react-form"
+import { useSelector } from "@tanstack/react-form"
 import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import { useRef } from "react"
 import { useEditCourseInstanceOpts } from "@/components/form/courses/hooks/useEditCourseInstanceOpts.ts"
 import { BreakdownForm } from "@/components/form/courses/Update&Demo/BreakdownForm.tsx"
-import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import Button from "@/components/general/Button.tsx"
 import { ScrollToBottom } from "@/components/ui/ScrollToBottom.tsx"
 import useToast from "@/contexts/toast.ts"
-import { fieldContext, formContext } from "@/hooks/form.ts"
 import usePercentagesForEdit, {
 	useHandleMissingFormFields
 } from "@/lib/course-form.ts"
@@ -48,15 +46,9 @@ export type CourseInstanceFormProps =
 			isForDemo: true
 	  }
 
-export const { useAppForm } = createFormHook({
-	fieldContext,
-	formContext,
-	fieldComponents: {},
-	formComponents: { SubmitBtn }
-})
 
 export default function CourseInstanceForm(props: CourseInstanceFormProps) {
-	const { defaultValues, isForDemo } = props
+	const { defaultValues, isForDemo, mode } = props
 	const { buildToast } = useToast()
 	const navigate = useNavigate()
 	const scrollToEnd = useRef<HTMLDivElement | null>(null)
@@ -115,7 +107,6 @@ export default function CourseInstanceForm(props: CourseInstanceFormProps) {
 							<field.TextField
 								label={"¿Cómo se llama tu profesor?"}
 								placeholder={"Lord Voldemort"}
-								inputId={field.name}
 							/>
 						)}
 					/>
@@ -125,7 +116,7 @@ export default function CourseInstanceForm(props: CourseInstanceFormProps) {
 				)}
 				<BreakdownForm
 					form={form}
-					mode={"edit"}
+					mode={mode}
 					isForDemo={isForDemo}
 					totalPercentage={totalBreakdownPercentage}
 					labTotalPercentage={totalLabDetailBreakdownPercentage}

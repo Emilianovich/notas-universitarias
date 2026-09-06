@@ -35,7 +35,7 @@ import { baseUrl } from "@/routes/__root.tsx"
 import type { InputProps } from "@/types/input.ts"
 import scrollTo from "@/utils/scroll.ts"
 
-const registerCourseInstance = async (dto: CourseInstanceToBeCreated) => {
+export const registerCourseInstance = async (dto: CourseInstanceToBeCreated) => {
 	return buildRequest<string, string>({
 		baseUrl,
 		path: "/course-instances",
@@ -45,7 +45,7 @@ const registerCourseInstance = async (dto: CourseInstanceToBeCreated) => {
 	})
 }
 
-const getPreviousCoursesInfo = async () => {
+export const getPreviousCoursesInfo = async () => {
 	return buildRequest<CoursesInfo[], string>({
 		baseUrl,
 		path: "/courses",
@@ -159,7 +159,6 @@ export default function CreateCourseInstanceForm() {
 						return (
 							<GeneralInputContainer
 								labelText={"¿Ya diste la materia anteriormente?"}
-								inputId={name}
 								maxWidth={400}
 								isBlurred={isBlurred || submissionAttempts > 0}
 								input={
@@ -208,7 +207,6 @@ export default function CreateCourseInstanceForm() {
 							originallyPassword: false,
 							label: "¿Cómo se llama la materia?",
 							error: errors[0]?.message,
-							id: name,
 							color: "#F9FCFC",
 							placeholder: "Física I",
 							value: state.value as string
@@ -226,7 +224,6 @@ export default function CreateCourseInstanceForm() {
 								selectedItem={data.content[0].name}
 								iterableItems={data.content}
 								label={"¿Cómo se llama la materia?"}
-								inputId={field.name}
 							/>
 						)
 					}}
@@ -246,7 +243,6 @@ export default function CreateCourseInstanceForm() {
 						originallyPassword: false,
 						label: "¿Cómo se llama tu profesor?",
 						error: errors[0]?.message,
-						id: name,
 						color: "#F9FCFC",
 						placeholder: "Lord Voldemort",
 						value: state.value
@@ -275,7 +271,6 @@ export default function CreateCourseInstanceForm() {
 														nameField
 													const inputProps: InputProps<string> = {
 														name: `${name}-${i}-name`,
-														id: `${name}-${i}-name`,
 														value: state.value,
 														type: "text",
 														syncValueToState: (e) =>
@@ -325,7 +320,6 @@ export default function CreateCourseInstanceForm() {
 													percentageField
 												const numberInputProps: NumberInputProps = {
 													name: `${name}-${i}-percentage`,
-													id: `${name}-${i}-percentage`,
 													value: state.value.toString(),
 													syncValueToState: (e) =>
 														handleChange(Number(e.currentTarget.value)),
@@ -421,7 +415,6 @@ export default function CreateCourseInstanceForm() {
 																					isBlurred || submissionAttempts > 0
 																				}
 																				color={"#F9FCFC"}
-																				id={`breakdown[${i}].laboratoryDetails.profesorName`}
 																				originallyPassword={false}
 																			/>
 																		)
@@ -486,7 +479,6 @@ export default function CreateCourseInstanceForm() {
 																										const inputProps: InputProps<string> =
 																											{
 																												name: `${name}-${i}-name`,
-																												id: `${name}-${i}-name`,
 																												value:
 																													state.value as string,
 																												type: "text",
@@ -539,7 +531,6 @@ export default function CreateCourseInstanceForm() {
 																										const numberInputProps: NumberInputProps =
 																											{
 																												name: `${name}-${i}-percentage`,
-																												id: `${name}-${i}-percentage`,
 																												value:
 																													state.value?.toString() as string,
 																												syncValueToState: (e) =>

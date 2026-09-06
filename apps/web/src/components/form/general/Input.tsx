@@ -13,7 +13,6 @@ export default function Input({
 	isBlurred,
 	color,
 	label,
-	id,
 	originallyPassword,
 	placeholder
 }: InputProps<string>) {
@@ -26,13 +25,11 @@ export default function Input({
 	return (
 		<GeneralInputContainer
 			labelText={label}
-			inputId={id}
 			maxWidth={INPUT_MAX_WIDTH}
 			isBlurred={isBlurred}
 			input={
 				<div className={"relative"}>
 					<input
-						id={id}
 						name={name}
 						type={currentInputType}
 						onChange={syncValueToState}

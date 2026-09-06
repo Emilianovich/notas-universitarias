@@ -1,33 +1,11 @@
-import type {
-	CourseBreakdownToBeCreated,
-	CourseInstance
-} from "@notas-universitarias/types"
 import { useSelector } from "@tanstack/react-form"
-import type { EditCourseInstanceFormType } from "@/components/form/courses/hooks/useEditCourseInstanceOpts.ts"
+import type {
+	CreateCourseInstanceFormType, CreatingCourseInstanceReturns,
+	EditCourseInstanceFormType,
+	EditingCourseInstanceReturns
+} from "@/components/form/courses/types/types.ts";
 
-type CourseInstancesPercentages = {
-	totalBreakdownPercentage: number
-	totalLabDetailBreakdownPercentage: number
-}
 
-type CreatingCourseInstanceReturns = CourseInstancesPercentages & {
-	breakdownList: CourseBreakdownToBeCreated
-}
-
-type EditingCourseInstanceReturns = CourseInstancesPercentages & {
-	breakdownList: {
-		name: string
-		percentage: number
-		contribution: number
-		entries: {
-			rawScore: number
-			maxScore: number
-			name?: string | undefined
-		}[]
-		type: "STANDALONE" | "NESTED" | "NOT-NESTED"
-		laboratoryDetails?: CourseInstance | undefined
-	}[]
-}
 
 export default function usePercentagesForEdit(
 	form: EditCourseInstanceFormType
@@ -71,6 +49,43 @@ export function useHandleMissingFormFields(
 	})
 }
 
-// export function usePercentagesForCreation(
-// 	form: EditCourseInstanceFormType
-// ): CreatingCourseInstanceReturns
+export function useFormDataForCreation(
+	form: CreateCourseInstanceFormType
+): CreatingCourseInstanceReturns {
+	const isRegistered = useSelector(
+		form.store,
+		(state) => state.values.isRegistered
+	)
+	const submissionAttempts = useSelector(
+		form.store,
+		(state) => state.submissionAttempts
+	)
+	const breakdownArray = useSelector(
+		form.store,
+		(state) => state.values.breakdown
+	)
+	const totalPercentage = breakdownArray.reduce(
+		(previousVal, currentVal) => previousVal + currentVal.percentage,
+		0
+	)
+	const laboratoryDetailBreakdownArray = breakdownArray.find(
+		(breakdown) => breakdown.type === "NESTED"
+	)?.laboratoryDetails?.breakdown
+	const labDetailTotalPercentage =
+		laboratoryDetailBreakdownArray?.reduce(
+			(previousVal, currentVal) => previousVal + currentVal.percentage,
+			0
+		) ?? -1
+	breakdownArray.forEach((breakdown) => {
+		if (breakdown.type !== "NESTED" && breakdown.laboratoryDetails) {
+			breakdown.laboratoryDetails = undefined
+		}
+	})
+	return {
+		isRegistered,
+		breakdownList: breakdownArray,
+		totalBreakdownPercentage: totalPercentage,
+		totalLabDetailBreakdownPercentage: labDetailTotalPercentage,
+		submissionAttempts,
+	}
+}

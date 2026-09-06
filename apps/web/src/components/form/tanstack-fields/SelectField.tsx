@@ -42,13 +42,12 @@ export const allowedPets: Set<PetName> = new Set([
 type DropdownMenuProps<T> = {
 	selectedItem: T
 	iterableItems: Set<T> | Array<CoursesInfo>
-	inputId: string
 	label: string
 }
 
 export default function SelectField<
 	T extends string | number | readonly string[] | undefined
->({ selectedItem, iterableItems, inputId, label }: DropdownMenuProps<T>) {
+>({ selectedItem, iterableItems, label }: DropdownMenuProps<T>) {
 	const field = useFieldContext<string>()
 	const form = useFormContext()
 	const { errors, isBlurred } = field.state.meta
@@ -87,7 +86,6 @@ export default function SelectField<
 	return (
 		<GeneralInputContainer
 			labelText={label}
-			inputId={inputId}
 			maxWidth={400}
 			isBlurred={isBlurred || submissionAttempts > 0}
 			input={

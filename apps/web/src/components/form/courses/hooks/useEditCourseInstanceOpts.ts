@@ -5,28 +5,17 @@ import {
 import {
 	type CourseInstance,
 	ON_SUBMIT_INVALID_MSG,
-	type SuccessRes,
-	type UpdateCourseInstanceDto,
 	updateCourseInstanceSchema
 } from "@notas-universitarias/types"
 import { createFormHook } from "@tanstack/react-form"
-import type { UseMutationResult } from "@tanstack/react-query"
-import BreakdownTypeGroup from "@/components/form/tanstack-fields/BreakdownTypeGroup.tsx"
 import NumberField from "@/components/form/tanstack-fields/NumberField.tsx"
 import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import TextField from "@/components/form/tanstack-fields/TextField.tsx"
 import useToast from "@/contexts/toast.ts"
 import { fieldContext, formContext } from "@/hooks/form.ts"
-
-export type EditCourseInstanceOpts = {
-	defaultValues: UpdateCourseInstanceDto
-	isForDemo: boolean
-	mutation: UseMutationResult<
-		SuccessRes<string>,
-		Error,
-		UpdateCourseInstanceDto
-	>
-}
+import type {EditCourseInstanceOpts} from "@/components/form/courses/types/types.ts";
+import {RadioField} from "@/components/form/tanstack-fields/RadioField.tsx";
+import SelectField from "@/components/form/tanstack-fields/SelectField.tsx";
 
 export const { useAppForm } = createFormHook({
 	fieldContext,
@@ -34,7 +23,8 @@ export const { useAppForm } = createFormHook({
 	fieldComponents: {
 		TextField,
 		NumberField,
-		BreakdownTypeGroup
+		RadioField,
+		SelectField,
 	},
 	formComponents: { SubmitBtn }
 })
@@ -79,6 +69,3 @@ export function useEditCourseInstanceOpts({
 	})
 }
 
-export type EditCourseInstanceFormType = ReturnType<
-	typeof useEditCourseInstanceOpts
->

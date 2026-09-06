@@ -4,14 +4,12 @@ import GeneralInput, {
 
 export default function PasswordField({
 	label,
-	inputId
 }: Omit<TanstackFieldTextInputProps, "isPassword" | "type" | "placeholder">) {
 	return (
 		<GeneralInput
 			type="password"
 			isPassword={true}
 			label={label}
-			inputId={inputId}
 			placeholder={"***********"}
 		/>
 	)

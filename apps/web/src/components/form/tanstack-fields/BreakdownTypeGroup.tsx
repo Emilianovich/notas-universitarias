@@ -11,6 +11,7 @@ import RadioInput, {
 	type RadioInputProps
 } from "@/components/form/general/RadioInput.tsx"
 import { useFieldContext } from "@/hooks/form.ts"
+import {RadioField} from "@/components/form/tanstack-fields/RadioField.tsx";
 
 export type BreakdownTypeGroupProps =
 	| {
@@ -24,91 +25,37 @@ export type BreakdownTypeGroupProps =
 	  }
 
 export type RadioGroupProps = {
-	// biome-ignore lint/suspicious/noExplicitAny: <need for FieldApi type>
-	field: FieldApi<
-		any,
-		string,
-		BreakdownCategory,
-		any,
-		any,
-		any,
-		any,
-		any,
-		any,
-		any,
-		any,
-		any,
-		any,
-		any,
-		any,
-		any,
-		any,
-		any,
-		any,
-		any,
-		any,
-		any,
-		any
-	>
 	radioGroupName: string
+	hasLabDetail: boolean
+	radioId?: string
 }
 
-export function getGeneralRadioProps({
-	radioGroupName,
-	field
-}: RadioGroupProps): Omit<RadioInputProps, "value" | "labelText" | "radioId"> {
-	const { handleBlur, handleChange, state } = field
-	return {
-		handleBlur,
-		syncValueToState: (e) => handleChange(e.target.value as BreakdownCategory),
-		radioGroupName,
-		currentVal: state.value
-	}
-}
-
-export default function BreakdownTypeGroup(props: BreakdownTypeGroupProps) {
-	const { index, isLabDetail } = props
-	let radioGroupName: string
-	let radioId: string
-	if (isLabDetail) {
-		radioGroupName = `breakdown[${index}].laboratoryDetails.breakdown[${props.labIndex}].type`
-		radioId = `breakdown[${index}].laboratoryDetails.breakdown[${props.labIndex}].`
-	} else {
-		radioGroupName = `breakdown[${index}].type`
-		radioId = `breakdown[${index}].`
-	}
+export default function BreakdownTypeGroup({radioGroupName, hasLabDetail}:RadioGroupProps) {
 	const field = useFieldContext<BreakdownCategory>()
 	const { errors, isBlurred } = field.state.meta
-	const generalRadioProps = getGeneralRadioProps({
-		field,
-		radioGroupName
-	})
 	return (
 		<div className={"flex flex-col gap-2"}>
 			<h2 className={"text-xl"}>{ADD_BREAKDOWN_TEXT}</h2>
-			<RadioInput
+			<RadioField
 				value={"STANDALONE"}
 				labelText={STANDALONE_LABEL}
-				radioId={`${radioId}standalone`}
-				{...generalRadioProps}
-				key={radioId}
+				type={"breakdownCategory"}
+				radioGroupName={radioGroupName}
 			/>
-			{!isLabDetail && (
-				<RadioInput
-					value={"NESTED"}
-					labelText={NESTED_LABEL}
-					radioId={`${radioId}nested`}
-					{...generalRadioProps}
-					key={`${radioId}nested`}
-				/>
-			)}
-			<RadioInput
+			<RadioField
 				value={"NOT-NESTED"}
 				labelText={NOT_NESTED_LABEL}
-				radioId={`${radioId}not-nested`}
-				{...generalRadioProps}
-				key={`${radioId}not-nested`}
+				type={"breakdownCategory"}
+				radioGroupName={radioGroupName}
 			/>
+			{!hasLabDetail && (
+				<RadioField
+					type={"breakdownCategory"}
+					radioGroupName={radioGroupName}
+					value={"NESTED"}
+					labelText={NESTED_LABEL}
+				/>
+			)}
 			{errors && isBlurred && (
 				<ErrorMessage error={errors[0]?.message as string} />
 			)}

@@ -5,7 +5,6 @@ import { useFieldContext, useFormContext } from "@/hooks/form.ts"
 
 export type TanstackFieldTextInputProps = {
 	label: string
-	inputId: string
 	isPassword: boolean
 	type: "text" | "password" | "email" | "number" | "date"
 	placeholder: string
@@ -13,7 +12,6 @@ export type TanstackFieldTextInputProps = {
 
 export default function GeneralInput({
 	label,
-	inputId,
 	type,
 	isPassword,
 	placeholder
@@ -38,7 +36,6 @@ export default function GeneralInput({
 				handleBlur={handleBlur}
 				isBlurred={isBlurred || submissionAttempts > 0}
 				color={"#F9FCFC"}
-				id={inputId}
 				originallyPassword={isPassword}
 				placeholder={placeholder}
 			/>
@@ -54,7 +51,6 @@ export default function GeneralInput({
 			handleBlur={handleBlur}
 			isBlurred={isBlurred || submissionAttempts > 0}
 			color={"#F9FCFC"}
-			id={inputId}
 		/>
 	)
 }

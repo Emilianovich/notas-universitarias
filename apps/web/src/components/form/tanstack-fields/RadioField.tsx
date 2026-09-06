@@ -1,33 +1,37 @@
-// import type {RadioInputProps} from "@/components/form/general/RadioInput.tsx";
-// import {useFieldContext, useFormContext} from "@/hooks/form.ts";
-// import {useSelector} from "@tanstack/react-form";
-//
-// type TanstackRadioFieldProps = Omit<RadioInputProps, "handleBlur">
-// export function RadioField({value, radioId, radioGroupName, currentVal, syncValueToState, labelText} : RadioInputProps) {
-//     const field = useFieldContext<string | boolean>()
-//     const form = useFormContext()
-//     const { errors, isBlurred } = field.state.meta
-//     const { name, handleBlur, handleChange } = field
-//     const submissionAttempts = useSelector(
-//         form.store,
-//         (state) => state.submissionAttempts
-//     )
-//     return (
-//         <div className={"grid grid-cols-[min-content_1fr] gap-4 w-100"}>
-//             <div className={"w-fit flex items-center justify-center"}>
-//                 <input
-//                     type={"radio"}
-//                     value={value}
-//                     name={radioGroupName}
-//                     id={radioId}
-//                     onChange={syncValueToState}
-//                     onBlur={handleBlur}
-//                     checked={currentVal === value}
-//                 />
-//             </div>
-//             <label htmlFor={radioId} className={"text-primary-600"}>
-//                 {labelText}
-//             </label>
-//         </div>
-//     );
-// }
+import type {RadioInputProps} from "@/components/form/general/RadioInput.tsx";
+import {useFieldContext} from "@/hooks/form.ts";
+import type {BreakdownCategory} from "@notas-universitarias/types";
+import type {ChangeEvent} from "react";
+
+type TanstackRadioFieldProps =  {
+    type: "boolean"
+    value: "0" | "1"
+} & Omit<RadioInputProps, "handleBlur" | "syncValueToState" | "radioId"> | {
+    type: "breakdownCategory"
+    value: BreakdownCategory
+} & Omit<RadioInputProps, "handleBlur" | "syncValueToState" | "radioId">
+
+
+export function RadioField({value, radioGroupName, currentVal,  labelText, type} : TanstackRadioFieldProps) {
+    const field = useFieldContext<string | boolean>()
+    const { handleBlur, handleChange } = field
+    let syncValueToState : (e: ChangeEvent<HTMLInputElement>) => void
+    if (type === "breakdownCategory") {
+        syncValueToState = (e) => handleChange(e.currentTarget.value as BreakdownCategory)
+    } else {
+        syncValueToState = (e) => handleChange(e.currentTarget.value)
+    }
+    return (
+        <label className={"flex gap-4 w-100"}>
+            <input
+                type={"radio"}
+                value={value}
+                name={radioGroupName}
+                onChange={syncValueToState}
+                onBlur={handleBlur}
+                checked={currentVal === value}
+            />
+            <span className={"text-primary-600"}>{labelText}</span>
+        </label>
+    );
+}
