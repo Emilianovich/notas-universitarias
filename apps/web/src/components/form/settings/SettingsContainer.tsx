@@ -17,7 +17,9 @@ export function SettingsContainer({
 	return (
 		<section className={"ml-4 w-full flex flex-col gap-4 p-4"}>
 			<div className={"flex gap-4 sm:w-[60%] sm:justify-between lg:w-[30%]"}>
-				<h2 className={"font-bold sm:text-xl md:text-2xl"}>{title}</h2>
+				<h2 className={"text-primary-500 font-bold sm:text-xl md:text-2xl"}>
+					{title}
+				</h2>
 				<img
 					alt={imgAlt}
 					src={imgSrc}

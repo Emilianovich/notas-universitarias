@@ -49,6 +49,7 @@ export default function CourseInstancesContainer({
 				<CourseInstanceBox
 					courseInstanceId={instance.id}
 					courseInstanceName={instance.name}
+					courseInstanceGrade={instance.grade}
 					key={instance.id}
 					navigateTo={() =>
 						navigate({
@@ -65,10 +66,10 @@ export default function CourseInstancesContainer({
 			<div className={"flex flex-col gap-10 mb-8"}>
 				<h1
 					className={
-						"mt-4 sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-center text-primary-500"
+						"mt-4 sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-center text-primary-600"
 					}
 				>
-					{!name.trim().length ? "Sin periodo académico registrado" : `${name}`}
+					{name.trim().length ? `${name}` : "Sin periodo académico registrado"}
 				</h1>
 				{name.trim().length > 0 && (
 					<>
@@ -86,7 +87,7 @@ export default function CourseInstancesContainer({
 			{!isActive ? (
 				<ChildCourseContainerProps
 					content={
-						<p className={"text-2xl text-center"}>
+						<p className={"text-primary-700 text-2xl text-center"}>
 							¿Estás de vacaciones? Si no, registra un nuevo periodo académico
 						</p>
 					}
@@ -99,7 +100,7 @@ export default function CourseInstancesContainer({
 			{isActive && !courseInstances.length ? (
 				<ChildCourseContainerProps
 					content={
-						<p className={"sm:text-lg md:text-xl lg:text-2xl"}>
+						<p className={"text-primary-600 sm:text-lg md:text-xl lg:text-2xl"}>
 							No tienes materias registradas para este periodo
 						</p>
 					}

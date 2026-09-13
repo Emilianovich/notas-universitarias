@@ -21,14 +21,14 @@ function RouteComponent() {
 				per={"char"}
 				as={"h1"}
 				className={
-					"sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center max-w-[25ch] leading-normal"
+					"text-primary-500 sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center max-w-[25ch] leading-normal"
 				}
 			>
 				Tus notas e historial universitario en un solo lugar
 			</TextEffect>
 			<p
 				className={
-					"sm:text-base lg:text-2xl text-center max-w-[55ch] leading-loose"
+					"sm:text-base lg:text-2xl text-center max-w-[60ch] leading-loose text-primary-600"
 				}
 			>
 				¿Cansado de llevar un Excel o correr al final del periodo académico para

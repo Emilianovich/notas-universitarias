@@ -166,7 +166,7 @@ export function Fact() {
 		return (
 			<div
 				id="pet-provider-fact"
-				className={`speech-bubble p-4 opacity-100 ${isHovered ? "opacity-100" : ""}`}
+				className={`text-primary-500 speech-bubble p-4 opacity-100 ${isHovered ? "opacity-100" : ""}`}
 			>
 				<p className={"sm:text-xs lg:text-base"}>{generatePetFact(facts)}</p>
 			</div>

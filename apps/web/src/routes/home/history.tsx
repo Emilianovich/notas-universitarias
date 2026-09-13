@@ -121,7 +121,7 @@ function AcademicPeriodContainer({
 			>
 				<h2
 					className={
-						"sm:text-sm lg:text-xl xl:text-2xl font-semibold col-span-2"
+						"text-primary-600 sm:text-sm lg:text-xl xl:text-2xl font-semibold col-span-2"
 					}
 				>
 					{name}
@@ -156,7 +156,11 @@ function CourseInstanceInHistory({
 	const navigate = useNavigate({ from: "/home/history" })
 	// TODO change the rounding method
 	return (
-		<div className={"grid grid-cols-4 justify-between items-center xl:w-[90%]"}>
+		<div
+			className={
+				"grid grid-cols-4 justify-between items-center xl:w-[90%] text-primary-600"
+			}
+		>
 			<div className={"flex items-center justify-center w-50 text-center"}>
 				<p className={"sm:text-xs sm:max-w-[20ch] lg:text-base 2xl:text-xl"}>
 					{name}

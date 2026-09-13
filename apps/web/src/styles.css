@@ -1,5 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Amiko:wght@400;600;700&family=Arima:wght@100..700&family=Audiowide&family=Cabin+Sketch:wght@400;700&family=Cherry+Cream+Soda&family=Elsie:wght@400;900&family=Fredoka:wght@300..700&family=Gorditas:wght@400;700&family=Libertinus+Math&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Playwrite+VN:wght@100..400&family=Saira+Stencil:ital,wght@0,100..900;1,100..900&family=Short+Stack&family=Special+Elite&family=Uncial+Antiqua&display=swap");
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
 	scroll-behavior: smooth;
 }
@@ -32,7 +35,9 @@
 	font-style: normal;
 	font-display: swap;
 }
+
 @theme {
+	--spacing-button-height: 44px;
 	--color-primary-300: #057e7e;
 	--color-primary-400: #035151;
 	--color-primary-500: #022525;
@@ -43,7 +48,35 @@
 	--color-red-400: #7e0505;
 	--color-red-700: #510303;
 	--color-blue-600: #030351;
-	--spacing-button-height: 50px;
+	--color-input: #f9fcfc;
+	--color-form-bg: #f3fafa;
+	--color-success-bg: #e3f3f3;
+	--color-success: #035151;
+	--color-error-bg: #f1e5e5;
+	--color-error: #7e0505;
+	--color-info-bg: #e8eaf6;
+	--color-info: #030351;
+}
+
+.dark {
+	--color-primary-300: #20b8b8;
+	--color-primary-400: #0d8f8f;
+	--color-primary-500: #d9eeee;
+	--color-primary-600: #b8dada;
+	--color-primary-700: #7fa8a8;
+	--color-secondary: #061b1c;
+	--color-tertiary: #061818;
+	--color-red-400: #e57373;
+	--color-red-700: #8b2525;
+	--color-blue-600: #6d8cff;
+	--color-input: #102b2e;
+	--color-form-bg: #0c292a;
+	--color-success-bg: #0d3535;
+	--color-success: #20b8b8;
+	--color-error-bg: #3a2022;
+	--color-error: #f08a8a;
+	--color-info-bg: #202640;
+	--color-info: #8fa7ff;
 }
 
 .main-body {
@@ -58,7 +91,7 @@
 }
 
 nav {
-	@apply flex 2xl:w-[40%] xl:w-[50%] sm:w-[60%] h-17 justify-evenly items-center gap-4 bg-secondary rounded-[20px] p-3;
+	@apply bg-secondary flex 2xl:w-[40%] xl:w-[50%] sm:w-[60%] h-17 justify-evenly items-center gap-4 rounded-[20px] p-3;
 }
 
 header {
@@ -147,7 +180,6 @@ select {
 
 input[type="radio"] {
 	appearance: none;
-	border: 1px solid #011e1e;
 	border-radius: 50px;
 	width: 15px;
 	height: 15px;
@@ -155,5 +187,5 @@ input[type="radio"] {
 }
 
 input:checked {
-	background-color: var(--color-primary-500);
+	background-color: var(--color-primary-700);
 }

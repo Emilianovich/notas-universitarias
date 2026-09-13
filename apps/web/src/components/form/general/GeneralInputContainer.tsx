@@ -20,7 +20,11 @@ export default function GeneralInputContainer({
 }: GeneralInputContainerProps) {
 	return (
 		<div className={`grid grid-rows-3 gap-4 relative`} style={{ maxWidth }}>
-			<label style={{ fontSize: 18, marginTop: "1em" }} htmlFor={inputId}>
+			<label
+				style={{ fontSize: 18, marginTop: "1em" }}
+				htmlFor={inputId}
+				className={"text-primary-700"}
+			>
 				{labelText}
 			</label>
 			{input}

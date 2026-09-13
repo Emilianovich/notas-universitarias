@@ -30,7 +30,6 @@ function getLocalStorageSettings(): LocalStorageReturn {
 			theme: defaultTheme
 		}
 	} else {
-		const { fontFamily, petName, theme } = settings.data
-		return { fontFamily, petName, theme }
+		return settings.data
 	}
 }

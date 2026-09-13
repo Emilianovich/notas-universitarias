@@ -40,13 +40,13 @@ function RouteComponent() {
 				>
 					<section
 						className={
-							"relative flex flex-col gap-8 bg-tertiary rounded-[10px] shadow-[0px_4px_10px_2px_rgba(0,0,0,0.25)] p-8 transition-all duration-300 ease-in-out"
+							"relative flex flex-col gap-8 bg-form-bg rounded-[10px] shadow-[0px_4px_10px_2px_rgba(0,0,0,0.25)] p-8 transition-all duration-300 ease-in-out"
 						}
 						style={{ width: totalContainerWidth }}
 					>
 						{!isFirstDone && (
 							<>
-								<h1 className={"mt-5 text-2xl text-center"}>
+								<h1 className={"mt-5 text-2xl text-center text-primary-500"}>
 									Cuéntanos sobre ti
 								</h1>
 								<UserCredentialsForm
@@ -57,7 +57,7 @@ function RouteComponent() {
 						)}
 						{isFirstDone && !isSecondDone && (
 							<>
-								<h1 className={"mt-5 text-2xl text-center"}>
+								<h1 className={"text-primary-500 mt-5 text-2xl text-center"}>
 									Personaliza el aspecto de la página
 								</h1>
 								<UserSettingsForm
@@ -77,10 +77,10 @@ function RouteComponent() {
 										})
 									}
 									className={
-										"absolute top-13 left-4 hover:scale-110 cursor-pointer transition-all duration-300 ease-in-out"
+										"text-primary-500 absolute top-13 left-4 hover:scale-110 cursor-pointer transition-all duration-300 ease-in-out"
 									}
 								/>
-								<h1 className={"mt-5 text-2xl text-center"}>
+								<h1 className={"text-primary-500 mt-5 text-2xl text-center"}>
 									Registra un periodo académico
 								</h1>
 								<CreateAcademicPeriodForm

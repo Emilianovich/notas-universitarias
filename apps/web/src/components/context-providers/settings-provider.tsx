@@ -9,6 +9,7 @@ import {
 	Spike,
 	type UserSettings
 } from "@/contexts/settings.ts"
+import { changeUserTheme } from "@/hooks/changeUserTheme.ts"
 import { baseUrl } from "@/routes/__root.tsx"
 
 type User = {
@@ -51,11 +52,32 @@ export default function SettingsProvider({
 		() => ({ ...userSettings, changeUserSettings }),
 		[userSettings]
 	)
+	/*
+	 * Read user settings
+	 * Check if HTML Element has the current theme. If not replace previous and add current theme
+	 * Update localStorage with new theme
+	 * */
 	useEffect(() => {
 		const { fontFamily, theme, pet } = userSettings
-		localStorage.setItem("theme", theme)
-		localStorage.setItem("petName", pet.name)
-		localStorage.setItem("fontFamily", fontFamily)
+		if (!theme) return
+		const { documentElement } = document
+		if (theme === "dark") {
+			documentElement.classList.add("dark")
+			if (documentElement.classList.contains("light")) {
+				documentElement.classList.remove("light")
+			}
+		} else {
+			documentElement.classList.add("light")
+			if (documentElement.classList.contains("dark")) {
+				documentElement.classList.remove("dark")
+			}
+		}
+		changeUserTheme({
+			document: documentElement,
+			theme,
+			fontFamily,
+			petName: pet.name
+		})
 	}, [userSettings])
 	return (
 		<SettingsContext.Provider value={value}>
