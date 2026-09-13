@@ -72,8 +72,12 @@ export function Modal({
 			style={{ aspectRatio: "151 / 89" }}
 		>
 			<div className={"modal-wrapper w-[90%]"}>
-				<h2 className={"sm:text-2xl xl:text-3xl font-bold"}>{modalTitle}</h2>
-				<p className={"text-justify text-[18px] xl:text-xl"}>{modalContent}</p>
+				<h2 className={"text-primary-500 sm:text-2xl xl:text-3xl font-bold"}>
+					{modalTitle}
+				</h2>
+				<p className={"text-primary-700 text-justify text-[18px] xl:text-xl"}>
+					{modalContent}
+				</p>
 				<div className={"flex justify-between items-center w-full"}>
 					<Button
 						type={"button"}

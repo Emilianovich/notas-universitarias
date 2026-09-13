@@ -87,10 +87,12 @@ export default function LoginForm({ wasRedirected }: Redirected) {
 				await form.handleSubmit()
 			}}
 			className={
-				"relative grid grid-rows-3 box-border p-15 w-125 items-center justify-center bg-tertiary rounded-[10px] shadow-[0px_4px_10px_2px_rgba(0,0,0,0.25)]"
+				"relative grid grid-rows-3 box-border p-15 w-125 items-center justify-center bg-form-bg rounded-[10px] shadow-[0px_4px_10px_2px_rgba(0,0,0,0.25)]"
 			}
 		>
-			<h1 className={"text-2xl mb-8 text-center"}>Bienvenido de vuelta</h1>
+			<h1 className={"text-2xl mb-8 text-center text-primary-500"}>
+				Bienvenido de vuelta
+			</h1>
 			<Field
 				name={"email"}
 				children={(fieldApi) => {
@@ -144,12 +146,12 @@ export default function LoginForm({ wasRedirected }: Redirected) {
 					"flex flex-col gap-6 justify-center items-center w-full h-fit"
 				}
 			>
-				<p>
+				<p className={"text-primary-500"}>
 					¿No tienes cuenta?{" "}
 					<Link to={"/register"}>
 						<strong
 							className={
-								"cursor-pointer font-medium hover:scale-105 hover:text-primary-400 transition-all duration-300 ease-in-out underline"
+								"text-primary-400 cursor-pointer font-medium hover:scale-105 hover:text-primary-500 transition-all duration-300 ease-in-out underline"
 							}
 						>
 							Regístrate

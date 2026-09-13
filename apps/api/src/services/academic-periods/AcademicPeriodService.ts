@@ -16,14 +16,17 @@ import type { ObjectId } from "mongodb"
 
 import type { MongoService } from "../../modules/db/MongoService.js"
 import { AcademicPeriodsRepository } from "../../repositories/academicPeriods.js"
+import { CourseInstancesRepository } from "../../repositories/courseInstances.js"
 import { CoursesRepository } from "../../repositories/courses.js"
 
 export class AcademicPeriodService {
 	private readonly academicPeriodsRepository: AcademicPeriodsRepository
 	private readonly coursesRepository: CoursesRepository
+	private readonly courseInstancesRepository: CourseInstancesRepository
 	constructor(mongoService: MongoService) {
 		this.academicPeriodsRepository = new AcademicPeriodsRepository(mongoService)
 		this.coursesRepository = new CoursesRepository(mongoService)
+		this.courseInstancesRepository = new CourseInstancesRepository(mongoService)
 	}
 	async createAcademicPeriod(
 		dto: CreateAcademicPeriodsDto,
@@ -101,9 +104,15 @@ export class AcademicPeriodService {
 					throw new HTTPException(400, {
 						message: "No se encontró el nombre de la materia especificada"
 					})
+				const grade = (
+					await this.courseInstancesRepository.findById(
+						instance._id as ObjectId
+					)
+				)?.finalGrade as number
 				courseInstances.push({
 					id: instance._id?.toString() as string,
-					name: name as string
+					name: name as string,
+					grade
 				})
 			}
 		}

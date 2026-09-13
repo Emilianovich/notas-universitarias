@@ -1,3 +1,4 @@
+import { X } from "lucide-react"
 import { useEffect, useState } from "react"
 import type { ToastProps } from "@/contexts/toast.ts"
 
@@ -15,36 +16,36 @@ export default function Toast({ type, content, removeToast, id }: ToastProps) {
 		success: {
 			nextToTextImg: "/checkmark-circle-svgrepo-com.svg",
 			closeIcon: "/close-x-success.svg",
-			textColor: "text-primary-400",
-			bgColor: "bg-[#E3F3F3]"
+			textColor: "text-success",
+			bgColor: "bg-success-bg"
 		},
 		error: {
 			nextToTextImg: "/error-svgrepo-com.svg",
 			closeIcon: "/close-x-error.svg",
-			textColor: "text-red-700",
-			bgColor: "bg-[#D7D1D1]"
+			textColor: "text-error",
+			bgColor: "bg-error-bg"
 		},
 		info: {
 			nextToTextImg: "/info-circle-svgrepo-com.svg",
 			closeIcon: "/close-x-info.svg",
-			textColor: "text-blue-600",
-			bgColor: "bg-[#DBDDEE]"
+			textColor: "text-info",
+			bgColor: "bg-info-bg"
 		}
 	}
 	let appliedStyles: string
 	let nextToImgSrc: string
-	let closeIconSrc: string
+	let textColor: string
 	if (type === "success") {
+		textColor = stylesObject.success.textColor
 		appliedStyles = `${stylesObject.success.textColor} ${stylesObject.success.bgColor}`
-		closeIconSrc = stylesObject.success.closeIcon
 		nextToImgSrc = stylesObject.success.nextToTextImg
 	} else if (type === "error") {
+		textColor = stylesObject.error.textColor
 		appliedStyles = `${stylesObject.error.textColor} ${stylesObject.error.bgColor}`
-		closeIconSrc = stylesObject.error.closeIcon
 		nextToImgSrc = stylesObject.error.nextToTextImg
 	} else {
+		textColor = stylesObject.info.textColor
 		appliedStyles = `${stylesObject.info.textColor} ${stylesObject.info.bgColor}`
-		closeIconSrc = stylesObject.info.closeIcon
 		nextToImgSrc = stylesObject.info.nextToTextImg
 	}
 	return (
@@ -57,14 +58,13 @@ export default function Toast({ type, content, removeToast, id }: ToastProps) {
 			}}
 		>
 			<div className={"w-full  flex justify-end"}>
-				<img
-					src={closeIconSrc}
-					alt="Botón para cerrar el toast"
-					width={20}
-					height={20}
-					className={"mr-4 hover:scale-110 cursor-pointer"}
+				<X
+					role="button"
+					className={`size-5 mr-4 hover:scale-110 cursor-pointer ${textColor}`}
 					onClick={() => setShouldVanish(true)}
-				/>
+				>
+					<title>{"Botón para cerrar el toast"}</title>
+				</X>
 			</div>
 			<div className={"flex gap-4 h-fit"}>
 				<img

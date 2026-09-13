@@ -42,6 +42,7 @@ export default function RadioInput({
 					onChange={syncValueToState}
 					onBlur={handleBlur}
 					checked={currentVal === value}
+					className={"border-2 border-primary-500"}
 				/>
 			</div>
 			<label htmlFor={radioId} className={"text-primary-600"}>

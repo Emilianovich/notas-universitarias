@@ -9,7 +9,7 @@ export default function LoadingComponent({ text }: { text: string }) {
 				}
 			>
 				<Loader2 className={"mr-3 size-7 animate-spin text-primary-400"} />
-				<div>{text}</div>
+				<div className={"text-primary-600"}>{text}</div>
 			</div>
 		</main>
 	)

@@ -19,7 +19,6 @@ export default function Input({
 	const [currentInputType, setCurrentInputType] = useState<
 		"text" | "password" | "email" | "date"
 	>(type)
-	const bgColor = `bg-[${color}]`
 	const borderColor =
 		error && isBlurred ? "border border-red-400" : "transparent"
 	const maxWidth = 400
@@ -38,7 +37,7 @@ export default function Input({
 						onChange={syncValueToState}
 						onBlur={handleBlur}
 						value={value}
-						className={`${bgColor} p-2 w-100 h-11.25 rounded-[10px] outline-none ${borderColor} shadow-[0px_2px_4px_rgba(0,0,0,0.25)]`}
+						className={`bg-input text-primary-700 p-2 w-100 h-11.25 rounded-[10px] outline-none ${borderColor} shadow-[0px_2px_4px_rgba(0,0,0,0.25)]`}
 						placeholder={placeholder}
 					/>
 					{originallyPassword && (

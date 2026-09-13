@@ -82,10 +82,12 @@ function RouteComponent() {
 					await form.handleSubmit()
 				}}
 				className={
-					"relative grid grid-rows-4 box-border p-4 w-125 items-center justify-center bg-tertiary rounded-[10px] shadow-[0px_4px_10px_2px_rgba(0,0,0,0.25)]"
+					"relative grid grid-rows-4 box-border p-4 w-125 items-center justify-center bg-form-bg rounded-[10px] shadow-[0px_4px_10px_2px_rgba(0,0,0,0.25)]"
 				}
 			>
-				<h1 className={"text-2xl text-center"}>Cambio de contraseña</h1>
+				<h1 className={"text-primary-500 text-2xl text-center"}>
+					Cambio de contraseña
+				</h1>
 				<Field
 					name={"password"}
 					children={(fieldApi) => {

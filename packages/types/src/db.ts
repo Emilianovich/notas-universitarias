@@ -75,4 +75,5 @@ export type CurrentAcademicPeriod = {
 export type CurrentAcademicPeriodSubjects = {
 	id: string
 	name: string
+	grade: number
 }

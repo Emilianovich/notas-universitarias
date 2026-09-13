@@ -15,7 +15,9 @@ export default function PreviewText({
 			style={{ fontFamily: font }}
 			className={`w-full flex justify-center items-center tracking-wider text-xl h-[${PREVIEW_TEXT_HEIGHT}px]`}
 		>
-			<p>{previewText ? previewText : "Vista Previa"}</p>
+			<p className={"text-primary-700"}>
+				{previewText ? previewText : "Vista Previa"}
+			</p>
 		</div>
 	)
 }

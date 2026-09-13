@@ -263,7 +263,9 @@ export default function CreateCourseInstanceForm() {
 				}}
 			/>
 			{breakdownArray.length > 0 && (
-				<h2 className={"text-xl mt-4"}>Evaluación del curso</h2>
+				<h2 className={"text-primary-500 text-xl mt-4"}>
+					Evaluación del curso
+				</h2>
 			)}
 			<Field name={"breakdown"} mode={"array"}>
 				{(fieldApi) => {
@@ -370,7 +372,9 @@ export default function CreateCourseInstanceForm() {
 												}
 												return (
 													<div className={"flex flex-col gap-2"}>
-														<h2 className={"text-xl"}>{ADD_BREAKDOWN_TEXT}</h2>
+														<h2 className={"text-primary-500 text-xl"}>
+															{ADD_BREAKDOWN_TEXT}
+														</h2>
 														<RadioInput
 															value={"STANDALONE"}
 															labelText={STANDALONE_LABEL}
@@ -608,7 +612,9 @@ export default function CreateCourseInstanceForm() {
 																												}
 																											>
 																												<h2
-																													className={"text-xl"}
+																													className={
+																														"text-primary-500 text-xl"
+																													}
 																												>
 																													{ADD_BREAKDOWN_TEXT}
 																												</h2>

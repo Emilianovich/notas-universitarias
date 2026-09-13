@@ -6,6 +6,7 @@ import {
 	Scripts
 } from "@tanstack/react-router"
 import HomePending from "@/components/pending-components/home/HomePending.tsx"
+import useThemeOnInitialLoad from "@/hooks/useThemeOnInitialLoad.ts"
 import env from "../../env.ts"
 import appCss from "../styles.css?url"
 
@@ -44,6 +45,7 @@ export const Route = createRootRoute({
 })
 
 function RootDocument() {
+	useThemeOnInitialLoad()
 	return (
 		<html lang="es">
 			<head>

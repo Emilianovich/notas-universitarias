@@ -171,12 +171,12 @@ export default function UserCredentialsForm({
 					"flex flex-col gap-4 justify-center items-center w-full h-fit"
 				}
 			>
-				<p>
+				<p className={"text-primary-500"}>
 					¿Ya tienes cuenta?{" "}
 					<Link to={"/login"}>
 						<strong
 							className={
-								"cursor-pointer font-medium hover:scale-105 hover:text-primary-400 transition-all duration-300 ease-in-out underline"
+								"text-primary-400 cursor-pointer font-medium hover:scale-105 hover:text-primary-500 transition-all duration-300 ease-in-out underline"
 							}
 						>
 							Inicia sesión

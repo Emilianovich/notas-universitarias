@@ -18,7 +18,6 @@ export default function NumberInput({
 	id,
 	placeholder
 }: Omit<InputProps<string>, "originallyPassword" | "type">) {
-	const bgColor = `bg-[${color}]`
 	const borderColor =
 		error && isBlurred ? "border border-red-400" : "transparent"
 	return (
@@ -36,7 +35,7 @@ export default function NumberInput({
 					onChange={syncValueToState}
 					onBlur={handleBlur}
 					placeholder={placeholder}
-					className={`${bgColor} p-2 w-20 h-11.25 rounded-[10px] outline-none ${borderColor} shadow-[0px_2px_4px_rgba(0,0,0,0.25)]`}
+					className={`bg-input text-primary-700 p-2 w-20 h-11.25 rounded-[10px] outline-none ${borderColor} shadow-[0px_2px_4px_rgba(0,0,0,0.25)]`}
 					inputMode={"decimal"}
 				/>
 			}

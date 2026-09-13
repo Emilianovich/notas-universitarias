@@ -88,7 +88,7 @@ export default function CreateAcademicPeriodForm({
 				await form.handleSubmit()
 			}}
 			className={
-				"grid grid-rows-[auto_auto_auto_1fr] gap-2 justify-center items-center relative"
+				"bg-form-bg grid grid-rows-[auto_auto_auto_1fr] gap-2 justify-center items-center relative"
 			}
 		>
 			<Field

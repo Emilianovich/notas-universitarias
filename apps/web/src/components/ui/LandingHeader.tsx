@@ -14,7 +14,7 @@ export default function LandingHeader() {
 				<Link
 					to={"/login"}
 					className={
-						"sm:text-sm lg:text-base hover:underline hover:text-primary-400"
+						"sm:text-sm lg:text-base text-primary-500 hover:underline hover:text-primary-400"
 					}
 					style={{ fontFamily: data?.fontFamily ?? defaultSettings.fontFamily }}
 				>

@@ -16,7 +16,7 @@ export default function ErrorComponent({ text }: { text: string }) {
 			>
 				<p
 					className={
-						"max-w-[50ch] text-center leading-normal sm:text-xl xl:text-2xl"
+						"text-primary-500 max-w-[50ch] text-center leading-normal sm:text-xl xl:text-2xl"
 					}
 				>
 					{text}

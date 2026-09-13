@@ -180,7 +180,9 @@ export function UpdateCourseInstanceForm(props: UpdateCourseInstanceFormProps) {
 			className="w-full flex flex-col gap-4 p-4"
 		>
 			{isForDemo && (
-				<h1 className={"mt-4 text-4xl font-bold text-center"}>Demo</h1>
+				<h1 className={"text-primary-500 mt-4 text-4xl font-bold text-center"}>
+					Demo
+				</h1>
 			)}
 			{!isForDemo && (
 				<Field
@@ -207,7 +209,9 @@ export function UpdateCourseInstanceForm(props: UpdateCourseInstanceFormProps) {
 				/>
 			)}
 			{breakdownList.length > 0 && (
-				<h2 className={"text-xl mt-4"}>Evaluación del curso</h2>
+				<h2 className={"text-primary-500 text-xl mt-4"}>
+					Evaluación del curso
+				</h2>
 			)}
 			<Field name={"breakdown"} mode={"array"}>
 				{(fieldApi) => {

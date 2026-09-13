@@ -91,7 +91,7 @@ export default function DropdownMenu<
 			input={
 				<div className={"w-fit h-fit relative"}>
 					<select
-						className={`p-2 w-100 h-11.25 rounded-[10px] outline-none shadow-[0px_2px_4px_rgba(0,0,0,0.25)] ${borderColor}`}
+						className={`bg-input text-primary-700 p-2 w-100 h-11.25 rounded-[10px] outline-none shadow-[0px_2px_4px_rgba(0,0,0,0.25)] ${borderColor}`}
 						onBlur={handleBlur}
 						onChange={syncValueToState}
 					>
