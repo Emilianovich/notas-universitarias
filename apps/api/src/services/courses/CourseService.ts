@@ -1,4 +1,7 @@
-import { updateCourseAverageGrade } from "@notas-universitarias/helpers"
+import {
+	roundNumber,
+	updateCourseAverageGrade
+} from "@notas-universitarias/helpers"
 import type {
 	AcademicPeriodDocument,
 	Course,
@@ -114,7 +117,7 @@ export class CourseService {
 		courseInstanceId: ObjectId,
 		userId: ObjectId
 	): Promise<{
-		courseInstance: Omit<CourseInstance, "finalGrade">
+		courseInstance: CourseInstance
 		courseInstanceDoc: CourseInstanceDocument
 		courseName: string
 	}> {
@@ -151,13 +154,19 @@ export class CourseService {
 				message: "Usted no tiene una materia registrada con ese id"
 			})
 		const { _id, ...rest } = copyCourseInstance
-		const { finalGrade, ...courseInstance } = rest
+		const { ...courseInstance } = rest
 		// TODO REVIEW: consider moving fully to client
 		courseInstance.breakdown.forEach((breakdown) => {
-			breakdown.percentage *= 100
+			breakdown.percentage = roundNumber({
+				number: breakdown.percentage * 100,
+				amountOfDecimals: 2
+			})
 			if (breakdown.laboratoryDetails) {
 				breakdown.laboratoryDetails.breakdown.forEach((detail) => {
-					detail.percentage *= 100
+					detail.percentage = roundNumber({
+						number: detail.percentage * 100,
+						amountOfDecimals: 2
+					})
 				})
 			}
 		})
