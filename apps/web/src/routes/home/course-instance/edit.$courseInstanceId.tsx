@@ -1,21 +1,9 @@
-import { buildRequest } from "@notas-universitarias/helpers"
-import type { CourseInstanceForEdit } from "@notas-universitarias/types"
-import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { UpdateCourseInstanceForm } from "@/components/form/courses/Update&Demo/UpdateCourseInstanceForm.tsx"
 import ErrorMessage from "@/components/form/general/ErrorMessage.tsx"
 import LoadingComponent from "@/components/loading-components/current-period/LoadingComponent.tsx"
-import { baseUrl } from "@/routes/__root.tsx"
-
-export const getCourseInstance = async (id: string) => {
-	return buildRequest<CourseInstanceForEdit, string>({
-		baseUrl,
-		method: "GET",
-		path: `/course-instances/${id}`,
-		includeCredentials: true
-	})
-}
+import useCourseInstanceData from "@/hooks/useCourseInstanceData.ts"
 
 export const Route = createFileRoute(
 	"/home/course-instance/edit/$courseInstanceId"
@@ -25,11 +13,7 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
 	const id = Route.useParams().courseInstanceId
-	const { data, error } = useSuspenseQuery({
-		queryKey: ["getCourseInstanceForEdit", id],
-		queryFn: () => getCourseInstance(id)
-	})
-	const { courseInstance, courseName } = data.content
+	const { courseInstance, courseName, error } = useCourseInstanceData(id)
 	return (
 		<main
 			className={
