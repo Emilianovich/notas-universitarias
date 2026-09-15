@@ -1,8 +1,11 @@
 import type { CourseInstance } from "@notas-universitarias/types"
 
-export type CourseBreakdownTableData = ReturnType<
-	typeof getCourseEvalFromBreakdowns
->
+export type CourseBreakdownTableData =  {
+	label: string
+	userData: ReturnType<
+		typeof getCourseEvalFromBreakdowns
+	>
+}
 export default function getCourseEvalFromBreakdowns(course: CourseInstance) {
 	return course.breakdown.map((breakdown) => {
 		return {

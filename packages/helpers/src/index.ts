@@ -162,10 +162,10 @@ export const addDate = ({ date, amount, units }: DatesParams): number => {
 }
 export const roundNumber = ({
 	number,
-	amountOfDecimals
+	amountOfDecimals = 2
 }: {
 	number: number
-	amountOfDecimals: number
+	amountOfDecimals?: number
 }): number => Number(number.toFixed(amountOfDecimals))
 
 export function getValueOver100({

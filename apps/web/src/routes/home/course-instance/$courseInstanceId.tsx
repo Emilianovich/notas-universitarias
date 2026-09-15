@@ -19,6 +19,7 @@ import useCourseInstanceData from "@/hooks/useCourseInstanceData.ts"
 import getCourseEvalFromBreakdowns, {
 	getLabEvalFromBreakdowns
 } from "@/utils/getCourseEvalFromBreakdowns.ts"
+import ContributionGraph from "@/components/course-instance-details/ContributionGraph.tsx";
 
 export const Route = createFileRoute("/home/course-instance/$courseInstanceId")(
 	{
@@ -122,6 +123,12 @@ function RouteComponent() {
 							<h2 className={"text-primary-700 text-2xl"}>
 								{COURSE_INSTANCE_CONTRIBUTION_GRAPH_TITLE}
 							</h2>
+							<article>
+								<ContributionGraph
+									userData={courseEvalData}
+									label={COURSE_INSTANCE_CONTRIBUTION_GRAPH_TITLE}
+								/>
+							</article>
 							<h3 className={"text-primary-700 text-xl"}>
 								{COURSE_INSTANCE_CONTRIBUTION_TITLE}
 							</h3>
@@ -132,6 +139,12 @@ function RouteComponent() {
 								<h2 className={"text-primary-700 text-2xl"}>
 									{LAB_CONTRIBUTION_GRAPH_TITLE}
 								</h2>
+								<article>
+									<ContributionGraph
+										userData={labData.labEvals}
+										label={`Gráfica de ${LAB_CONTRIBUTION_GRAPH_TITLE}`}
+									/>
+								</article>
 								<h3 className={"text-primary-700 text-xl"}>
 									{LAB_CONTRIBUTION_TITLE}
 								</h3>
