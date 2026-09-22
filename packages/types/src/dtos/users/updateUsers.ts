@@ -34,4 +34,4 @@ export const updateUserDTO = updateUserPreferences
 			})
 		}
 	})
-export type UpdateUserDTO = z.Infer<typeof updateUserDTO>
+export type UpdateUserDTO = z.infer<typeof updateUserDTO>
