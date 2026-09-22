@@ -29,6 +29,8 @@ export const LAB_CONTRIBUTION_GRAPH_TITLE = "Desglose del laboratorio"
 export const LAB_CONTRIBUTION_TITLE =
 	"Desempeño en las evaluaciones de laboratorio"
 export const NO_BREAKDOWN_ENTRIES = "Aún no hay calificaciones registradas"
+export const CTX_MENU_SEE_PROGRESS_TEXT = "Texto para visualizar progreso"
+export const CTX_MENU_EDIT_COURSE = "Texto para editar"
 export type SuccessRes<T> = BaseRes & { content: T }
 export * from "./db.js"
 export * from "./document-schemas/index.js"
