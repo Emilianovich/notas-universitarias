@@ -158,7 +158,7 @@ function CourseInstanceInHistory({
 	return (
 		<div
 			className={
-				"grid grid-cols-4 justify-between items-center xl:w-[90%] text-primary-600"
+				"grid grid-cols-5 justify-between items-center xl:w-[90%] text-primary-600"
 			}
 		>
 			<div className={"flex items-center justify-center w-50 text-center"}>
@@ -179,6 +179,19 @@ function CourseInstanceInHistory({
 					alt: isLetterGrade
 						? "Botón para cambiar la nota de letra a números"
 						: "Botón para cambiar la nota de números a letras"
+				}}
+			/>
+			<IconButton
+				className={"sm:size-5 lg:size-7 2xl:size-10"}
+				action={async () =>
+					navigate({
+						to: "/home/course-instance/$courseInstanceId",
+						params: { courseInstanceId: _id.toString() }
+					})
+				}
+				img={{
+					src: "/search.svg",
+					alt: "Botón para ver desglose de una materia"
 				}}
 			/>
 			<IconButton
