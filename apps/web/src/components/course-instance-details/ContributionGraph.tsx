@@ -33,7 +33,7 @@ export default function ContributionGraph({userData, label} : CourseBreakdownTab
 			x: {
 				scale: scaleBand,
 				axis: {
-					label: "Evaluaciones"
+					label: "Evaluaciones",
 				}
 			},
 			y: {
