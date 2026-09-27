@@ -1,57 +1,122 @@
-import { barY, defineChart } from "@tanstack/charts"
+import { roundNumber } from "@notas-universitarias/helpers"
+import { barY, defineChart, fold, ruleY, stack } from "@tanstack/charts"
+import { Chart } from "@tanstack/charts/react"
+import { scaleBand } from "@tanstack/charts/scales/band"
+import { scaleLinear } from "@tanstack/charts/scales/linear"
+import { tooltip } from "@tanstack/charts/tooltip"
 import type { CourseBreakdownTableData } from "@/utils/getCourseEvalFromBreakdowns.ts"
-import {Chart} from "@tanstack/charts/react";
-import {scaleLinear} from "@tanstack/charts/scales/linear";
-import {tooltip} from "@tanstack/charts/tooltip";
-import {scaleBand} from "@tanstack/charts/scales/band";
-import {roundNumber} from "@notas-universitarias/helpers";
 
-
-export default function ContributionGraph({userData, label} : CourseBreakdownTableData) {
-	// const namesAndPercentages = userData.map((data) => {
-	// 	return {
-	// 		name: data.name,
-	// 		percentage: data.percentage
-	// 	}
-	// })
-	const namesAndContributions = userData.map((data) => {
+export default function ContributionGraph({
+	userData,
+	label
+}: CourseBreakdownTableData) {
+	const data = userData.map((data) => {
+		const contribution = data.contribution * 100
+		const { percentage } = data
 		return {
-			name: data.name,
-			contribution: data.contribution * 100
+			...data,
+			contribution,
+			remaining:
+				percentage - roundNumber({ number: contribution, amountOfDecimals: 2 })
 		}
 	})
+	const dataLabels = ["contribution", "remaining"] as const
+	const dataColors = [
+		"var(--color-chart-contribution)",
+		"var(--color-chart-remaining)"
+	]
+	const rows = fold(data, {
+		fields: dataLabels,
+		as: {
+			key: "metric",
+			value: "value"
+		}
+	})
+	console.log(rows)
 	const breakdownData = defineChart({
 		marks: [
-			barY(namesAndContributions, {
+			barY(rows, {
+				id: "user-percentages",
 				x: "name",
-				y: "contribution",
-				fill: "var(--color-primary-300)",
+				y: "value",
+				z: "metric",
+				color: "metric",
+				layout: stack({
+					order: dataLabels
+				}),
 				maxThickness: 75
 			}),
+			ruleY([0])
 		],
+		theme: {
+			foreground: "var(--color-primary-300)",
+			muted: "var(--color-chart-tick)"
+		},
 		scales: {
 			x: {
 				scale: scaleBand,
 				axis: {
-					label: "Evaluaciones",
+					label: {
+						text: "Evaluaciones",
+						fontSize: 14,
+						fontWeight: 700,
+						fill: "var(--color-chart-axis)"
+					}
 				}
 			},
 			y: {
 				nice: true,
 				scale: scaleLinear,
 				axis: {
-					label: "Porcentajes"
-				},
+					label: {
+						text: "Porcentajes",
+						fontSize: 14,
+						fontWeight: 700,
+						fill: "var(--color-chart-axis)"
+					}
+				}
 			}
+		},
+		color: {
+			domain: dataLabels,
+			range: dataColors
 		},
 		keyboard: true,
 		tooltip: {
 			use: tooltip,
-			format: ({datum}) => `${datum.name} - ${roundNumber({number: datum.contribution})}`
+			className: "custom-tooltip",
+			format: ({ datum }) => {
+				const { contribution, metric, remaining, name } = datum
+				const messageForRemaining =
+					remaining > 0
+						? `Te falta ${roundNumber({ number: remaining })}% para completar el porcentaje de ${name}`
+						: `¡Tienes todo el porcentaje de ${name}!`
+				if (metric === "remaining") return messageForRemaining
+				return `Tienes el ${roundNumber({ number: contribution })}% de ${name}`
+			}
 		}
 	})
-	return <Chart
+	return (
+		<div className="relative">
+			<div className="absolute right-1/2 translate-x-1/2 z-10 flex flex-col gap-4">
+				<div className="flex items-center gap-3">
+					<span className="size-3 rounded-full bg-chart-contribution" />
+					<span className="text-primary-500 text-xs">
+						Tu porcentaje acumulado
+					</span>
+				</div>
+				<div className="flex items-center gap-3">
+					<span className="size-3 rounded-full bg-chart-remaining" />
+					<span className="text-primary-500 text-xs">
+						Porcentaje faltante para el total
+					</span>
+				</div>
+			</div>
+			<Chart
 				ariaLabel={label}
 				definition={breakdownData}
+				className="breakdown-chart"
 			/>
+		</div>
+	)
 }

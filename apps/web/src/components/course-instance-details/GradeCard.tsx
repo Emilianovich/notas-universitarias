@@ -16,7 +16,7 @@ export default function GradeCard({ rawGrade }: { rawGrade: number }) {
 			<div className={"w-full flex gap-4 items-center justify-between"}>
 				<div>
 					<h2
-						className={"text-primary-500 font-bold text-3xl"}
+						className={"text-primary-500 font-bold sm:text-2xl lg:text-3xl"}
 					>{`${grade} - ${letterGrade}`}</h2>
 				</div>
 				<EmojiForGrade letterGrade={letterGrade} />

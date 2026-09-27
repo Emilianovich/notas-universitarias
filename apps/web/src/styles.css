@@ -56,6 +56,10 @@
 	--color-error: #7e0505;
 	--color-info-bg: #e8eaf6;
 	--color-info: #030351;
+	--color-chart-contribution: #057e7e;
+	--color-chart-remaining: #dde5e5;
+	--color-chart-axis: #035151;
+	--color-chart-tick: #4f6868;
 }
 
 .dark {
@@ -77,6 +81,10 @@
 	--color-error: #f08a8a;
 	--color-info-bg: #202640;
 	--color-info: #8fa7ff;
+	--color-chart-contribution: #20b8b8;
+	--color-chart-remaining: #244344;
+	--color-chart-axis: #0d8f8f;
+	--color-chart-tick: #8fb3b3;
 }
 
 .main-body {
@@ -188,4 +196,23 @@ input[type="radio"] {
 
 input:checked {
 	background-color: var(--color-primary-700);
+}
+
+.custom-tooltip {
+	--ts-chart-tooltip-background: var(--color-form-bg);
+	--ts-chart-tooltip-color: var(--color-primary-500);
+	--ts-chart-tooltip-border: 1px solid var(--color-chart-remaining);
+	--ts-chart-tooltip-border-radius: 0.625rem;
+	--ts-chart-tooltip-padding: 0.75rem 1rem;
+	--ts-chart-tooltip-max-width: 18rem;
+	text-align: center;
+}
+
+.breakdown-chart .ts-chart:focus {
+	outline: none;
+}
+
+.breakdown-chart .ts-chart:focus-visible {
+	outline: 2px solid var(--color-primary-300);
+	outline-offset: 2px;
 }

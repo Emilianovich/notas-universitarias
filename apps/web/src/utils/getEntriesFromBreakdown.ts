@@ -15,7 +15,6 @@ export default function getEntriesFromBreakdown(course: CourseInstance) {
 	const breakdownDetail: BreakdownDetail[] = []
 	course.breakdown.forEach((breakdown) => {
 		const { contribution, name: breakdownName, percentage, type } = breakdown
-		console.log(JSON.stringify(breakdown.contribution))
 		const entriesData: CourseBreakdownEntry[] = []
 		if (breakdown.type === "NESTED") return
 		breakdown.entries.forEach((entry) => {
