@@ -11,7 +11,7 @@ import Input from "@/components/form/general/Input.tsx"
 import Button from "@/components/general/Button.tsx"
 import useToast from "@/contexts/toast.ts"
 import { queryClient } from "@/routes/__root.tsx"
-import handleLogin, {testLogin} from "@/routes/login.tsx"
+import { handleLogin } from "@/routes/login.tsx"
 
 export type Redirected = {
 	wasRedirected?: "true"
@@ -29,7 +29,7 @@ export default function LoginForm({ wasRedirected }: Redirected) {
 	// }
 	const navigate = useNavigate({ from: "/login" })
 	const mutation = useMutation({
-		mutationFn: testLogin,
+		mutationFn: handleLogin,
 		onError: (error) => {
 			if (error instanceof ServerErrorRes) {
 				buildToast({
@@ -44,7 +44,7 @@ export default function LoginForm({ wasRedirected }: Redirected) {
 				content: error.message
 			})
 		},
-		onSuccess: async (data) => {
+		onSuccess: async (_data) => {
 			queryClient.clear()
 			await navigate({ to: "/home/current-period" })
 			// buildToast({

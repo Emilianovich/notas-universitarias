@@ -12,46 +12,41 @@ export default function EmojiForGrade({
 }: {
 	letterGrade: GradeLetter
 }) {
-	const emojiSize = 50
+	const classes = "sm:size-10 lg:size-12"
 	const strokeWith = 2
 	switch (letterGrade) {
 		case "A":
 			return (
 				<FaceGrinning
-					size={emojiSize}
-					className={"text-success"}
+					className={`text-success ${classes}`}
 					strokeWidth={strokeWith}
 				/>
 			)
 		case "B":
 			return (
 				<FaceSlightlySmiling
-					size={emojiSize}
-					className={"text-success"}
+					className={`text-success ${classes}`}
 					strokeWidth={strokeWith}
 				/>
 			)
 		case "C":
 			return (
 				<FaceNeutral
-					size={emojiSize}
-					className={"text-info"}
+					className={`text-info ${classes}`}
 					strokeWidth={strokeWith}
 				/>
 			)
 		case "D":
 			return (
 				<FaceSlightlyFrowning
-					size={emojiSize}
-					className={"text-error"}
+					className={`text-error ${classes}`}
 					strokeWidth={strokeWith}
 				/>
 			)
 		case "F":
 			return (
 				<FaceAngry
-					size={emojiSize}
-					className={"text-error"}
+					className={`text-error ${classes}`}
 					strokeWidth={strokeWith}
 				/>
 			)

@@ -10,6 +10,7 @@ import { createFileRoute } from "@tanstack/react-router"
 import { UserRound } from "lucide-react"
 import { Suspense } from "react"
 import BreakdownEntriesDetail from "@/components/course-instance-details/BreakdownEntriesDetail.tsx"
+import ContributionGraph from "@/components/course-instance-details/ContributionGraph.tsx"
 import GradeCard from "@/components/course-instance-details/GradeCard.tsx"
 import ErrorMessage from "@/components/form/general/ErrorMessage.tsx"
 import LoadingComponent from "@/components/loading-components/current-period/LoadingComponent.tsx"
@@ -19,7 +20,6 @@ import useCourseInstanceData from "@/hooks/useCourseInstanceData.ts"
 import getCourseEvalFromBreakdowns, {
 	getLabEvalFromBreakdowns
 } from "@/utils/getCourseEvalFromBreakdowns.ts"
-import ContributionGraph from "@/components/course-instance-details/ContributionGraph.tsx";
 
 export const Route = createFileRoute("/home/course-instance/$courseInstanceId")(
 	{
@@ -55,13 +55,17 @@ function RouteComponent() {
 					<>
 						<section className={"flex justify-between items-center w-full"}>
 							<article className={"flex flex-col gap-4"}>
-								<h1 className={"text-4xl text-primary-500 mt-4 font-bold"}>
+								<h1
+									className={
+										"sm:text-2xl lg:text-4xl text-primary-500 mt-4 font-bold"
+									}
+								>
 									{courseName}
 								</h1>
 								<div className={"flex gap-4"}>
 									<UserRound className={"text-primary-300 size-5"} />
 									<span
-										className={"text-primary-600 text-sm"}
+										className={"text-primary-600 sm:text-base text-sm"}
 									>{`Prof. ${profesorName}`}</span>
 								</div>
 							</article>
@@ -75,7 +79,7 @@ function RouteComponent() {
 							}
 						>
 							<div className={"flex justify-start items-center w-full"}>
-								<h2 className={"text-primary-700 text-2xl"}>
+								<h2 className={"text-primary-700 sm:text-xl text-2xl"}>
 									{BREAKDOWN_TABLE_TITLE_COURSE}
 								</h2>
 							</div>
@@ -100,7 +104,7 @@ function RouteComponent() {
 								}
 							>
 								<div className={"flex justify-start items-center w-full"}>
-									<h2 className={"text-primary-700 text-xl"}>
+									<h2 className={"text-primary-700 sm:text-xl text-xl"}>
 										{LAB_BREAKDOWN_TABLE_TITLE_COURSE}
 									</h2>
 								</div>
@@ -120,7 +124,7 @@ function RouteComponent() {
 							</section>
 						)}
 						<section className={"w-full flex flex-col gap-10"}>
-							<h2 className={"text-primary-700 text-2xl"}>
+							<h2 className={"text-primary-700 sm:text-lg text-2xl"}>
 								{COURSE_INSTANCE_CONTRIBUTION_GRAPH_TITLE}
 							</h2>
 							<article>
@@ -136,7 +140,7 @@ function RouteComponent() {
 						</section>
 						{labData && (
 							<section className={"w-full flex flex-col gap-10"}>
-								<h2 className={"text-primary-700 text-2xl"}>
+								<h2 className={"text-primary-700 sm:text-lg text-2xl"}>
 									{LAB_CONTRIBUTION_GRAPH_TITLE}
 								</h2>
 								<article>

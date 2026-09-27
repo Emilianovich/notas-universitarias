@@ -3,7 +3,7 @@ import type {
 	CurrentAcademicPeriodSubjects
 } from "@notas-universitarias/types"
 import { useNavigate } from "@tanstack/react-router"
-import {type ReactNode, useRef, useState} from "react"
+import type { ReactNode } from "react"
 import { AddItem } from "@/components/general/AddItem.tsx"
 import MyCountdown from "@/components/ui/MyCountdown.tsx"
 import CourseInstanceBox from "@/routes/home/current-period/-CourseInstanceBox.tsx"

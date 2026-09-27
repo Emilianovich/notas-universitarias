@@ -318,7 +318,9 @@ export function UpdateCourseInstanceForm(props: UpdateCourseInstanceFormProps) {
 												}
 												return (
 													<div className={"flex flex-col gap-2"}>
-														<h2 className={"text-primary-500 text-xl"}>{ADD_BREAKDOWN_TEXT}</h2>
+														<h2 className={"text-primary-500 text-xl"}>
+															{ADD_BREAKDOWN_TEXT}
+														</h2>
 														<RadioInput
 															value={"STANDALONE"}
 															labelText={STANDALONE_LABEL}
@@ -563,7 +565,9 @@ export function UpdateCourseInstanceForm(props: UpdateCourseInstanceFormProps) {
 																												}
 																											>
 																												<h2
-																													className={"text-primary-500 text-xl"}
+																													className={
+																														"text-primary-500 text-xl"
+																													}
 																												>
 																													{ADD_BREAKDOWN_TEXT}
 																												</h2>

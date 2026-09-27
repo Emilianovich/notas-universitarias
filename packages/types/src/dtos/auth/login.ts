@@ -1,4 +1,4 @@
-import {z, ZodType} from "zod"
+import { type ZodType, z } from "zod"
 
 export type LoginDTO = {
 	email: string
@@ -15,11 +15,12 @@ export const loginDTO = z.object({
 
 export const BaseApiRes = z.object({
 	statusCode: z.number("Status Code must be a number"),
-	issuedAt: z.string()
-				.regex(/^\d{1,2}\/\d{1,2}\/\d{4}$/, "Expected format: M/D/YYYY"),
+	issuedAt: z
+		.string()
+		.regex(/^\d{1,2}\/\d{1,2}\/\d{4}$/, "Expected format: M/D/YYYY")
 })
 
-export function createSuccessApiRes<T extends ZodType> (schema: T) {
+export function createSuccessApiRes<T extends ZodType>(schema: T) {
 	return BaseApiRes.extend({
 		content: schema
 	})

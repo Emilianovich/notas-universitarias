@@ -11,7 +11,7 @@ export default function TableCellContainer({
 }: TableCellContainer) {
 	return (
 		<div
-			className={`p-2 flex items-center justify-center w-150 ${isHeader ? "bg-success-bg" : "bg-input h-10"} border-black/20 border-1`}
+			className={`p-2 flex items-center justify-center sm:w-70 md:w-90 lg:w-110 xl:w-150 ${isHeader ? "bg-success-bg" : "bg-input h-10"} border-black/20 border`}
 		>
 			{isHeader ? <HeaderData data={data} /> : <TableBodyData data={data} />}
 		</div>
