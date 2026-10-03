@@ -15,7 +15,7 @@ import useModal from "@/contexts/modal.ts"
 import {fieldContext, formContext} from "@/hooks/form.ts"
 import scrollTo from "@/utils/scroll.ts"
 import {BreakdownSharedContent, withFieldGroup} from "@/components/form/courses/BreakdownSharedContent.tsx";
-import {RadioField} from "@/components/form/tanstack-fields/RadioField.tsx";
+import {RadioButton} from "@/components/form/tanstack-fields/Radio/RadioButton.tsx";
 import BreakdownEntries from "@/components/form/courses/BreakdownEntries.tsx";
 import SelectField from "@/components/form/tanstack-fields/SelectField.tsx";
 
@@ -28,7 +28,7 @@ const { withForm } = createFormHook({
 	fieldComponents: {
 		TextField,
 		NumberField,
-		RadioField,
+		RadioField: RadioButton,
 		SelectField,
 	},
 	formComponents: { SubmitBtn },

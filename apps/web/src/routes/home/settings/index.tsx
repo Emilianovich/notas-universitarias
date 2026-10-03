@@ -9,7 +9,7 @@ import Input from "@/components/form/general/Input.tsx"
 import { SettingsContainer } from "@/components/form/settings/SettingsContainer.tsx"
 import EmailField from "@/components/form/tanstack-fields/EmailField.tsx"
 import PasswordField from "@/components/form/tanstack-fields/PasswordField.tsx"
-import SelectField, {
+import  {
 	allowedFontFamilies,
 	allowedPets,
 	allowedThemes
@@ -26,6 +26,10 @@ import useToast from "@/contexts/toast.ts"
 import { fieldContext, formContext } from "@/hooks/form.ts"
 import authMiddleware from "@/middlewares/auth.ts"
 import { baseUrl } from "@/routes/__root.tsx"
+import Select from "@/components/form/tanstack-fields/Select/Select.tsx";
+import {
+	fontFamilyOptions, petNameOptions, appThemeOptions
+} from "@/components/form/tanstack-fields/Select/option-functions.ts";
 
 export const Route = createFileRoute("/home/settings/")({
 	component: RouteComponent,
@@ -64,7 +68,7 @@ const { useAppForm } = createFormHook({
 		TextField,
 		EmailField,
 		PasswordField,
-		SelectField
+		Select
 	},
 	formComponents: {}
 })
@@ -232,11 +236,10 @@ function RouteComponent() {
 							children={(field) => {
 								return (
 									<div className={"flex flex-col"}>
-										<field.SelectField
-											label={"Estilo de fuente"}
-											selectedItem={fontFamily}
-											inputId={field.name}
-											iterableItems={allowedFontFamilies}
+										<field.Select
+											labelText={"Estilo de fuente"}
+											items={[...allowedFontFamilies]}
+											{...fontFamilyOptions}
 										/>
 										<PreviewText font={selectedFontFamily} />
 									</div>
@@ -247,11 +250,10 @@ function RouteComponent() {
 							name={"theme"}
 							children={(field) => {
 								return (
-									<field.SelectField
-										label={"Tema de la aplicación"}
-										selectedItem={theme}
-										inputId={field.name}
-										iterableItems={allowedThemes}
+									<field.Select
+										labelText={"Tema de la aplicación"}
+										items={[...allowedThemes]}
+										{...appThemeOptions}
 									/>
 								)
 							}}
@@ -261,11 +263,10 @@ function RouteComponent() {
 							children={(field) => {
 								return (
 									<div className={"flex flex-col"}>
-										<field.SelectField
-											label={"Mascota"}
-											selectedItem={petName}
-											inputId={"pet"}
-											iterableItems={allowedPets}
+										<field.Select
+											labelText={"Mascota"}
+											items={[...allowedPets]}
+											{...petNameOptions}
 										/>
 										<PreviewPet petName={selectedPetName} />
 									</div>

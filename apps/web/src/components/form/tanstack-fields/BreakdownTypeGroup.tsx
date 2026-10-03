@@ -11,7 +11,7 @@ import RadioInput, {
 	type RadioInputProps
 } from "@/components/form/general/RadioInput.tsx"
 import { useFieldContext } from "@/hooks/form.ts"
-import {RadioField} from "@/components/form/tanstack-fields/RadioField.tsx";
+import {RadioButton} from "@/components/form/tanstack-fields/Radio/RadioButton.tsx";
 
 export type BreakdownTypeGroupProps =
 	| {
@@ -36,20 +36,20 @@ export default function BreakdownTypeGroup({radioGroupName, hasLabDetail}:RadioG
 	return (
 		<div className={"flex flex-col gap-2"}>
 			<h2 className={"text-xl"}>{ADD_BREAKDOWN_TEXT}</h2>
-			<RadioField
+			<RadioButton
 				value={"STANDALONE"}
 				labelText={STANDALONE_LABEL}
 				type={"breakdownCategory"}
 				radioGroupName={radioGroupName}
 			/>
-			<RadioField
+			<RadioButton
 				value={"NOT-NESTED"}
 				labelText={NOT_NESTED_LABEL}
 				type={"breakdownCategory"}
 				radioGroupName={radioGroupName}
 			/>
 			{!hasLabDetail && (
-				<RadioField
+				<RadioButton
 					type={"breakdownCategory"}
 					radioGroupName={radioGroupName}
 					value={"NESTED"}

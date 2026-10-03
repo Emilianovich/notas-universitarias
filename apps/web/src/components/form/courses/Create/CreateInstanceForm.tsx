@@ -17,7 +17,7 @@ import {AddItem} from "@/components/general/AddItem.tsx";
 import scrollTo from "@/utils/scroll.ts";
 import GeneralInputContainer from "@/components/form/general/GeneralInputContainer.tsx";
 import {INPUT_MAX_WIDTH} from "@notas-universitarias/types";
-import {RadioField} from "@/components/form/tanstack-fields/RadioField.tsx";
+import {RadioButton} from "@/components/form/tanstack-fields/Radio/RadioButton.tsx";
 
 export default function CreateInstanceForm() {
     const { data } = useSuspenseQuery({
@@ -79,13 +79,13 @@ export default function CreateInstanceForm() {
                                     isBlurred={field.state.meta.isBlurred || submissionAttempts > 0}
                                     input={
                                         <div className={"flex flex-col gap-2"}>
-                                            <RadioField
+                                            <RadioButton
                                                 type={"boolean"}
                                                 value={"1"}
                                                 radioGroupName={field.name}
                                                 labelText={"Sí"}
                                             />
-                                            <RadioField
+                                            <RadioButton
                                                 type={"boolean"}
                                                 value={"0"}
                                                 radioGroupName={field.name}

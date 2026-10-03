@@ -5,7 +5,7 @@ import {createFormHook} from "@tanstack/react-form";
 import TextField from "@/components/form/tanstack-fields/TextField.tsx";
 import NumberField from "@/components/form/tanstack-fields/NumberField.tsx";
 import SelectField from "@/components/form/tanstack-fields/SelectField.tsx";
-import {RadioField} from "@/components/form/tanstack-fields/RadioField.tsx";
+import {RadioButton} from "@/components/form/tanstack-fields/Radio/RadioButton.tsx";
 import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx";
 import {fieldContext, formContext} from "@/hooks/form.ts";
 
@@ -14,7 +14,7 @@ export const { withForm, withFieldGroup } = createFormHook({
         TextField,
         NumberField,
         SelectField,
-        RadioField
+        RadioField: RadioButton
     },
     formComponents: { SubmitBtn },
     fieldContext,

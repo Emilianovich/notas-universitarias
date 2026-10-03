@@ -2,6 +2,7 @@ import { INPUT_MAX_WIDTH } from "@notas-universitarias/types"
 import { useState } from "react"
 import GeneralInputContainer from "@/components/form/general/GeneralInputContainer.tsx"
 import type { InputProps, PasswordImageProps } from "@/types/input.ts"
+import {Eye, EyeClosed} from "lucide-react";
 
 export default function Input({
 	name,
@@ -56,18 +57,11 @@ export default function Input({
 }
 
 function PasswordImage({ isOpen, changeType }: PasswordImageProps) {
-	const imageSrc = isOpen ? "/eye-open.svg" : "/eye-closed.svg"
-	const alt = isOpen
-		? "Eye opened for visible password"
-		: "Eye closed for not visible password"
+	const styles = "w-7.5 h-6 absolute right-8 top-1/2 -translate-y-1/2 hover:scale-95 cursor-pointer text-primary-300"
 	return (
-		<img
-			src={imageSrc}
-			alt={alt}
-			className={
-				"w-7.5 h-6 absolute right-8 top-1/2 -translate-y-1/2 hover:scale-95 cursor-pointer"
-			}
-			onClick={changeType}
-		/>
+		<>
+			{isOpen ? <Eye className={styles} onClick={changeType} /> : <EyeClosed className={styles} onClick={changeType}/>}
+		</>
+
 	)
 }

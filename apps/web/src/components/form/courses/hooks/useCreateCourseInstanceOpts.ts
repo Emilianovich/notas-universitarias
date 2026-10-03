@@ -10,7 +10,7 @@ import {fieldContext, formContext} from "@/hooks/form.ts";
 import TextField from "@/components/form/tanstack-fields/TextField.tsx";
 import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx";
 import SelectField from "@/components/form/tanstack-fields/SelectField.tsx"
-import {RadioField} from "@/components/form/tanstack-fields/RadioField.tsx";
+import {RadioButton} from "@/components/form/tanstack-fields/Radio/RadioButton.tsx";
 import NumberField from "@/components/form/tanstack-fields/NumberField.tsx";
 
 export const { useAppForm } = createFormHook({
@@ -19,7 +19,7 @@ export const { useAppForm } = createFormHook({
     fieldComponents: {
         TextField,
         SelectField,
-        RadioField,
+        RadioField: RadioButton,
         NumberField
     },
     formComponents: { SubmitBtn }

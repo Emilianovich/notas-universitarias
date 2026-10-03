@@ -1,6 +1,5 @@
 import {
 	ON_SUBMIT_INVALID_MSG,
-	type PetName,
 	PREVIEW_PET_HEIGHT,
 	PREVIEW_TEXT_HEIGHT
 } from "@notas-universitarias/types"
@@ -10,7 +9,7 @@ import {
 } from "@notas-universitarias/types/dtos"
 import { createFormHook, useSelector } from "@tanstack/react-form"
 import defaultSettings from "@/components/context-providers/default-settings.ts"
-import SelectField, {
+import  {
 	allowedFontFamilies,
 	allowedPets,
 	allowedThemes
@@ -22,12 +21,16 @@ import PreviewText from "@/components/ui/PreviewText.tsx"
 import useToast from "@/contexts/toast.ts"
 import { fieldContext, formContext } from "@/hooks/form.ts"
 import type { RegisterFormProps } from "@/types/input.ts"
+import Select from "@/components/form/tanstack-fields/Select/Select.tsx";
+import {
+	fontFamilyOptions, petNameOptions, appThemeOptions
+} from "@/components/form/tanstack-fields/Select/option-functions.ts";
 
 const { useAppForm } = createFormHook({
 	fieldContext,
 	formContext,
 	fieldComponents: {
-		SelectField
+		Select
 	},
 	formComponents: {}
 })
@@ -74,7 +77,6 @@ export default function UserSettingsForm({
 		form.store,
 		(state) => state.values.petName
 	)
-	const currentTheme = useSelector(form.store, (state) => state.values.theme)
 	// TODO ver si puedo volver esto un componente junto al de los settings
 	return (
 		<AppForm>
@@ -91,11 +93,10 @@ export default function UserSettingsForm({
 					children={(field) => {
 						return (
 							<div className={"flex flex-col"}>
-								<field.SelectField
-									label={"Estilo de fuente"}
-									selectedItem={currentFontFamily}
-									inputId={field.name}
-									iterableItems={allowedFontFamilies}
+								<field.Select
+									labelText={"Estilo de fuente"}
+									items={[...allowedFontFamilies]}
+									{...fontFamilyOptions}
 								/>
 								<PreviewText
 									font={currentFontFamily}
@@ -109,11 +110,10 @@ export default function UserSettingsForm({
 					name={"theme"}
 					children={(field) => {
 						return (
-							<field.SelectField
-								label={"Tema de la aplicación"}
-								selectedItem={currentTheme}
-								inputId={field.name}
-								iterableItems={allowedThemes}
+							<field.Select
+								labelText={"Tema de la aplicación"}
+								items={[...allowedThemes]}
+								{...appThemeOptions}
 							/>
 						)
 					}}
@@ -123,13 +123,12 @@ export default function UserSettingsForm({
 					children={(field) => {
 						return (
 							<div className={"flex flex-col"}>
-								<field.SelectField
-									label={"Mascota"}
-									selectedItem={currentPetName}
-									inputId={"pet"}
-									iterableItems={allowedPets}
+								<field.Select
+									labelText={"Mascota"}
+									items={[...allowedPets]}
+									{...petNameOptions}
 								/>
-								<PreviewPet petName={currentPetName as PetName} />
+								<PreviewPet petName={currentPetName} />
 							</div>
 						)
 					}}

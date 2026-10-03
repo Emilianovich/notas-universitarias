@@ -14,7 +14,7 @@ import TextField from "@/components/form/tanstack-fields/TextField.tsx"
 import useToast from "@/contexts/toast.ts"
 import { fieldContext, formContext } from "@/hooks/form.ts"
 import type {EditCourseInstanceOpts} from "@/components/form/courses/types/types.ts";
-import {RadioField} from "@/components/form/tanstack-fields/RadioField.tsx";
+import {RadioButton} from "@/components/form/tanstack-fields/Radio/RadioButton.tsx";
 import SelectField from "@/components/form/tanstack-fields/SelectField.tsx";
 
 export const { useAppForm } = createFormHook({
@@ -23,7 +23,7 @@ export const { useAppForm } = createFormHook({
 	fieldComponents: {
 		TextField,
 		NumberField,
-		RadioField,
+		RadioField: RadioButton,
 		SelectField,
 	},
 	formComponents: { SubmitBtn }
