@@ -1,7 +1,7 @@
 import Header, { SettingsIcon } from "@/components/general/Header.tsx"
 import { Nav, NavOption } from "@/components/general/Nav.tsx"
-import LogoutIcon from "@/components/ui/LogoutIcon.tsx"
-import { ProfileOrLogoInHeader } from "@/components/ui/ProfileOrLogoInHeader.tsx"
+import LogoutIcon from "@/components/ui/logout/LogoutIcon.tsx"
+import { ProfileOrLogoInHeader } from "@/components/ui/Profile-Logo-In-Header/ProfileOrLogoInHeader.tsx"
 
 export default function HomeHeader() {
 	return (
