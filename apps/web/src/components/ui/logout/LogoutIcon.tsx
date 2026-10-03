@@ -4,6 +4,7 @@ import { useNavigate } from "@tanstack/react-router"
 import useModal from "@/contexts/modal.ts"
 import useToast from "@/contexts/toast.ts"
 import { baseUrl, queryClient } from "@/routes/__root.tsx"
+import GenericModalContentCtn from "@/components/ui/modal/GenericModalContentCtn.tsx";
 
 const handleLogout = async () => {
 	return buildRequest<string, string>({
@@ -56,15 +57,19 @@ export default function LogoutIcon() {
 			onClick={() => {
 				buildModal({
 					modalTitle: "Cerrar sesión",
-					modalContent: "¿Está seguro que quiere cerrar la sesión?",
-					closeButtonTitle: "Quedarme",
-					confirmButton: {
-						text: "Sí, cerrar sesión",
-						type: "primary",
-						action: () => mutate()
-					}
+					Content: <GenericModalContentCtn
+								closeBtnTitle={"Quedarme"}
+								confirmButton={{
+								text: "Cerrar sesión",
+								type: "button",
+								styleType: "primary",
+								action: () => mutate(),
+								}}
+								text={"¿Está seguro que quiere cerrar la sesión?"}
+							/>
 				})
 			}}
 		/>
 	)
 }
+

@@ -1,36 +1,39 @@
+import type {JSX} from "react"
 import { createContext, useContext } from "react"
 
 export type ModalButton = {
 	action: () => Promise<void> | void
 	text: string
-	type: "modal-primary" | "secondary" | "primary"
+	styleType: "modal-primary" | "secondary" | "primary"
 }
 
-export type ModalContextProps = {
-	buildModal: (data: ModalBuilderProps) => void
+export type ModalAPI = {
+	buildModal: (data: ModalProps) => void
 	closeModal: () => void
 }
 
-export type ModalBuilderProps = {
+export type ModalProps = {
 	modalTitle: string
-	modalContent: string
-	confirmButton: ModalButton
-	closeButtonTitle: string
+	Content: JSX.Element
 }
 
-export type ModalProps = ModalBuilderProps & {
-	closeModal: () => void
-}
 
-export type ModalContextComponentProps = {
+export type ModalContextComponentProps = ModalProps & {
 	isOpen: boolean
-	modalTitle: string
-	modalContent: string
-	confirmButton: ModalButton
-	closeButtonTitle: string
 }
 
-export const ModalContext = createContext<ModalContextProps | null>(null)
+export type ModalBtnCtnProps = {
+	closeBtnTitle: string
+	confirmButton: ConfirmModalBtn
+}
+export type ConfirmModalBtn = ModalButton & {
+	type: "button" | "reset" | "submit"
+}
+
+export type GenericModalContentCtnProps = {
+	text: string
+} & ModalBtnCtnProps
+export const ModalContext = createContext<ModalAPI | null>(null)
 
 export default function useModal() {
 	const context = useContext(ModalContext)

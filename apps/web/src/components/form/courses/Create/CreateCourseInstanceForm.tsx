@@ -15,7 +15,6 @@ import {
 import { useForm, useSelector } from "@tanstack/react-form"
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
-import { Trash2 } from "lucide-react"
 import { useRef } from "react"
 import DropdownMenu from "@/components/form/general/DropdownMenu.tsx"
 import ErrorMessage from "@/components/form/general/ErrorMessage.tsx"
@@ -29,11 +28,11 @@ import RadioInput, {
 } from "@/components/form/general/RadioInput.tsx"
 import { AddItem } from "@/components/general/AddItem.tsx"
 import Button from "@/components/general/Button.tsx"
-import useModal from "@/contexts/modal.ts"
 import useToast from "@/contexts/toast.ts"
 import { baseUrl } from "@/routes/__root.tsx"
 import type { InputProps } from "@/types/input.ts"
 import scrollTo from "@/utils/scroll.ts"
+import DeleteFormValue from "@/components/form/general/DeleteFormValue.tsx";
 
 const registerCourseInstance = async (dto: CourseInstanceToBeCreated) => {
 	return buildRequest<string, string>({
@@ -61,7 +60,6 @@ export default function CreateCourseInstanceForm() {
 		queryKey: ["getPreviousCoursesInfo"]
 	})
 	const { buildToast } = useToast()
-	const { buildModal, closeModal } = useModal()
 	const navigate = useNavigate({
 		from: "/home/current-period/course-instance/"
 	})
@@ -303,27 +301,21 @@ export default function CreateCourseInstanceForm() {
 													)
 												}}
 											</Field>
-											<Trash2
-												className={
-													"text-red-700 cursor-pointer hover:scale-110 transition-all duration-300 ease-in-out absolute top-4 left-110"
-												}
-												onClick={() => {
-													buildModal({
-														modalTitle: "Eliminar evaluación",
-														confirmButton: {
-															type: "modal-primary",
-															action: () => {
-																fieldApi.removeValue(i)
-																closeModal()
-															},
-															text: "Sí, eliminar"
-														},
-														closeButtonTitle: "No, me arrepentí",
-														modalContent:
-															"Eliminarás completamente la evaluación. No podrás recuperar el progreso que tenías"
-													})
+											<DeleteFormValue
+												className={"absolute top-4 left-110"}
+												confirmButton={{
+													styleType: "modal-primary",
+													action: () => {
+														fieldApi.removeValue(i)
+													},
+													text: "Eliminar",
+													type: "button"
 												}}
+												closeButtonTitle={"No, me arrepentí"}
+												modalTitle={"Eliminar evaluación"}
+												modalText={"Eliminarás completamente la evaluación. No podrás recuperar el progreso que tenías"}
 											/>
+
 										</div>
 										<Field
 											name={`breakdown[${i}].percentage`}
@@ -453,30 +445,19 @@ export default function CreateCourseInstanceForm() {
 																								className={"relative"}
 																								key={`labDetails${labIndex}`}
 																							>
-																								<Trash2
-																									className={
-																										"text-red-700 cursor-pointer hover:scale-110 transition-all duration-300 ease-in-out absolute top-4 left-110"
-																									}
-																									onClick={() => {
-																										buildModal({
-																											modalTitle:
-																												"Eliminar evaluación de laboratorio",
-																											confirmButton: {
-																												type: "modal-primary",
-																												action: () => {
-																													fieldApi.removeValue(
-																														i
-																													)
-																													closeModal()
-																												},
-																												text: "Sí, eliminar"
-																											},
-																											closeButtonTitle:
-																												"No, me arrepentí",
-																											modalContent:
-																												"Eliminarás completamente la evaluación. No podrás recuperar el progreso que tenías"
-																										})
+																								<DeleteFormValue
+																									className={"absolute top-4 left-110"}
+																									confirmButton={{
+																										styleType: "modal-primary",
+																										action: () => {
+																											fieldApi.removeValue(i)
+																										},
+																										text: "Eliminar",
+																										type: "button"
 																									}}
+																									closeButtonTitle={"No, me arrepentí"}
+																									modalTitle={"Eliminar evaluación de laboratorio"}
+																									modalText={"Eliminarás completamente la evaluación. No podrás recuperar el progreso que tenías"}
 																								/>
 																								<Field
 																									name={`breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].name`}

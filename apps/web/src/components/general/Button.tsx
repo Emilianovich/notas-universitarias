@@ -24,7 +24,7 @@ function Button({
 			type={type}
 			onClick={clickAction}
 			disabled={isDisabled}
-			className={`flex justify-center items-center rounded-lg sm:text-sm sm:w-45 xl:text-[16px] xl:w-50  border-2 ${styles} h-button-height p-1 ${isDisabled ? "cursor-not-allowed" : "hover:scale-105 cursor-pointer"}  transition-all duration-300 ease-in-out`}
+			className={`flex justify-center items-center rounded-lg sm:text-sm sm:w-40 xl:text-[16px] xl:w-45  border-2 ${styles} h-button-height p-1 ${isDisabled ? "cursor-not-allowed" : "hover:scale-105 cursor-pointer"}  transition-all duration-300 ease-in-out`}
 		>
 			{text}
 		</button>
