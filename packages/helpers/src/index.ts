@@ -161,12 +161,19 @@ export const addDate = ({ date, amount, units }: DatesParams): number => {
 	}
 }
 export const roundNumber = ({
-	number,
-	amountOfDecimals
-}: {
+								number,
+								amountOfDecimals,
+							}: {
 	number: number
 	amountOfDecimals: number
-}): number => Number(number.toFixed(amountOfDecimals))
+}): number => {
+	if (!Number.isInteger(amountOfDecimals) || amountOfDecimals < 0) {
+		throw new RangeError("The amount must be a non-negative integer")
+	}
+	const shifted = Number(`${number}e${amountOfDecimals}`)
+	const rounded = Math.round(shifted)
+	return Number(`${rounded}e-${amountOfDecimals}`)
+}
 
 export function getValueOver100({
 	rawScore,
@@ -178,7 +185,7 @@ export function getValueOver100({
 	return (rawScore / maxScore) * 100
 }
 
-function getEntriesAverageGrade(entries: CourseBreakdownEntry[]): number {
+export function getEntriesAverageGrade(entries: CourseBreakdownEntry[]): number {
 	if (!entries.length) return 0
 	const gradeAverage: number[] = []
 	entries.forEach((entry) => {
@@ -240,6 +247,89 @@ export function updateCourseAverageGrade(course: Course): void {
 				.map((instance) => instance.finalGrade)
 				.reduce((currentFinalGrade, acc) => currentFinalGrade + acc, 0) /
 			course.courseInstances.length,
+		amountOfDecimals: 4
+	})
+}
+
+// REFACTORS for courses
+export type RCourseBreakdown = {
+	name: string
+	percentage: number
+	contribution: number
+	entries: CourseBreakdownEntry[]
+	allowsMultipleEntries: boolean
+}
+
+export type RBaseCourseInstance = {
+	profesorName: string
+	finalGrade: number
+	breakdowns: RCourseBreakdown[]
+}
+
+export type Laboratory = RBaseCourseInstance & {
+	percentage: number
+}
+
+export type RCourseInstance = RBaseCourseInstance & {
+	laboratory?: Laboratory
+}
+
+export type RCourse = {
+	name: string
+	averageGrade: number
+	courseInstances: RCourseInstance[]
+}
+
+export function computeBreakdownContribution(breakdown: RCourseBreakdown) {
+	if (!breakdown.entries.length) {
+		breakdown.contribution = 0
+	}
+	const entryAverage = getEntriesAverageGrade(breakdown.entries)
+	breakdown.contribution = breakdown.percentage * (entryAverage / 100)
+}
+
+export function computeCourseInstanceFinalGrade(instance: RCourseInstance) {
+	instance.finalGrade = instance.breakdowns
+		.map(currInstance => currInstance.contribution)
+		.reduce((currentContribution, acc) => currentContribution + acc, 0)
+
+}
+export function RupdateCourseInstanceFinalGrade(
+	courseInstance: RCourseInstance
+): void {
+	let labContribution = 0
+	const {laboratory} = courseInstance
+	if (laboratory) {
+		const {breakdowns: labBreakdowns} = laboratory
+		labBreakdowns.forEach(breakdown => {
+			computeBreakdownContribution(breakdown)
+		})
+		computeCourseInstanceFinalGrade(laboratory)
+		const {finalGrade: labFinalGrade, percentage} = laboratory
+		labContribution = labFinalGrade * percentage
+	}
+	courseInstance.breakdowns.forEach((breakdown) => {
+		computeBreakdownContribution(breakdown)
+		computeCourseInstanceFinalGrade(courseInstance)
+	})
+	courseInstance.finalGrade += labContribution
+	courseInstance.finalGrade = roundNumber({
+		number: courseInstance.finalGrade,
+		amountOfDecimals: 4
+	})
+}
+
+export function RupdateCourseAverageGrade(course: RCourse): void {
+	course.courseInstances.forEach((instance) => {
+		RupdateCourseInstanceFinalGrade(instance)
+	})
+	const { courseInstances } = course
+	course.averageGrade = roundNumber({
+		number:
+			courseInstances
+				.map((instance) => instance.finalGrade)
+				.reduce((currentFinalGrade, acc) => currentFinalGrade + acc, 0) /
+			courseInstances.length,
 		amountOfDecimals: 4
 	})
 }
@@ -313,4 +403,12 @@ export function getLastElementFromArray<T>(array: T[]) {
 
 export function isArrayEmpty<T>(array: T[]) {
 	return array.length === 0
+}
+type NonEmptyObject<T extends object> = keyof T extends never ? never : T;
+export function copyObject<T extends object>(object: T & NonEmptyObject<T>) {
+	return {...object}
+}
+
+export function copyArray<T>(array: T[]) {
+	return [...array]
 }

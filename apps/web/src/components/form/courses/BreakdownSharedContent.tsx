@@ -1,5 +1,4 @@
 import {breakdownSharedContentDefaultValues} from "@/components/form/courses/types/types.ts";
-import {NESTED_LABEL, NOT_NESTED_LABEL, STANDALONE_LABEL} from "@notas-universitarias/types";
 import DeleteFormValue from "@/components/form/general/DeleteFormValue.tsx";
 import {createFormHook} from "@tanstack/react-form";
 import TextField from "@/components/form/tanstack-fields/TextField.tsx";
@@ -8,13 +7,16 @@ import SelectField from "@/components/form/tanstack-fields/SelectField.tsx";
 import {RadioButton} from "@/components/form/tanstack-fields/Radio/RadioButton.tsx";
 import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx";
 import {fieldContext, formContext} from "@/hooks/form.ts";
+import RadioGroup from "@/components/form/tanstack-fields/Radio/RadioGroup.tsx";
+import {getBreakdownRadioGroup} from "@/components/form/tanstack-fields/Radio/GetBreakdownRadioGroup.ts";
 
 export const { withForm, withFieldGroup } = createFormHook({
     fieldComponents: {
         TextField,
         NumberField,
         SelectField,
-        RadioField: RadioButton
+        RadioField: RadioButton,
+        RadioGroup,
     },
     formComponents: { SubmitBtn },
     fieldContext,
@@ -66,30 +68,15 @@ export const BreakdownSharedContent = withFieldGroup({
                 <AppField
                     name={`type`}
                     key={`type`}
-                    children={(typeField) => (
-                        <>
-                            <typeField.RadioField
-                                type={"breakdownCategory"}
-                                value={"STANDALONE"}
-                                radioGroupName={typeField.name}
-                                labelText={STANDALONE_LABEL}
-                            />
-                            <typeField.RadioField
-                                type={"breakdownCategory"}
-                                value={"NOT-NESTED"}
-                                radioGroupName={typeField.name}
-                                labelText={NOT_NESTED_LABEL}
-                            />
-                            {isLabDetail && (
-                                <typeField.RadioField
-                                    type={"breakdownCategory"}
-                                    value={"NESTED"}
-                                    radioGroupName={typeField.name}
-                                    labelText={NESTED_LABEL}
+                    children={(typeField) => {
+                        const radioGroupName = typeField.name
+                        return (
+                                <typeField.RadioGroup
+                                    radioGroupName={radioGroupName}
+                                    radios={getBreakdownRadioGroup(radioGroupName, isLabDetail)}
                                 />
-                            )}
-                        </>
-                    )}
+                        )
+                    }}
                 />
             </>
         )
