@@ -1,96 +1,28 @@
 import { z } from "zod"
-import type { BreakdownCategory } from "../../db"
+import type {BreakdownCategory} from "../../db"
 
-// TODO think about rounding total percentage?
+export const PercentageShape =  (addedStr: string) => z
+	.number()
+	.gte(0, "El porcentaje no puede ser negativo")
+	.lte(
+		100,
+		`${addedStr} no puede ser mayor a 100%`
+	)
+	.multipleOf(0.01, { message: "Máximo 2 decimales" })
+	.transform((val) => val / 100)
+
 export type CourseInstanceToBeCreated = z.infer<
 	typeof CreateCourseInstanceSchema
 >
 export type CourseBreakdownToBeCreated = z.infer<typeof CreateBreakdownSchema>
-// {
-// 	isRegistered: boolean
-// 	name?: string
-// 	profesorName: string
-// 	breakdown: {
-// 		name: string
-// 		percentage: number
-// 		type: BreakdownCategory
-// 		laboratoryDetails?: {
-// 			profesorName: string
-// 			breakdown: CreatingCourseInstanceBreakdown[]
-// 		}
-// 	}[]
-// }
 
-export type CreatingCourseInstanceBreakdown = {
+export type CreatingCourseInstanceBreakdown  = {
 	name: string
 	percentage: number
 	type: BreakdownCategory
 }
 
-const LaboratoryDetailsSchema = z
-	.object({
-		profesorName: z
-			.string()
-			.min(
-				1,
-				"El nombre del profesor de laboratorio debería tener por lo menos un caracter"
-			)
-			.max(
-				50,
-				"El nombre del profesor de laboratorio debería tener entre 1 a 50 caracteres"
-			),
-		breakdown: z.array(
-			z.object({
-				name: z
-					.string()
-					.min(
-						1,
-						"El nombre de la subdivisión debería tener por lo menos un caracter"
-					)
-					.max(
-						50,
-						"El nombre de la subdivisión debería tener entre 1 a 50 caracteres"
-					),
-				percentage: z
-					.number()
-					.gte(0, "El porcentaje no puede ser negativo")
-					.lte(
-						100,
-						"El porcentaje total de la subdivisión no puede ser mayor a 100%"
-					)
-					.multipleOf(0.01, { message: "Máximo 2 decimales" })
-					.transform((val) => val / 100),
-				type: z.enum(
-					["STANDALONE", "NESTED", "NOT-NESTED"],
-					"El tipo de la subdivisión no encaja dentro de los registrados"
-				)
-			})
-		)
-	})
-	.superRefine((self, ctx) => {
-		self.breakdown.forEach((breakdown) => {
-			if (breakdown.type === "NESTED") {
-				ctx.addIssue({
-					code: "custom",
-					message:
-						"La categoría de una parte de laboratorio no puede ser 'NESTED'"
-				})
-			}
-		})
-		const totalPercentage = self.breakdown
-			.map((breakdown) => breakdown.percentage)
-			.reduce((total, currentPercent) => total + currentPercent, 0)
-		if (totalPercentage !== 1) {
-			ctx.addIssue({
-				code: "custom",
-				message:
-					"El total de porcentajes de laboratorio tiene que ser igual a 100%"
-			})
-		}
-	})
-
-// OPTIMIZE reduce code duplication
-const CreateBreakdownSchema = z
+export const CreateBreakdownSchema = z
 	.object({
 		name: z
 			.string()
@@ -102,41 +34,42 @@ const CreateBreakdownSchema = z
 				50,
 				"El nombre de la subdivisión debería tener entre 1 a 50 caracteres"
 			),
-		percentage: z
-			.number()
-			.gte(0, "El porcentaje no puede ser negativo")
-			.lte(
-				100,
-				"El porcentaje total de la subdivisión no puede ser mayor a 100%"
-			)
-			.multipleOf(0.01, { message: "Máximo 2 decimales" })
-			.transform((val) => val / 100),
-		type: z.enum(
-			["STANDALONE", "NESTED", "NOT-NESTED"],
-			"El tipo de la subdivisión no encaja dentro de los registrados"
+		percentage: PercentageShape("El porcentaje total de la evaluación"),
+		allowsMultipleEntries: z.boolean(
+			"Es necesario especificar si esta subdivisión permite registrar más de una nota"
 		),
-		laboratoryDetails: LaboratoryDetailsSchema.optional()
 	})
-	.superRefine((self, ctx) => {
-		if (self.type !== "NESTED" && self.laboratoryDetails) {
-			ctx.addIssue({
-				code: "custom",
-				path: ["type"],
-				message:
-					"Solo una categoría de tipo 'NESTED' necesita que se especifique la parte de laboratorio"
-			})
-		}
-		if (self.type === "NESTED" && !self.laboratoryDetails) {
-			ctx.addIssue({
-				code: "custom",
-				message:
-					"Como la subdivisión tiene parte de laboratorio. Es necesario detallar esa subdivisión",
-				path: ["type"]
-			})
-		}
-	})
-// REVIEW
-// OPTIMIZE reduce possible unnecessary validation
+
+export const CreateCourseInstanceBaseSchema = z.object({
+	profesorName: z
+		.string()
+		.min(1, "El nombre del profesor debería tener por lo menos un caracter")
+		.max(
+			100,
+			"El nombre del profesor debería tener entre 1 a 100 caracteres"
+		),
+	breakdown: z.array(CreateBreakdownSchema)
+})
+
+const CreatingLaboratorySchema = CreateCourseInstanceBaseSchema.safeExtend({
+	percentage: PercentageShape("El porcentaje de laboratorio")
+})
+
+type CreateBreakdownType = z.infer<typeof CreateBreakdownSchema>
+type CreatingLaboratoryType = z.infer<typeof CreatingLaboratorySchema>
+
+export const isTotalPercentageValid = (breakdown: CreateBreakdownType[], laboratory: CreatingLaboratoryType | undefined) : boolean => {
+	let totalLabPercentage = 0
+	if (laboratory) {
+		totalLabPercentage = laboratory.percentage
+	}
+	const totalBreakdownPercentage = breakdown
+		.map((breakdown) => breakdown.percentage)
+		.reduce((total, currentPercent) => total + currentPercent, 0)
+	const totalPercentage = totalBreakdownPercentage + totalLabPercentage
+	return Math.abs(totalPercentage - 1) <= 0.001;
+}
+
 export const CreateCourseInstanceSchema = z
 	.object({
 		isRegistered: z.boolean(
@@ -150,6 +83,7 @@ export const CreateCourseInstanceSchema = z
 				"El nombre de la materia debería tener entre 1 a 100 caracteres"
 			)
 			.optional(),
+		laboratory: CreatingLaboratorySchema.optional(),
 		profesorName: z
 			.string()
 			.min(1, "El nombre del profesor debería tener por lo menos un caracter")
@@ -161,21 +95,29 @@ export const CreateCourseInstanceSchema = z
 		breakdown: z.array(CreateBreakdownSchema)
 	})
 	.superRefine((self, ctx) => {
-		if (self.isRegistered && !self.previousCourseId) {
+		const { isRegistered, breakdown, previousCourseId, laboratory, name } = self
+		if (isRegistered && !previousCourseId) {
 			ctx.addIssue({
 				code: "custom",
 				path: ["previousCourseId"],
 				message: "Ya diste la materia, es necesario que facilites su id"
 			})
 		}
-		if (!self.isRegistered && !self.name) {
+		if (isRegistered && name) {
+			ctx.addIssue({
+				code: "custom",
+				path: ["name"],
+				message: "Ya diste la materia, no es necesario que des el nombre"
+			})
+		}
+		if (!isRegistered && !name) {
 			ctx.addIssue({
 				code: "custom",
 				path: ["name"],
 				message: "Es importante que facilites el nombre de la materia"
 			})
 		}
-		if (!self.isRegistered && self.previousCourseId) {
+		if (!isRegistered && previousCourseId) {
 			ctx.addIssue({
 				code: "custom",
 				path: ["previousCourseId"],
@@ -183,11 +125,7 @@ export const CreateCourseInstanceSchema = z
 					"No tienes registrado esa materia, no es necesario que mandes un id"
 			})
 		}
-
-		const totalPercentage = self.breakdown
-			.map((breakdown) => breakdown.percentage)
-			.reduce((total, currentPercent) => total + currentPercent, 0)
-		if (Math.abs(totalPercentage - 1) > 0.001) {
+		if (!isTotalPercentageValid(breakdown, laboratory)) {
 			ctx.addIssue({
 				code: "custom",
 				message: "El total de porcentajes tiene que ser igual a 100%"

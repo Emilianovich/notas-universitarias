@@ -1,13 +1,11 @@
 import {describe, expect, test} from 'vitest'
 import {
     computeBreakdownContribution, copyObject,
-    getValueOver100, RCourse,
-    RCourseInstance, roundNumber, RupdateCourseAverageGrade,
-    RupdateCourseInstanceFinalGrade
+    getValueOver100, roundNumber, updateCourseAverageGrade, updateCourseInstanceFinalGrade
 } from "./index";
-import {CourseBreakdownEntry} from "@notas-universitarias/types";
+import {Course, CourseBreakdownEntry, CourseInstance} from "@notas-universitarias/types";
 
-const courseInstances: RCourseInstance[] = [
+const courseInstances: CourseInstance[] = [
     {
         profesorName: "Ana Rodríguez",
         finalGrade: 0.8730,
@@ -265,7 +263,7 @@ const courseInstances: RCourseInstance[] = [
         ],
     },
 ]
-const course: RCourse = {
+const course: Course = {
     name: "Programación",
     averageGrade: 0.8677,
     courseInstances,
@@ -314,7 +312,7 @@ describe("Computing Course Instance Final Grade", () => {
             if (!courseInstanceWithLaboratory) return
             const copyOfCourseInstanceWithLaboratory = copyObject(courseInstanceWithLaboratory)
             const { finalGrade }  = copyOfCourseInstanceWithLaboratory
-            RupdateCourseInstanceFinalGrade(copyOfCourseInstanceWithLaboratory)
+            updateCourseInstanceFinalGrade(copyOfCourseInstanceWithLaboratory)
             const { finalGrade : computedFinalGrade }  = copyOfCourseInstanceWithLaboratory
             expect(roundNumber({number: computedFinalGrade, amountOfDecimals: 2})).toBeCloseTo(finalGrade)
         })
@@ -322,7 +320,7 @@ describe("Computing Course Instance Final Grade", () => {
             if (!courseInstanceWithoutLaboratory) return
             const copyOfCourseInstanceWithoutLaboratory = copyObject(courseInstanceWithoutLaboratory)
             const { finalGrade }  = copyOfCourseInstanceWithoutLaboratory
-            RupdateCourseInstanceFinalGrade(copyOfCourseInstanceWithoutLaboratory)
+            updateCourseInstanceFinalGrade(copyOfCourseInstanceWithoutLaboratory)
             const { finalGrade : computedFinalGrade }  = copyOfCourseInstanceWithoutLaboratory
             expect(roundNumber({number: computedFinalGrade, amountOfDecimals: 2})).toBeCloseTo(finalGrade)
         })
@@ -330,7 +328,7 @@ describe("Computing Course Instance Final Grade", () => {
             const { courseInstances } = course
             courseInstances.forEach(instance => {
                 const { finalGrade }  = instance
-                RupdateCourseInstanceFinalGrade(instance)
+                updateCourseInstanceFinalGrade(instance)
                 const { finalGrade : computedFinalGrade }  = instance
                 expect(computedFinalGrade).toBeCloseTo(finalGrade)
             })
@@ -341,7 +339,7 @@ describe("Computing Course Instance Final Grade", () => {
 describe("updateCourseAverageGrade function", () => {
     test("Compute Course Average Grade", () => {
         const {averageGrade} = course
-        RupdateCourseAverageGrade(course)
+        updateCourseAverageGrade(course)
         const {averageGrade: computedAverageGrade} = course
         expect(roundNumber({ number: computedAverageGrade, amountOfDecimals: 2 })).toBeCloseTo(averageGrade)
     })
