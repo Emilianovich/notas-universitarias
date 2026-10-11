@@ -1,4 +1,4 @@
-import { updateCourseAverageGrade } from "@notas-universitarias/helpers"
+import {copyObject, updateCourseAverageGrade} from "@notas-universitarias/helpers"
 import type {
 	AcademicPeriodDocument,
 	Course,
@@ -13,7 +13,7 @@ import { HTTPException } from "hono/http-exception"
 import type { FindCursor, ObjectId, WithId } from "mongodb"
 
 import getValidObjectId, {
-	mapCreateCourseInstanceToDTO
+	mapCreateCourseInstanceToDTO, prepareCourseInstance
 } from "../../helpers/helpers.js"
 import type { MongoService } from "../../modules/db/MongoService.js"
 import { AcademicPeriodsRepository } from "../../repositories/academicPeriods.js"
@@ -110,11 +110,12 @@ export class CourseService {
 		)
 	}
 	// NOTE: courseInstances do not have a userId so its necessary a validation to ensure it belongs to logged user
+	// NOTE: frontend needs to prepare courseInstance for presentation
 	async getCourseInstance(
 		courseInstanceId: ObjectId,
 		userId: ObjectId
 	): Promise<{
-		courseInstance: Omit<CourseInstance, "finalGrade">
+		courseInstance: CourseInstance
 		courseInstanceDoc: CourseInstanceDocument
 		courseName: string
 	}> {
@@ -150,17 +151,7 @@ export class CourseService {
 			throw new HTTPException(404, {
 				message: "Usted no tiene una materia registrada con ese id"
 			})
-		const { _id, ...rest } = copyCourseInstance
-		const { finalGrade, ...courseInstance } = rest
-		// TODO REVIEW: consider moving fully to client
-		courseInstance.breakdown.forEach((breakdown) => {
-			breakdown.percentage *= 100
-			if (breakdown.laboratoryDetails) {
-				breakdown.laboratoryDetails.breakdown.forEach((detail) => {
-					detail.percentage *= 100
-				})
-			}
-		})
+		const { _id, ...courseInstance} = copyCourseInstance
 		return { courseInstance, courseInstanceDoc, courseName }
 	}
 
@@ -204,11 +195,10 @@ export class CourseService {
 		const updatedPeriodCourseInstances: CourseInstanceDocument[] = []
 		academicPeriod.courseInstances.forEach(
 			(instance: CourseInstanceDocument) => {
-				const { _id, ...rest } = instance
+				const { _id } = instance
 				if (!_id?.equals(updatedCourseInstance._id)) {
 					updatedPeriodCourseInstances.push({
-						_id,
-						...rest
+						...instance
 					})
 				} else {
 					updatedPeriodCourseInstances.push({

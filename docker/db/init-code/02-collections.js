@@ -191,47 +191,49 @@ db.createCollection("academicPeriods", {
 })
 
 db.createCollection("courseInstances", {
+	validationLevel: "strict",
+	validationAction: "error",
 	validator: {
 		$and: [
 			{
 				$jsonSchema: {
 					bsonType: "object",
 					title: "Course Instances Validations",
-					required: ["profesorName", "finalGrade", "breakdown"],
+					required: ["profesorName", "finalGrade", "breakdowns"],
 					properties: {
 						profesorName: {
 							bsonType: "string",
-							description: "A profesor name is required for a course instance"
+							description: "A profesor name is required"
 						},
 						finalGrade: {
 							bsonType: "number",
 							minimum: 0,
 							maximum: 1,
-							description: "A Grade is required for a course instance"
+							description: "Final grade must be between 0 and 1"
 						},
-						breakdown: {
+						breakdowns: {
 							bsonType: "array",
-							minItems: 1,
-							description: "Course instance must have at least one breakdown",
 							items: {
 								bsonType: "object",
 								required: [
-									"contribution",
 									"name",
-									"entries",
 									"percentage",
-									"type"
+									"contribution",
+									"entries",
+									"allowsMultipleEntries"
 								],
 								properties: {
-									contribution: {
+									name: {
+										bsonType: "string"
+									},
+									percentage: {
 										bsonType: "number",
 										minimum: 0,
-										description: "Breakdown contribution cannot be negative"
+										maximum: 1
 									},
-									name: {
-										bsonType: "string",
-										description:
-											"Breakdown name must be a string and its required"
+									contribution: {
+										bsonType: "number",
+										minimum: 0
 									},
 									entries: {
 										bsonType: "array",
@@ -240,35 +242,92 @@ db.createCollection("courseInstances", {
 											required: ["rawScore", "maxScore"],
 											properties: {
 												name: {
-													bsonType: ["null", "string"]
+													bsonType: "string"
 												},
 												rawScore: {
-													bsonType: "number",
-													description:
-														"Course Breakdown Entry raw score is number and required"
+													bsonType: "number"
 												},
 												maxScore: {
-													bsonType: "int",
-													description:
-														"Course Breakdown Entry max score is an int and required"
+													bsonType: "number"
 												}
 											}
 										}
 									},
-									percentage: {
-										bsonType: "number",
-										minimum: 0,
-										maximum: 1,
-										description:
-											"Course Breakdown Entry percentage is number, required and must be between 0 and 1"
-									},
-									type: {
-										enum: ["STANDALONE", "NESTED", "NOT-NESTED"],
-										description:
-											"Course Breakdown type is either STANDALONE, NESTED or NOT-NESTED"
-									},
-									laboratoryDetails: {
-										bsonType: ["object", "null"]
+									allowsMultipleEntries: {
+										bsonType: "bool"
+									}
+								}
+							}
+						},
+						laboratory: {
+							bsonType: "object",
+							required: [
+								"profesorName",
+								"finalGrade",
+								"percentage",
+								"breakdowns"
+							],
+							properties: {
+								profesorName: {
+									bsonType: "string"
+								},
+								finalGrade: {
+									bsonType: "number",
+									minimum: 0,
+									maximum: 1
+								},
+								percentage: {
+									bsonType: "number",
+									minimum: 0,
+									maximum: 1
+								},
+								breakdowns: {
+									bsonType: "array",
+									minItems: 1,
+									items: {
+										bsonType: "object",
+										required: [
+											"name",
+											"percentage",
+											"contribution",
+											"entries",
+											"allowsMultipleEntries"
+										],
+										properties: {
+											name: {
+												bsonType: "string"
+											},
+											percentage: {
+												bsonType: "number",
+												minimum: 0,
+												maximum: 1
+											},
+											contribution: {
+												bsonType: "number",
+												minimum: 0
+											},
+											entries: {
+												bsonType: "array",
+												items: {
+													bsonType: "object",
+													required: ["rawScore", "maxScore"],
+													properties: {
+														name: {
+															bsonType: "string"
+														},
+														rawScore: {
+															bsonType: "number"
+														},
+														maxScore: {
+															bsonType: "number"
+														}
+													}
+												}
+											},
+											allowsMultipleEntries: {
+												bsonType: "bool"
+											}
+										}
 									}
 								}
 							}
@@ -278,28 +337,64 @@ db.createCollection("courseInstances", {
 			},
 			{
 				$expr: {
-					$allElementsTrue: {
-						$map: {
-							input: "$breakdown",
-							as: "item",
-							in: {
-								$and: [
-									{ $lte: ["$$item.contribution", "$$item.percentage"] },
-									{
-										$allElementsTrue: {
-											$map: {
-												input: "$$item.entries",
-												as: "entry",
-												in: {
-													$lte: ["$$entry.rawScore", "$$entry.maxScore"]
+					$and: [
+						{
+							$allElementsTrue: {
+								$map: {
+									input: {
+										$ifNull: ["$breakdowns", []]
+									},
+									as: "item",
+									in: {
+										$and: [
+											{
+												$lte: ["$$item.contribution", "$$item.percentage"]
+											},
+											{
+												$allElementsTrue: {
+													$map: {
+														input: "$$item.entries",
+														as: "entry",
+														in: {
+															$lte: ["$$entry.rawScore", "$$entry.maxScore"]
+														}
+													}
 												}
 											}
-										}
+										]
 									}
-								]
+								}
+							}
+						},
+						{
+							$allElementsTrue: {
+								$map: {
+									input: {
+										$ifNull: ["$laboratory.breakdowns", []]
+									},
+									as: "item",
+									in: {
+										$and: [
+											{
+												$lte: ["$$item.contribution", "$$item.percentage"]
+											},
+											{
+												$allElementsTrue: {
+													$map: {
+														input: "$$item.entries",
+														as: "entry",
+														in: {
+															$lte: ["$$entry.rawScore", "$$entry.maxScore"]
+														}
+													}
+												}
+											}
+										]
+									}
+								}
 							}
 						}
-					}
+					]
 				}
 			}
 		]

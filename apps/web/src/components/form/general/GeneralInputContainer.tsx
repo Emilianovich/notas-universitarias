@@ -19,7 +19,10 @@ export default function GeneralInputContainer({
 	return (
 		<div className={`grid grid-rows-2 gap-4 relative`} style={{ maxWidth }}>
 			{/** biome-ignore lint/a11y/noLabelWithoutControl: <The ReactNode expected is an input> */}
-			<label style={{ fontSize: 18, marginTop: "1em"}} className={"flex flex-col gap-2"}>
+			<label
+				style={{ fontSize: 18, marginTop: "1em" }}
+				className={"flex flex-col gap-2"}
+			>
 				<span>{labelText}</span>
 				{input}
 			</label>

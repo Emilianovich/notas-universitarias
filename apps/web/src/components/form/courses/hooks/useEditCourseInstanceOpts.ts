@@ -13,9 +13,9 @@ import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import TextField from "@/components/form/tanstack-fields/TextField.tsx"
 import useToast from "@/contexts/toast.ts"
 import { fieldContext, formContext } from "@/hooks/form.ts"
-import type {EditCourseInstanceOpts} from "@/components/form/courses/types/types.ts";
-import {RadioButton} from "@/components/form/tanstack-fields/Radio/RadioButton.tsx";
-import SelectField from "@/components/form/tanstack-fields/SelectField.tsx";
+import type { EditCourseInstanceOpts } from "@/components/form/courses/types/types.ts"
+import { RadioButton } from "@/components/form/tanstack-fields/Radio/RadioButton.tsx"
+import SelectField from "@/components/form/tanstack-fields/SelectField.tsx"
 
 export const { useAppForm } = createFormHook({
 	fieldContext,
@@ -24,7 +24,7 @@ export const { useAppForm } = createFormHook({
 		TextField,
 		NumberField,
 		RadioField: RadioButton,
-		SelectField,
+		SelectField
 	},
 	formComponents: { SubmitBtn }
 })
@@ -68,4 +68,3 @@ export function useEditCourseInstanceOpts({
 		}
 	})
 }
-

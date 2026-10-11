@@ -7,9 +7,9 @@ import type {
 } from "@notas-universitarias/types"
 import type React from "react"
 import type { BreakdownForm } from "@/components/form/courses/Update&Demo/BreakdownForm.tsx"
-import type {UseMutationResult} from "@tanstack/react-query";
-import {useEditCourseInstanceOpts} from "@/components/form/courses/hooks/useEditCourseInstanceOpts.ts";
-import type useCreateCourseInstanceOpts from "@/components/form/courses/hooks/useCreateCourseInstanceOpts.ts";
+import type { UseMutationResult } from "@tanstack/react-query"
+import { useEditCourseInstanceOpts } from "@/components/form/courses/hooks/useEditCourseInstanceOpts.ts"
+import type useCreateCourseInstanceOpts from "@/components/form/courses/hooks/useCreateCourseInstanceOpts.ts"
 
 export type Modes = "create" | "edit"
 
@@ -22,11 +22,14 @@ export const defaultValues: UpdateCourseInstanceDto = {
 	breakdown: []
 }
 
-export type BreakdownSharedContent = Omit<CourseBreakdown, "entries" | "contribution" | "laboratoryDetails">
-export const breakdownSharedContentDefaultValues : BreakdownSharedContent = {
+export type BreakdownSharedContent = Omit<
+	CourseBreakdown,
+	"entries" | "contribution" | "laboratoryDetails"
+>
+export const breakdownSharedContentDefaultValues: BreakdownSharedContent = {
 	name: "",
 	type: "STANDALONE",
-	percentage: 0,
+	percentage: 0
 }
 
 export type LaboratoryDetailsContent = {
@@ -34,9 +37,9 @@ export type LaboratoryDetailsContent = {
 	breakdown: BreakdownSharedContent[]
 }
 
-export const laboratoryDetailsFormDefaultValues : LaboratoryDetailsContent = {
+export const laboratoryDetailsFormDefaultValues: LaboratoryDetailsContent = {
 	profesorName: "",
-	breakdown: [],
+	breakdown: []
 }
 export const breakdownDefaultProps = {
 	mode: "edit" as Modes,
@@ -55,14 +58,16 @@ export type CreatingCourseInstanceReturns = CourseInstancesPercentages & {
 		name: string
 		percentage: number
 		type: "STANDALONE" | "NESTED" | "NOT-NESTED"
-		laboratoryDetails?: {
-			profesorName: string
-			breakdown: {
-				name: string
-				percentage: number
-				type: "STANDALONE" | "NESTED" | "NOT-NESTED"
-			}[]
-		} | undefined
+		laboratoryDetails?:
+			| {
+					profesorName: string
+					breakdown: {
+						name: string
+						percentage: number
+						type: "STANDALONE" | "NESTED" | "NOT-NESTED"
+					}[]
+			  }
+			| undefined
 	}[]
 	isRegistered: boolean
 	submissionAttempts: number
@@ -98,7 +103,13 @@ export type EditCourseInstanceFormType = ReturnType<
 >
 
 export type CreateCourseInstanceOpts = {
-	mutation: UseMutationResult<SuccessRes<string>, Error, CourseInstanceToBeCreated>
+	mutation: UseMutationResult<
+		SuccessRes<string>,
+		Error,
+		CourseInstanceToBeCreated
+	>
 }
 
-export type CreateCourseInstanceFormType = ReturnType<typeof useCreateCourseInstanceOpts>
+export type CreateCourseInstanceFormType = ReturnType<
+	typeof useCreateCourseInstanceOpts
+>

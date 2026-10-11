@@ -1,18 +1,19 @@
-import type { AcademicPeriod } from "@notas-universitarias/types/db"
 import type { ObjectId } from "mongodb"
 import type {
 	CourseInstanceDocument,
 	CourseInstancePresentation
 } from "./courses"
 
-interface AcademicPeriodInterface {
+export type AcademicPeriodDocument = {
 	_id?: ObjectId
+	name: string
+	startDate: Date
+	endDate: Date
 	isActive: boolean
 	userId: ObjectId
 	courseInstances: CourseInstanceDocument[]
 	registeredCourses: ObjectId[]
 }
-export type AcademicPeriodDocument = AcademicPeriod & AcademicPeriodInterface
 
 export type AcademicPeriodPresentation = {
 	_id: ObjectId

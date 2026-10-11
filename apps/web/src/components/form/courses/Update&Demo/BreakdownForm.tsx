@@ -9,8 +9,11 @@ import { LaboratoryDetailsForm } from "@/components/form/courses/Update&Demo/Lab
 import { AddItem } from "@/components/general/AddItem.tsx"
 import { ScrollToBottom } from "@/components/ui/ScrollToBottom.tsx"
 import scrollTo from "@/utils/scroll.ts"
-import {BreakdownSharedContent, withForm} from "@/components/form/courses/BreakdownSharedContent.tsx";
-import BreakdownEntries from "@/components/form/courses/BreakdownEntries.tsx";
+import {
+	BreakdownSharedContent,
+	withForm
+} from "@/components/form/courses/BreakdownSharedContent.tsx"
+import BreakdownEntries from "@/components/form/courses/BreakdownEntries.tsx"
 
 function BreakdownFormContent({
 	form,
@@ -29,19 +32,19 @@ function BreakdownFormContent({
 						{field.state.value.map((breakdown, i) => {
 							return (
 								<div key={`breakdown[${i}]-ctn`}>
-										<BreakdownSharedContent
-											form={form}
-											fields={{
-												name: `breakdown[${i}].name`,
-												percentage: `breakdown[${i}].percentage`,
-												type: `breakdown[${i}].type`,
-											}}
-											confirmBtnAction={() => {
+									<BreakdownSharedContent
+										form={form}
+										fields={{
+											name: `breakdown[${i}].name`,
+											percentage: `breakdown[${i}].percentage`,
+											type: `breakdown[${i}].type`
+										}}
+										confirmBtnAction={() => {
 											field.removeValue(i)
 										}}
-											modalTitle={"Eliminar evaluación"}
-											isLabDetail={false}
-										/>
+										modalTitle={"Eliminar evaluación"}
+										isLabDetail={false}
+									/>
 									{breakdown.type === "NESTED" && (
 										<LaboratoryDetailsForm
 											form={form}
@@ -79,7 +82,9 @@ function BreakdownFormContent({
 																		hasNameField={hasNameField}
 																		hasEntryGradeField={hasEntryGradeField}
 																		modalTitle={"Eliminar nota"}
-																		confirmBtnAction={() => entryField.removeValue(entryIndex)}
+																		confirmBtnAction={() =>
+																			entryField.removeValue(entryIndex)
+																		}
 																	/>
 																</div>
 															)
@@ -133,6 +138,3 @@ export const BreakdownForm = withForm({
 	defaultValues,
 	render: (props) => <BreakdownFormContent {...props} />
 })
-
-
-

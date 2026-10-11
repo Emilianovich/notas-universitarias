@@ -35,7 +35,9 @@ import { baseUrl } from "@/routes/__root.tsx"
 import type { InputProps } from "@/types/input.ts"
 import scrollTo from "@/utils/scroll.ts"
 
-export const registerCourseInstance = async (dto: CourseInstanceToBeCreated) => {
+export const registerCourseInstance = async (
+	dto: CourseInstanceToBeCreated
+) => {
 	return buildRequest<string, string>({
 		baseUrl,
 		path: "/course-instances",

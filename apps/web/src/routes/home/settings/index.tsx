@@ -9,7 +9,7 @@ import Input from "@/components/form/general/Input.tsx"
 import { SettingsContainer } from "@/components/form/settings/SettingsContainer.tsx"
 import EmailField from "@/components/form/tanstack-fields/EmailField.tsx"
 import PasswordField from "@/components/form/tanstack-fields/PasswordField.tsx"
-import  {
+import {
 	allowedFontFamilies,
 	allowedPets,
 	allowedThemes
@@ -26,10 +26,12 @@ import useToast from "@/contexts/toast.ts"
 import { fieldContext, formContext } from "@/hooks/form.ts"
 import authMiddleware from "@/middlewares/auth.ts"
 import { baseUrl } from "@/routes/__root.tsx"
-import Select from "@/components/form/tanstack-fields/Select/Select.tsx";
+import Select from "@/components/form/tanstack-fields/Select/Select.tsx"
 import {
-	fontFamilyOptions, petNameOptions, appThemeOptions
-} from "@/components/form/tanstack-fields/Select/option-functions.ts";
+	fontFamilyOptions,
+	petNameOptions,
+	appThemeOptions
+} from "@/components/form/tanstack-fields/Select/option-functions.ts"
 
 export const Route = createFileRoute("/home/settings/")({
 	component: RouteComponent,

@@ -1,54 +1,45 @@
 import { z } from "zod"
-import type {BreakdownCategory} from "../../db"
+import type { BreakdownCategory } from "../../db"
 
-export const PercentageShape =  (addedStr: string) => z
-	.number()
-	.gte(0, "El porcentaje no puede ser negativo")
-	.lte(
-		100,
-		`${addedStr} no puede ser mayor a 100%`
-	)
-	.multipleOf(0.01, { message: "Máximo 2 decimales" })
-	.transform((val) => val / 100)
+export const PercentageShape = (addedStr: string) =>
+	z
+		.number()
+		.gte(0, "El porcentaje no puede ser negativo")
+		.lte(100, `${addedStr} no puede ser mayor a 100%`)
+		.multipleOf(0.01, { message: "Máximo 2 decimales" })
+		.transform((val) => val / 100)
 
 export type CourseInstanceToBeCreated = z.infer<
 	typeof CreateCourseInstanceSchema
 >
 export type CourseBreakdownToBeCreated = z.infer<typeof CreateBreakdownSchema>
 
-export type CreatingCourseInstanceBreakdown  = {
-	name: string
-	percentage: number
-	type: BreakdownCategory
-}
-
-export const CreateBreakdownSchema = z
-	.object({
-		name: z
-			.string()
-			.min(
-				1,
-				"El nombre de la subdivisión debería tener por lo menos un caracter"
-			)
-			.max(
-				50,
-				"El nombre de la subdivisión debería tener entre 1 a 50 caracteres"
-			),
-		percentage: PercentageShape("El porcentaje total de la evaluación"),
-		allowsMultipleEntries: z.boolean(
-			"Es necesario especificar si esta subdivisión permite registrar más de una nota"
+export const CreateBreakdownSchema = z.object({
+	name: z
+		.string()
+		.min(
+			1,
+			"El nombre de la subdivisión debería tener por lo menos un caracter"
+		)
+		.max(
+			50,
+			"El nombre de la subdivisión debería tener entre 1 a 50 caracteres"
 		),
-	})
+	percentage: PercentageShape("El porcentaje total de la evaluación"),
+	allowsMultipleEntries: z.boolean(
+		"Es necesario especificar si esta subdivisión permite registrar más de una nota"
+	)
+})
 
+export type CreatingCourseInstanceBreakdown = z.infer<
+	typeof CreateBreakdownSchema
+>
 export const CreateCourseInstanceBaseSchema = z.object({
 	profesorName: z
 		.string()
 		.min(1, "El nombre del profesor debería tener por lo menos un caracter")
-		.max(
-			100,
-			"El nombre del profesor debería tener entre 1 a 100 caracteres"
-		),
-	breakdown: z.array(CreateBreakdownSchema)
+		.max(100, "El nombre del profesor debería tener entre 1 a 100 caracteres"),
+	breakdowns: z.array(CreateBreakdownSchema)
 })
 
 const CreatingLaboratorySchema = CreateCourseInstanceBaseSchema.safeExtend({
@@ -58,16 +49,19 @@ const CreatingLaboratorySchema = CreateCourseInstanceBaseSchema.safeExtend({
 type CreateBreakdownType = z.infer<typeof CreateBreakdownSchema>
 type CreatingLaboratoryType = z.infer<typeof CreatingLaboratorySchema>
 
-export const isTotalPercentageValid = (breakdown: CreateBreakdownType[], laboratory: CreatingLaboratoryType | undefined) : boolean => {
+export const isTotalPercentageValid = (
+	breakdowns: CreateBreakdownType[],
+	laboratory: CreatingLaboratoryType | undefined
+): boolean => {
 	let totalLabPercentage = 0
 	if (laboratory) {
 		totalLabPercentage = laboratory.percentage
 	}
-	const totalBreakdownPercentage = breakdown
+	const totalBreakdownPercentage = breakdowns
 		.map((breakdown) => breakdown.percentage)
 		.reduce((total, currentPercent) => total + currentPercent, 0)
 	const totalPercentage = totalBreakdownPercentage + totalLabPercentage
-	return Math.abs(totalPercentage - 1) <= 0.001;
+	return Math.abs(totalPercentage - 1) <= 0.001
 }
 
 export const CreateCourseInstanceSchema = z
@@ -92,10 +86,11 @@ export const CreateCourseInstanceSchema = z
 				"El nombre del profesor debería tener entre 1 a 100 caracteres"
 			),
 		previousCourseId: z.string().optional(),
-		breakdown: z.array(CreateBreakdownSchema)
+		breakdowns: z.array(CreateBreakdownSchema)
 	})
 	.superRefine((self, ctx) => {
-		const { isRegistered, breakdown, previousCourseId, laboratory, name } = self
+		const { isRegistered, breakdowns, previousCourseId, laboratory, name } =
+			self
 		if (isRegistered && !previousCourseId) {
 			ctx.addIssue({
 				code: "custom",
@@ -125,7 +120,7 @@ export const CreateCourseInstanceSchema = z
 					"No tienes registrado esa materia, no es necesario que mandes un id"
 			})
 		}
-		if (!isTotalPercentageValid(breakdown, laboratory)) {
+		if (!isTotalPercentageValid(breakdowns, laboratory)) {
 			ctx.addIssue({
 				code: "custom",
 				message: "El total de porcentajes tiene que ser igual a 100%"

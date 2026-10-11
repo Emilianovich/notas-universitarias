@@ -26,8 +26,8 @@ export class AcademicPeriodsRepository extends Repository<AcademicPeriodDocument
 			registeredCourses: []
 		})
 	}
-	async getOneById(id: ObjectId): Promise<AcademicPeriodDocument | null> {
-		return this.getCollection().findOne({ _id: id })
+	async getOneById(_id: ObjectId): Promise<AcademicPeriodDocument | null> {
+		return this.getCollection().findOne({ _id })
 	}
 	async getCurrentAcademicPeriod(
 		userId: ObjectId

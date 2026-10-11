@@ -5,19 +5,22 @@ import { createFormHook } from "@tanstack/react-form"
 import { useRef } from "react"
 import {
 	breakdownDefaultProps,
-	type LabDetailsBreakdownFormProps,
+	type LabDetailsBreakdownFormProps
 } from "@/components/form/courses/types/types.ts"
 import NumberField from "@/components/form/tanstack-fields/NumberField.tsx"
 import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import TextField from "@/components/form/tanstack-fields/TextField.tsx"
 import { AddItem } from "@/components/general/AddItem.tsx"
 import useModal from "@/contexts/modal.ts"
-import {fieldContext, formContext, useFormContext} from "@/hooks/form.ts"
+import { fieldContext, formContext, useFormContext } from "@/hooks/form.ts"
 import scrollTo from "@/utils/scroll.ts"
-import {BreakdownSharedContent, withFieldGroup,} from "@/components/form/courses/BreakdownSharedContent.tsx";
-import {RadioButton} from "@/components/form/tanstack-fields/Radio/RadioButton.tsx";
-import BreakdownEntries from "@/components/form/courses/BreakdownEntries.tsx";
-import SelectField from "@/components/form/tanstack-fields/SelectField.tsx";
+import {
+	BreakdownSharedContent,
+	withFieldGroup
+} from "@/components/form/courses/BreakdownSharedContent.tsx"
+import { RadioButton } from "@/components/form/tanstack-fields/Radio/RadioButton.tsx"
+import BreakdownEntries from "@/components/form/courses/BreakdownEntries.tsx"
+import SelectField from "@/components/form/tanstack-fields/SelectField.tsx"
 
 const defaultValues: UpdateCourseInstanceDto = {
 	profesorName: "Tú mismo",
@@ -29,7 +32,7 @@ const { withForm } = createFormHook({
 		TextField,
 		NumberField,
 		RadioField: RadioButton,
-		SelectField,
+		SelectField
 	},
 	formComponents: { SubmitBtn },
 	fieldContext,
@@ -178,11 +181,11 @@ const LaboratoryDetailsForm = withFieldGroup({
 	props: {
 		isForDemo: false
 	},
-	render: function Render({group, isForDemo}) {
+	render: function Render({ group, isForDemo }) {
 		const { closeModal } = useModal()
 		const scrollToLabEnd = useRef<HTMLDivElement>(null)
 		const form = useFormContext()
-		const {AppField, AppForm} = group
+		const { AppField, AppForm } = group
 		return (
 			<AppForm>
 				<h2 className={"text-xl mt-4"}>Evaluación del curso de laboratorio</h2>
@@ -205,15 +208,13 @@ const LaboratoryDetailsForm = withFieldGroup({
 							{field.state.value.map((_, i) => {
 								return (
 									<div className={"relative"} key={`labDetails${i}`}>
-										<BreakdownSharedContent
-											form={form}
-										/>
+										<BreakdownSharedContent form={form} />
 									</div>
 								)
 							})}
 						</div>
 					)}
-					/>
+				/>
 			</AppForm>
 		)
 	}

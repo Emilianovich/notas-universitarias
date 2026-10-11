@@ -46,7 +46,6 @@ export type CourseInstanceFormProps =
 			isForDemo: true
 	  }
 
-
 export default function CourseInstanceForm(props: CourseInstanceFormProps) {
 	const { defaultValues, isForDemo, mode } = props
 	const { buildToast } = useToast()

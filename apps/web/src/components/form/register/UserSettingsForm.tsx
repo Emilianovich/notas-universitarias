@@ -9,7 +9,7 @@ import {
 } from "@notas-universitarias/types/dtos"
 import { createFormHook, useSelector } from "@tanstack/react-form"
 import defaultSettings from "@/components/context-providers/default-settings.ts"
-import  {
+import {
 	allowedFontFamilies,
 	allowedPets,
 	allowedThemes
@@ -21,10 +21,12 @@ import PreviewText from "@/components/ui/PreviewText.tsx"
 import useToast from "@/contexts/toast.ts"
 import { fieldContext, formContext } from "@/hooks/form.ts"
 import type { RegisterFormProps } from "@/types/input.ts"
-import Select from "@/components/form/tanstack-fields/Select/Select.tsx";
+import Select from "@/components/form/tanstack-fields/Select/Select.tsx"
 import {
-	fontFamilyOptions, petNameOptions, appThemeOptions
-} from "@/components/form/tanstack-fields/Select/option-functions.ts";
+	fontFamilyOptions,
+	petNameOptions,
+	appThemeOptions
+} from "@/components/form/tanstack-fields/Select/option-functions.ts"
 
 const { useAppForm } = createFormHook({
 	fieldContext,

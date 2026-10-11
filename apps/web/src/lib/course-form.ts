@@ -1,11 +1,10 @@
 import { useSelector } from "@tanstack/react-form"
 import type {
-	CreateCourseInstanceFormType, CreatingCourseInstanceReturns,
+	CreateCourseInstanceFormType,
+	CreatingCourseInstanceReturns,
 	EditCourseInstanceFormType,
 	EditingCourseInstanceReturns
-} from "@/components/form/courses/types/types.ts";
-
-
+} from "@/components/form/courses/types/types.ts"
 
 export default function usePercentagesForEdit(
 	form: EditCourseInstanceFormType
@@ -86,6 +85,6 @@ export function useFormDataForCreation(
 		breakdownList: breakdownArray,
 		totalBreakdownPercentage: totalPercentage,
 		totalLabDetailBreakdownPercentage: labDetailTotalPercentage,
-		submissionAttempts,
+		submissionAttempts
 	}
 }

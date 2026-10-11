@@ -11,7 +11,7 @@ import RadioInput, {
 	type RadioInputProps
 } from "@/components/form/general/RadioInput.tsx"
 import { useFieldContext } from "@/hooks/form.ts"
-import {RadioButton} from "@/components/form/tanstack-fields/Radio/RadioButton.tsx";
+import { RadioButton } from "@/components/form/tanstack-fields/Radio/RadioButton.tsx"
 
 export type BreakdownTypeGroupProps =
 	| {
@@ -30,7 +30,10 @@ export type RadioGroupProps = {
 	radioId?: string
 }
 
-export default function BreakdownTypeGroup({radioGroupName, hasLabDetail}:RadioGroupProps) {
+export default function BreakdownTypeGroup({
+	radioGroupName,
+	hasLabDetail
+}: RadioGroupProps) {
 	const field = useFieldContext<BreakdownCategory>()
 	const { errors, isBlurred } = field.state.meta
 	return (

@@ -3,7 +3,7 @@ import GeneralInput, {
 } from "@/components/form/tanstack-fields/GeneralInput.tsx"
 
 export default function PasswordField({
-	label,
+	label
 }: Omit<TanstackFieldTextInputProps, "isPassword" | "type" | "placeholder">) {
 	return (
 		<GeneralInput

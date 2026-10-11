@@ -161,9 +161,9 @@ export const addDate = ({ date, amount, units }: DatesParams): number => {
 	}
 }
 export const roundNumber = ({
-								number,
-								amountOfDecimals,
-							}: {
+	number,
+	amountOfDecimals
+}: {
 	number: number
 	amountOfDecimals: number
 }): number => {
@@ -185,7 +185,9 @@ export function getValueOver100({
 	return (rawScore / maxScore) * 100
 }
 
-export function getEntriesAverageGrade(entries: CourseBreakdownEntry[]): number {
+export function getEntriesAverageGrade(
+	entries: CourseBreakdownEntry[]
+): number {
 	if (!entries.length) return 0
 	const gradeAverage: number[] = []
 	entries.forEach((entry) => {
@@ -206,22 +208,21 @@ export function computeBreakdownContribution(breakdown: CourseBreakdown) {
 
 export function computeCourseInstanceFinalGrade(instance: CourseInstance) {
 	instance.finalGrade = instance.breakdowns
-		.map(currInstance => currInstance.contribution)
+		.map((currInstance) => currInstance.contribution)
 		.reduce((currentContribution, acc) => currentContribution + acc, 0)
-
 }
 export function updateCourseInstanceFinalGrade(
 	courseInstance: CourseInstance
 ): void {
 	let labContribution = 0
-	const {laboratory} = courseInstance
+	const { laboratory } = courseInstance
 	if (laboratory) {
-		const {breakdowns: labBreakdowns} = laboratory
-		labBreakdowns.forEach(breakdown => {
+		const { breakdowns: labBreakdowns } = laboratory
+		labBreakdowns.forEach((breakdown) => {
 			computeBreakdownContribution(breakdown)
 		})
 		computeCourseInstanceFinalGrade(laboratory)
-		const {finalGrade: labFinalGrade, percentage} = laboratory
+		const { finalGrade: labFinalGrade, percentage } = laboratory
 		labContribution = labFinalGrade * percentage
 	}
 	courseInstance.breakdowns.forEach((breakdown) => {
@@ -320,9 +321,9 @@ export function getLastElementFromArray<T>(array: T[]) {
 export function isArrayEmpty<T>(array: T[]) {
 	return array.length === 0
 }
-type NonEmptyObject<T extends object> = keyof T extends never ? never : T;
+type NonEmptyObject<T extends object> = keyof T extends never ? never : T
 export function copyObject<T extends object>(object: T & NonEmptyObject<T>) {
-	return {...object}
+	return { ...object }
 }
 
 export function copyArray<T>(array: T[]) {
