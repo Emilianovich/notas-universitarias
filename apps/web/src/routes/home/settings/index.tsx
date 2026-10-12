@@ -9,11 +9,6 @@ import Input from "@/components/form/general/Input.tsx"
 import { SettingsContainer } from "@/components/form/settings/SettingsContainer.tsx"
 import EmailField from "@/components/form/tanstack-fields/EmailField.tsx"
 import PasswordField from "@/components/form/tanstack-fields/PasswordField.tsx"
-import {
-	allowedFontFamilies,
-	allowedPets,
-	allowedThemes
-} from "@/components/form/tanstack-fields/SelectField.tsx"
 import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import TextField from "@/components/form/tanstack-fields/TextField.tsx"
 import Button from "@/components/general/Button.tsx"
@@ -26,12 +21,15 @@ import useToast from "@/contexts/toast.ts"
 import { fieldContext, formContext } from "@/hooks/form.ts"
 import authMiddleware from "@/middlewares/auth.ts"
 import { baseUrl } from "@/routes/__root.tsx"
-import Select from "@/components/form/tanstack-fields/Select/Select.tsx"
+import SelectField from "@/components/form/tanstack-fields/Select/SelectField.tsx"
 import {
 	fontFamilyOptions,
 	petNameOptions,
 	appThemeOptions
 } from "@/components/form/tanstack-fields/Select/option-functions.ts"
+import {allowedFontFamilies} from "@/constants/font-families.ts";
+import {allowedThemes} from "@/constants/app-themes.ts";
+import {allowedPets} from "@/constants/pet-names.ts";
 
 export const Route = createFileRoute("/home/settings/")({
 	component: RouteComponent,
@@ -70,7 +68,7 @@ const { useAppForm } = createFormHook({
 		TextField,
 		EmailField,
 		PasswordField,
-		Select
+		Select: SelectField
 	},
 	formComponents: {}
 })

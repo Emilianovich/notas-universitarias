@@ -1,56 +1,54 @@
 import { useSelector } from "@tanstack/react-form"
 import type {
 	CreateCourseInstanceFormType,
-	CreatingCourseInstanceReturns,
 	EditCourseInstanceFormType,
-	EditingCourseInstanceReturns
 } from "@/components/form/courses/types/types.ts"
 
 export default function usePercentagesForEdit(
 	form: EditCourseInstanceFormType
-): EditingCourseInstanceReturns {
+) {
 	const breakdownList = useSelector(
 		form.store,
-		(state) => state.values.breakdown
+		(state) => state.values.breakdowns
 	)
-	const totalBreakdownPercentage = breakdownList.reduce(
+	const breakdownsPercentage = breakdownList.reduce(
 		(previousVal, currentVal) => previousVal + currentVal.percentage,
 		0
 	)
-	const laboratoryDetailBreakdown = breakdownList.find(
-		(breakdown) => breakdown.type === "NESTED"
-	)?.laboratoryDetails?.breakdown
-	const totalLabDetailBreakdownPercentage =
-		laboratoryDetailBreakdown?.reduce(
+	const laboratory = useSelector(form.store, (state) => state.values.laboratory)
+	let laboratoryPercentage = 0
+	if (laboratory) {
+		laboratoryPercentage = laboratory.breakdowns.reduce(
 			(previousVal, currentVal) => previousVal + currentVal.percentage,
 			0
-		) ?? -1
+		)
+	}
+	const totalPercentage = breakdownsPercentage + laboratoryPercentage
 	return {
 		breakdownList,
-		totalBreakdownPercentage,
-		totalLabDetailBreakdownPercentage
+		totalPercentage
 	}
 }
 
-export function useHandleMissingFormFields(
-	form: EditCourseInstanceFormType,
-	isForDemo: boolean
-) {
-	const { breakdownList } = usePercentagesForEdit(form)
-	breakdownList.forEach((currBreakdown, _i) => {
-		if (currBreakdown.type !== "NESTED" && currBreakdown.laboratoryDetails) {
-			currBreakdown.laboratoryDetails = undefined
-		}
-		if (currBreakdown.laboratoryDetails && isForDemo) {
-			currBreakdown.laboratoryDetails.profesorName = "Sam"
-			currBreakdown.laboratoryDetails.finalGrade = 0
-		}
-	})
-}
+// export function useHandleMissingFormFields(
+// 	form: EditCourseInstanceFormType,
+// 	isForDemo: boolean
+// ) {
+// 	const { breakdownList } = usePercentagesForEdit(form)
+// 	breakdownList.forEach((currBreakdown, _i) => {
+// 		if (currBreakdown.type !== "NESTED" && currBreakdown.laboratoryDetails) {
+// 			currBreakdown.laboratoryDetails = undefined
+// 		}
+// 		if (currBreakdown.laboratoryDetails && isForDemo) {
+// 			currBreakdown.laboratoryDetails.profesorName = "Sam"
+// 			currBreakdown.laboratoryDetails.finalGrade = 0
+// 		}
+// 	})
+// }
 
 export function useFormDataForCreation(
 	form: CreateCourseInstanceFormType
-): CreatingCourseInstanceReturns {
+) {
 	const isRegistered = useSelector(
 		form.store,
 		(state) => state.values.isRegistered
@@ -61,30 +59,29 @@ export function useFormDataForCreation(
 	)
 	const breakdownArray = useSelector(
 		form.store,
-		(state) => state.values.breakdown
+		(state) => state.values.breakdowns
 	)
-	const totalPercentage = breakdownArray.reduce(
+	const breakdownsPercentage = breakdownArray.reduce(
 		(previousVal, currentVal) => previousVal + currentVal.percentage,
 		0
 	)
-	const laboratoryDetailBreakdownArray = breakdownArray.find(
-		(breakdown) => breakdown.type === "NESTED"
-	)?.laboratoryDetails?.breakdown
-	const labDetailTotalPercentage =
-		laboratoryDetailBreakdownArray?.reduce(
+	const laboratory = useSelector(form.store, (state) => state.values.laboratory)
+	let laboratoryPercentage = 0
+	let laboratoryTotalPercentage : number = 0
+	if (laboratory) {
+		laboratoryPercentage = laboratory.percentage
+		laboratoryTotalPercentage = laboratory.breakdowns.reduce(
 			(previousVal, currentVal) => previousVal + currentVal.percentage,
 			0
-		) ?? -1
-	breakdownArray.forEach((breakdown) => {
-		if (breakdown.type !== "NESTED" && breakdown.laboratoryDetails) {
-			breakdown.laboratoryDetails = undefined
-		}
-	})
+		)
+	}
+	const totalPercentage = breakdownsPercentage + laboratoryPercentage
 	return {
 		isRegistered,
 		breakdownList: breakdownArray,
 		totalBreakdownPercentage: totalPercentage,
-		totalLabDetailBreakdownPercentage: labDetailTotalPercentage,
-		submissionAttempts
+		laboratory,
+		submissionAttempts,
+		laboratoryTotalPercentage
 	}
 }

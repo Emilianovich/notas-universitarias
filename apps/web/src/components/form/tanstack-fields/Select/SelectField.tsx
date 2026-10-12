@@ -3,7 +3,7 @@ import { useFieldContext, useFormContext } from "@/hooks/form.ts"
 import { useSelector } from "@tanstack/react-form"
 import GeneralInputContainer from "@/components/form/general/GeneralInputContainer.tsx"
 
-type SelectProps<T> = {
+type SelectFieldProps<T> = {
 	items: T[]
 	labelText: string
 } & OptionFunctions<T>
@@ -14,14 +14,14 @@ export type OptionFunctions<T> = {
 	setOptionsText: (item: T) => string
 }
 
-export default function Select<T>({
+export default function SelectField<T>({
 	items,
 	labelText,
 	setOptionsValues,
 	setOptionKeys,
 	setOptionsText
-}: SelectProps<T>) {
-	const field = useFieldContext<T>()
+}: SelectFieldProps<T>) {
+	const field = useFieldContext<string | undefined>()
 	const form = useFormContext()
 	const { value } = field.state
 	const { errors, isBlurred } = field.state.meta
@@ -30,15 +30,11 @@ export default function Select<T>({
 		form.store,
 		(state) => state.submissionAttempts
 	)
+	const errorMessage = errors[0]?.message as string
 	const borderColor =
-		errors[0]?.message && isBlurred ? "border border-red-400" : "transparent"
+		errorMessage && isBlurred ? "border border-red-400" : "transparent"
 	const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		const value = items.find(
-			(item) => setOptionsValues(item) === e.target.value
-		)
-		if (value) {
-			handleChange(value)
-		}
+		handleChange(e.target.value)
 	}
 	return (
 		<GeneralInputContainer
@@ -52,7 +48,7 @@ export default function Select<T>({
 						onBlur={handleBlur}
 						onChange={onChange}
 						name={name}
-						value={String(value)}
+						value={value}
 					>
 						{items.map((item) => (
 							<option key={setOptionKeys(item)} value={setOptionsValues(item)}>
@@ -62,7 +58,7 @@ export default function Select<T>({
 					</select>
 				</div>
 			}
-			error={errors[0]?.message}
+			error={errorMessage}
 		/>
 	)
 }

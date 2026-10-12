@@ -15,7 +15,7 @@ import useToast from "@/contexts/toast.ts"
 import { fieldContext, formContext } from "@/hooks/form.ts"
 import type { EditCourseInstanceOpts } from "@/components/form/courses/types/types.ts"
 import { RadioButton } from "@/components/form/tanstack-fields/Radio/RadioButton.tsx"
-import SelectField from "@/components/form/tanstack-fields/SelectField.tsx"
+import SelectField from "@/components/form/tanstack-fields/Select/SelectField.tsx";
 
 export const { useAppForm } = createFormHook({
 	fieldContext,
@@ -24,7 +24,7 @@ export const { useAppForm } = createFormHook({
 		TextField,
 		NumberField,
 		RadioField: RadioButton,
-		SelectField
+		Select: SelectField
 	},
 	formComponents: { SubmitBtn }
 })

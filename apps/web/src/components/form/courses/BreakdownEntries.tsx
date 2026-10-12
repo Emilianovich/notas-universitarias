@@ -12,7 +12,6 @@ const BreakdownEntries = withFieldGroup({
 	defaultValues,
 	props: {
 		hasNameField: true,
-		hasEntryGradeField: false,
 		modalTitle: "",
 		confirmBtnAction: () =>
 			console.log("This is the function to run for positive modal action")
@@ -20,7 +19,6 @@ const BreakdownEntries = withFieldGroup({
 	render: function Render({
 		group,
 		hasNameField,
-		hasEntryGradeField,
 		modalTitle,
 		confirmBtnAction
 	}) {
@@ -39,7 +37,6 @@ const BreakdownEntries = withFieldGroup({
 					/>
 				)}
 				<div className={"flex w-full justify-evenly items-center"}>
-					{hasEntryGradeField && (
 						<>
 							<AppField
 								name={`rawScore`}
@@ -73,7 +70,7 @@ const BreakdownEntries = withFieldGroup({
 								closeButtonTitle={"No, me arrepentí"}
 							/>
 						</>
-					)}
+
 				</div>
 			</div>
 		)

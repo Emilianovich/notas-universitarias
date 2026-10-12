@@ -4,7 +4,7 @@ import type {
 	FontFamily,
 	PetName
 } from "@notas-universitarias/types"
-import type { OptionFunctions } from "@/components/form/tanstack-fields/Select/Select.tsx"
+import type { OptionFunctions } from "@/components/form/tanstack-fields/Select/SelectField.tsx"
 
 export const fontFamilyOptions: OptionFunctions<FontFamily> = {
 	setOptionKeys: (font) => font,

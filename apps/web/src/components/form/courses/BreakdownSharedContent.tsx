@@ -3,19 +3,17 @@ import DeleteFormValue from "@/components/form/general/DeleteFormValue.tsx"
 import { createFormHook } from "@tanstack/react-form"
 import TextField from "@/components/form/tanstack-fields/TextField.tsx"
 import NumberField from "@/components/form/tanstack-fields/NumberField.tsx"
-import SelectField from "@/components/form/tanstack-fields/SelectField.tsx"
-import { RadioButton } from "@/components/form/tanstack-fields/Radio/RadioButton.tsx"
 import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import { fieldContext, formContext } from "@/hooks/form.ts"
 import RadioGroup from "@/components/form/tanstack-fields/Radio/RadioGroup.tsx"
-import { getBreakdownRadioGroup } from "@/components/form/tanstack-fields/Radio/GetBreakdownRadioGroup.ts"
+import {allowsMultiplesEntriesRadios, getRadioGroup} from "@/components/form/tanstack-fields/Radio/GetRadioGroup.ts"
+import SelectField from "@/components/form/tanstack-fields/Select/SelectField.tsx";
 
 export const { withForm, withFieldGroup } = createFormHook({
 	fieldComponents: {
 		TextField,
 		NumberField,
 		SelectField,
-		RadioField: RadioButton,
 		RadioGroup
 	},
 	formComponents: { SubmitBtn },
@@ -28,17 +26,15 @@ export const BreakdownSharedContent = withFieldGroup({
 	props: {
 		modalTitle: "",
 		confirmBtnAction: () => console.log("This is the modal confirm action"),
-		isLabDetail: false
 	},
 	render: function Render({
 		group,
 		modalTitle,
 		confirmBtnAction,
-		isLabDetail
 	}) {
 		const { AppField } = group
 		return (
-			<>
+			<div className={"border flex flex-col gap-8"}>
 				<div className={"relative"}>
 					<AppField
 						name={`name`}
@@ -50,7 +46,7 @@ export const BreakdownSharedContent = withFieldGroup({
 						)}
 					/>
 					<DeleteFormValue
-						className={""}
+						className={"absolute top-4 left-110"}
 						modalTitle={modalTitle}
 						modalContent={
 							"Eliminarás completamente la evaluación. No podrás recuperar el progreso que tenías"
@@ -80,12 +76,12 @@ export const BreakdownSharedContent = withFieldGroup({
 						return (
 							<typeField.RadioGroup
 								radioGroupName={radioGroupName}
-								radios={getBreakdownRadioGroup(radioGroupName, isLabDetail)}
+								radios={getRadioGroup(radioGroupName, allowsMultiplesEntriesRadios)}
 							/>
 						)
 					}}
 				/>
-			</>
+			</div>
 		)
 	}
 })

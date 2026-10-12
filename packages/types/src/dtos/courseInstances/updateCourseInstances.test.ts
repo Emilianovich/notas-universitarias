@@ -1,11 +1,10 @@
 import { describe, expect, test } from "vitest"
-import { updateCourseInstanceSchema } from "./updateCourseInstances"
+import {CourseBreakdownSchemaType, updateCourseInstanceSchema} from "./updateCourseInstances"
 
-const validBreakdown = {
+const validBreakdown : CourseBreakdownSchemaType = {
 	name: "Final Exam",
 	percentage: 100,
 	allowsMultipleEntries: false,
-	contribution: 85,
 	entries: [
 		{
 			name: "Final Exam",
@@ -22,7 +21,7 @@ const testCases = [
 		expected: false,
 		fixture: {
 			profesorName: "",
-			breakdown: [validBreakdown]
+			breakdowns: [validBreakdown]
 		}
 	},
 
@@ -32,7 +31,7 @@ const testCases = [
 		expected: false,
 		fixture: {
 			profesorName: "P".repeat(101),
-			breakdown: [validBreakdown]
+			breakdowns: [validBreakdown]
 		}
 	},
 
@@ -42,17 +41,17 @@ const testCases = [
 		expected: true,
 		fixture: {
 			profesorName: "Ana Rodríguez",
-			breakdown: [validBreakdown]
+			breakdowns: [validBreakdown]
 		}
 	},
 
 	// 4
 	{
-		description: "4. Rejects breakdown percentages exceeding 100%",
+		description: "4. Rejects breakdowns percentages exceeding 100%",
 		expected: false,
 		fixture: {
 			profesorName: "Ana Rodríguez",
-			breakdown: [
+			breakdowns: [
 				{
 					...validBreakdown,
 					percentage: 60
@@ -68,11 +67,11 @@ const testCases = [
 
 	// 5
 	{
-		description: "5. Accepts breakdown percentages totaling 100%",
+		description: "5. Accepts breakdowns percentages totaling 100%",
 		expected: true,
 		fixture: {
 			profesorName: "Ana Rodríguez",
-			breakdown: [
+			breakdowns: [
 				{
 					...validBreakdown,
 					percentage: 60
@@ -88,11 +87,11 @@ const testCases = [
 
 	// 6
 	{
-		description: "6. Rejects breakdown percentages totaling less than 100%",
+		description: "6. Rejects breakdowns percentages totaling less than 100%",
 		expected: false,
 		fixture: {
 			profesorName: "Ana Rodríguez",
-			breakdown: [
+			breakdowns: [
 				{
 					...validBreakdown,
 					percentage: 40
@@ -109,11 +108,11 @@ const testCases = [
 	// 7
 	{
 		description:
-			"7. Rejects combined breakdown and laboratory percentages exceeding 100%",
+			"7. Rejects combined breakdowns and laboratory percentages exceeding 100%",
 		expected: false,
 		fixture: {
 			profesorName: "Carlos Mendoza",
-			breakdown: [
+			breakdowns: [
 				{
 					...validBreakdown,
 					percentage: 80
@@ -122,7 +121,7 @@ const testCases = [
 			laboratory: {
 				profesorName: "Laura Castillo",
 				percentage: 30,
-				breakdown: [validBreakdown]
+				breakdowns: [validBreakdown]
 			}
 		}
 	},
@@ -130,11 +129,11 @@ const testCases = [
 	// 8
 	{
 		description:
-			"8. Accepts combined breakdown and laboratory percentages totaling 100%",
+			"8. Accepts combined breakdowns and laboratory percentages totaling 100%",
 		expected: true,
 		fixture: {
 			profesorName: "Carlos Mendoza",
-			breakdown: [
+			breakdowns: [
 				{
 					...validBreakdown,
 					percentage: 75
@@ -143,7 +142,7 @@ const testCases = [
 			laboratory: {
 				profesorName: "Laura Castillo",
 				percentage: 25,
-				breakdown: [validBreakdown]
+				breakdowns: [validBreakdown]
 			}
 		}
 	},
@@ -151,11 +150,11 @@ const testCases = [
 	// 9
 	{
 		description:
-			"9. Rejects combined breakdown and laboratory percentages totaling less than 100%",
+			"9. Rejects combined breakdowns and laboratory percentages totaling less than 100%",
 		expected: false,
 		fixture: {
 			profesorName: "Carlos Mendoza",
-			breakdown: [
+			breakdowns: [
 				{
 					...validBreakdown,
 					percentage: 50
@@ -164,7 +163,7 @@ const testCases = [
 			laboratory: {
 				profesorName: "Laura Castillo",
 				percentage: 25,
-				breakdown: [validBreakdown]
+				breakdowns: [validBreakdown]
 			}
 		}
 	},
@@ -172,15 +171,15 @@ const testCases = [
 	// 10
 	{
 		description:
-			"10. Rejects a course instance with only a laboratory and no breakdowns",
+			"10. Rejects a course instance with only a laboratory and no breakdownss",
 		expected: false,
 		fixture: {
 			profesorName: "Roberto Díaz",
-			breakdown: [],
+			breakdowns: [],
 			laboratory: {
 				profesorName: "Daniel Herrera",
 				percentage: 100,
-				breakdown: [validBreakdown]
+				breakdowns: [validBreakdown]
 			}
 		}
 	},
@@ -191,7 +190,7 @@ const testCases = [
 		expected: false,
 		fixture: {
 			profesorName: "María González",
-			breakdown: [
+			breakdowns: [
 				{
 					...validBreakdown,
 					entries: [
@@ -212,7 +211,7 @@ const testCases = [
 		expected: false,
 		fixture: {
 			profesorName: "María González",
-			breakdown: [
+			breakdowns: [
 				{
 					...validBreakdown,
 					entries: [
@@ -234,7 +233,7 @@ const testCases = [
 		expected: false,
 		fixture: {
 			profesorName: "Sofía Martínez",
-			breakdown: [
+			breakdowns: [
 				{
 					...validBreakdown,
 					entries: [
@@ -255,7 +254,7 @@ const testCases = [
 		expected: false,
 		fixture: {
 			profesorName: "Ana Rodríguez",
-			breakdown: [
+			breakdowns: [
 				{
 					...validBreakdown,
 					allowsMultipleEntries: false,
@@ -279,7 +278,7 @@ const testCases = [
 
 describe.only("Update Course Instance Schema", () => {
 	test.each(testCases)("$description", ({ fixture, expected }) => {
-		const { success, error } = updateCourseInstanceSchema.safeParse(fixture)
+		const { success } = updateCourseInstanceSchema.safeParse(fixture)
 		expect(success).toBe(expected)
 	})
 })

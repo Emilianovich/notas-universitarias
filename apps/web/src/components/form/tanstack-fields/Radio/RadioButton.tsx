@@ -15,7 +15,7 @@ export function RadioButton<T>({
 	const { handleBlur, handleChange } = field
 	const { value: fieldValue } = field.state
 	return (
-		<label className={"flex gap-4 w-100"}>
+		<label className={"flex justify-start items-center gap-4 w-100"}>
 			<input
 				type={"radio"}
 				value={String(value)}

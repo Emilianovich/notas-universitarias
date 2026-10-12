@@ -82,3 +82,4 @@ export const updateCourseInstanceSchema = CourseInstanceBaseSchema.safeExtend({
 	}
 })
 export type UpdateCourseInstanceDto = z.infer<typeof updateCourseInstanceSchema>
+export type CourseBreakdownSchemaType = z.infer<typeof CourseBreakdownSchema>

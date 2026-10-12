@@ -20,17 +20,19 @@ export default function RadioGroup<T>({
 		form.store,
 		(state) => state.submissionAttempts
 	)
-	const canDisplayError = errors && (isBlurred || submissionAttempts > 0)
+	const errorMessage = errors[0]?.message as string
+	const canDisplayError = errorMessage && (isBlurred || submissionAttempts > 0)
 	return (
 		<div
-			className={`grid gap-4 w-full p-2 ${canDisplayError ? "border border-toast-error" : ""}`}
+			className={`grid gap-4 w-full p-2 ${canDisplayError ? "border border-red-400" : ""}`}
 			role="radiogroup"
 			aria-labelledby={radioGroupName}
+			style={{ gridTemplateRows: `${canDisplayError && isBlurred ? "1fr 20px" : "1fr"}` }}
 		>
 			{radios.map((radio) => {
 				return <RadioButton key={crypto.randomUUID()} {...radio} />
 			})}
-			{canDisplayError && <ErrorMessage error={errors[0]?.message} />}
+			{canDisplayError && <ErrorMessage error={errorMessage} />}
 		</div>
 	)
 }

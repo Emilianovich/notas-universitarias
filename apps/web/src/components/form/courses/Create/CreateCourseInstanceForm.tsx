@@ -26,7 +26,6 @@ import NumberInput, {
 import RadioInput, {
 	type RadioInputProps
 } from "@/components/form/general/RadioInput.tsx"
-import SelectField from "@/components/form/tanstack-fields/SelectField.tsx"
 import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import { AddItem } from "@/components/general/AddItem.tsx"
 import useModal from "@/contexts/modal.ts"

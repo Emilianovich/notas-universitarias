@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest"
-import { CreateCourseInstanceSchema } from "./createCourseInstances"
+import {CreateCourseInstanceSchema, CreateCourseInstanceType} from "./createCourseInstances"
 
 const validBreakdown = {
 	name: "Examen final",
@@ -7,11 +7,12 @@ const validBreakdown = {
 	allowsMultipleEntries: false
 }
 
-const baseCourseInstance = {
+const baseCourseInstance : CreateCourseInstanceType = {
 	isRegistered: false,
 	name: "Programación I",
 	profesorName: "Ana Rodríguez",
-	breakdown: [validBreakdown]
+	breakdowns: [validBreakdown],
+	hasLaboratory: false,
 }
 
 const testCases = [
@@ -78,7 +79,7 @@ const testCases = [
 		description: "8. Rejects a percentage that surpasses 100%",
 		fixture: {
 			...baseCourseInstance,
-			breakdown: [
+			breakdowns: [
 				{
 					...validBreakdown,
 					percentage: 120
@@ -88,10 +89,11 @@ const testCases = [
 		expected: false
 	},
 	{
-		description: "9. Accepts breakdown + laboratory that add up to 100%",
+		description: "9. Accepts breakdowns + laboratory that add up to 100%",
 		fixture: {
 			...baseCourseInstance,
-			breakdown: [
+			hasLaboratory: true,
+			breakdowns: [
 				{
 					...validBreakdown,
 					percentage: 75
@@ -100,16 +102,17 @@ const testCases = [
 			laboratory: {
 				profesorName: "Laura Castillo",
 				percentage: 25,
-				breakdown: [validBreakdown]
+				breakdowns: [validBreakdown]
 			}
 		},
 		expected: true
 	},
 	{
-		description: "10. Rejects breakdown + laboratory that surpass 100%",
+		description: "10. Rejects breakdowns + laboratory that surpass 100%",
 		fixture: {
 			...baseCourseInstance,
-			breakdown: [
+			hasLaboratory: true,
+			breakdowns: [
 				{
 					...validBreakdown,
 					percentage: 80
@@ -118,8 +121,50 @@ const testCases = [
 			laboratory: {
 				profesorName: "Laura Castillo",
 				percentage: 30,
-				breakdown: [validBreakdown]
+				breakdowns: [validBreakdown]
 			}
+		},
+		expected: false
+	},
+	{
+		description: "11. Rejects laboratory when hasLaboratory is false",
+		fixture: {
+			...baseCourseInstance,
+			hasLaboratory: false,
+			breakdowns: [
+				{
+					...validBreakdown,
+					percentage: 80
+				}
+			],
+			laboratory: {
+				profesorName: "Laura Castillo",
+				percentage: 30,
+				breakdowns: [validBreakdown]
+			}
+		},
+		expected: false
+	},
+	{
+		description: "12. Rejects schema when hasLaboratory is true and no laboratory is specified",
+		fixture: {
+			...baseCourseInstance,
+			hasLaboratory: true,
+			breakdowns: [
+				{
+					...validBreakdown,
+					percentage: 80
+				}
+			],
+		},
+		expected: false
+	},
+	{
+		description: "13. Rejects schema with empty array of breakdowns",
+		fixture: {
+			...baseCourseInstance,
+			hasLaboratory: false,
+			breakdowns: [],
 		},
 		expected: false
 	}

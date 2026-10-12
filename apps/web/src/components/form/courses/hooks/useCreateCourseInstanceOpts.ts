@@ -2,17 +2,16 @@ import type { CreateCourseInstanceOpts } from "@/components/form/courses/types/t
 import useToast from "@/contexts/toast.ts"
 import {
 	type CourseBreakdownToBeCreated,
-	type CourseInstanceToBeCreated,
-	CreateCourseInstanceSchema,
+	CreateCourseInstanceSchema, type CreateCourseInstanceType,
 	ON_SUBMIT_INVALID_MSG
 } from "@notas-universitarias/types"
 import { createFormHook } from "@tanstack/react-form"
 import { fieldContext, formContext } from "@/hooks/form.ts"
 import TextField from "@/components/form/tanstack-fields/TextField.tsx"
 import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
-import SelectField from "@/components/form/tanstack-fields/SelectField.tsx"
-import { RadioButton } from "@/components/form/tanstack-fields/Radio/RadioButton.tsx"
 import NumberField from "@/components/form/tanstack-fields/NumberField.tsx"
+import RadioGroup from "@/components/form/tanstack-fields/Radio/RadioGroup.tsx";
+import SelectField from "@/components/form/tanstack-fields/Select/SelectField.tsx";
 
 export const { useAppForm } = createFormHook({
 	fieldContext,
@@ -20,14 +19,15 @@ export const { useAppForm } = createFormHook({
 	fieldComponents: {
 		TextField,
 		SelectField,
-		RadioField: RadioButton,
+		RadioGroup,
 		NumberField
 	},
 	formComponents: { SubmitBtn }
 })
 
 export default function useCreateCourseInstanceOpts({
-	mutation
+	mutation,
+	error
 }: CreateCourseInstanceOpts) {
 	const { buildToast } = useToast()
 	return useAppForm({
@@ -38,14 +38,16 @@ export default function useCreateCourseInstanceOpts({
 			isRegistered: false,
 			name: undefined,
 			previousCourseId: undefined,
+			hasLaboratory: false,
+			laboratory: undefined,
 			profesorName: "",
-			breakdown: [] as CourseBreakdownToBeCreated[]
-		} as CourseInstanceToBeCreated,
+			breakdowns: [] as CourseBreakdownToBeCreated[]
+		} as CreateCourseInstanceType,
 		onSubmitInvalid: () => {
 			buildToast({
 				id: Date.now(),
 				type: "error",
-				content: ON_SUBMIT_INVALID_MSG
+				content: error ?? ON_SUBMIT_INVALID_MSG
 			})
 		},
 		onSubmit: async ({ value }) => {

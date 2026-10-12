@@ -1,5 +1,4 @@
 import { z } from "zod"
-import type { BreakdownCategory } from "../../db"
 
 export const PercentageShape = (addedStr: string) =>
 	z
@@ -9,9 +8,6 @@ export const PercentageShape = (addedStr: string) =>
 		.multipleOf(0.01, { message: "Máximo 2 decimales" })
 		.transform((val) => val / 100)
 
-export type CourseInstanceToBeCreated = z.infer<
-	typeof CreateCourseInstanceSchema
->
 export type CourseBreakdownToBeCreated = z.infer<typeof CreateBreakdownSchema>
 
 export const CreateBreakdownSchema = z.object({
@@ -34,6 +30,7 @@ export const CreateBreakdownSchema = z.object({
 export type CreatingCourseInstanceBreakdown = z.infer<
 	typeof CreateBreakdownSchema
 >
+
 export const CreateCourseInstanceBaseSchema = z.object({
 	profesorName: z
 		.string()
@@ -47,7 +44,7 @@ const CreatingLaboratorySchema = CreateCourseInstanceBaseSchema.safeExtend({
 })
 
 type CreateBreakdownType = z.infer<typeof CreateBreakdownSchema>
-type CreatingLaboratoryType = z.infer<typeof CreatingLaboratorySchema>
+export type CreatingLaboratoryType = z.infer<typeof CreatingLaboratorySchema>
 
 export const isTotalPercentageValid = (
 	breakdowns: CreateBreakdownType[],
@@ -77,6 +74,9 @@ export const CreateCourseInstanceSchema = z
 				"El nombre de la materia debería tener entre 1 a 100 caracteres"
 			)
 			.optional(),
+		hasLaboratory: z.boolean(
+			"Es necesario especificar si la materia tiene parte de laboratorio"
+		),
 		laboratory: CreatingLaboratorySchema.optional(),
 		profesorName: z
 			.string()
@@ -89,7 +89,7 @@ export const CreateCourseInstanceSchema = z
 		breakdowns: z.array(CreateBreakdownSchema)
 	})
 	.superRefine((self, ctx) => {
-		const { isRegistered, breakdowns, previousCourseId, laboratory, name } =
+		const { isRegistered, breakdowns, previousCourseId, laboratory, name, hasLaboratory } =
 			self
 		if (isRegistered && !previousCourseId) {
 			ctx.addIssue({
@@ -120,6 +120,27 @@ export const CreateCourseInstanceSchema = z
 					"No tienes registrado esa materia, no es necesario que mandes un id"
 			})
 		}
+		if (!breakdowns.length) {
+			ctx.addIssue({
+				code: "custom",
+				path: ["breakdowns"],
+				message: "No tienes registradas evaluaciones para esta materia"
+			})
+		}
+		if (hasLaboratory && !laboratory) {
+			ctx.addIssue({
+				code: "custom",
+				path: ["laboratory"],
+				message: "Como la materia tiene parte de laboratorio, tiene que especificar sus detalles"
+			})
+		}
+		if (!hasLaboratory && laboratory) {
+			ctx.addIssue({
+				code: "custom",
+				path: ["laboratory"],
+				message: "Como no especificó que la materia tiene parte de laboratorio, no tiene que especificar sus detalles"
+			})
+		}
 		if (!isTotalPercentageValid(breakdowns, laboratory)) {
 			ctx.addIssue({
 				code: "custom",
@@ -127,3 +148,5 @@ export const CreateCourseInstanceSchema = z
 			})
 		}
 	})
+
+export type CreateCourseInstanceType = z.infer<typeof CreateCourseInstanceSchema>

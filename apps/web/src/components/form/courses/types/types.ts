@@ -1,7 +1,6 @@
 import type {
 	CourseBreakdown,
 	CourseInstance,
-	CourseInstanceToBeCreated,
 	SuccessRes,
 	UpdateCourseInstanceDto
 } from "@notas-universitarias/types"
@@ -19,7 +18,7 @@ export type LabDetailsBreakdownFormProps = BreakdownFormProps & { i: number }
 
 export const defaultValues: UpdateCourseInstanceDto = {
 	profesorName: "Tú mismo",
-	breakdown: []
+	breakdowns: []
 }
 
 export type BreakdownSharedContent = Omit<
@@ -28,7 +27,7 @@ export type BreakdownSharedContent = Omit<
 >
 export const breakdownSharedContentDefaultValues: BreakdownSharedContent = {
 	name: "",
-	type: "STANDALONE",
+	allowsMultipleEntries: false,
 	percentage: 0
 }
 
@@ -105,9 +104,9 @@ export type EditCourseInstanceFormType = ReturnType<
 export type CreateCourseInstanceOpts = {
 	mutation: UseMutationResult<
 		SuccessRes<string>,
-		Error,
-		CourseInstanceToBeCreated
+		Error
 	>
+	error?: string
 }
 
 export type CreateCourseInstanceFormType = ReturnType<
