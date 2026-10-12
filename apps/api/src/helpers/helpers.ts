@@ -1,9 +1,8 @@
 import type {
 	CourseBreakdown,
 	CourseInstance,
-	CourseInstanceDocument,
-	CourseInstanceToBeCreated,
-	CreatingCourseInstanceBreakdown,
+	CourseInstanceDocument, CreateCourseInstanceType,
+	CreatingCourseInstanceBreakdown, Laboratory,
 	UpdateCourseInstanceDto,
 	UpdateUserDTO,
 	UserDocument
@@ -44,19 +43,21 @@ function mapBreakdownSchemaToDto(
 	}
 }
 
-// NOTE: spread operator used with null or undefined are ignored. This is why its being used on laboratory
 export function mapCreateCourseInstanceToDTO(
-	dto: CourseInstanceToBeCreated
+	dto: CreateCourseInstanceType
 ): CourseInstance {
-	const { breakdowns: dtoBreakdowns, laboratory, profesorName } = dto
-	const breakdowns: CourseBreakdown[] = dtoBreakdowns.map(
-		mapBreakdownSchemaToDto
-	)
+	const { breakdowns, laboratory, profesorName } = dto
 	return {
 		profesorName,
 		finalGrade: 0,
-		...laboratory,
-		breakdowns
+		breakdowns: breakdowns.map(mapBreakdownSchemaToDto),
+		...(laboratory && {
+			laboratory: {
+				...laboratory,
+				finalGrade: 0,
+				breakdowns: laboratory.breakdowns.map(mapBreakdownSchemaToDto),
+			},
+		}),
 	}
 }
 
@@ -111,6 +112,10 @@ export function prepareCourseInstance(instance: CourseInstance) : CourseInstance
 		profesorName,
 		finalGrade,
 		breakdowns,
-		...laboratory,
+		...(laboratory && {
+			laboratory: {
+				...laboratory,
+			},
+		}),
 	}
 }

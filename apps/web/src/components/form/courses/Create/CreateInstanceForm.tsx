@@ -19,7 +19,6 @@ import scrollTo from "@/utils/scroll.ts"
 import {genericBooleanRadios, getRadioGroup} from "@/components/form/tanstack-fields/Radio/GetRadioGroup.ts";
 import {ADDING_LAB_BREAKDOWN, type CreatingLaboratoryType} from "@notas-universitarias/types";
 import FieldText from "@/components/form/general/FieldText.tsx";
-import {useSelector} from "@tanstack/react-form";
 
 export default function CreateInstanceForm() {
 	const { data } = useSuspenseQuery({
@@ -64,8 +63,6 @@ export default function CreateInstanceForm() {
 	const prevInstanceName = useRef<string | undefined>(undefined)
 	const prevInstanceId = useRef<string | undefined>(undefined)
 	const prevLaboratoryVal = useRef<CreatingLaboratoryType | undefined>(undefined)
-	const values = useSelector(form.store, (s) => s.values)
-	console.log(JSON.stringify(values))
 	return (
 		<AppForm>
 			<form

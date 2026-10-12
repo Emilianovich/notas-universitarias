@@ -18,6 +18,11 @@ export type LabDetailsBreakdownFormProps = BreakdownFormProps & { i: number }
 
 export const defaultValues: UpdateCourseInstanceDto = {
 	profesorName: "Tú mismo",
+	laboratory: {
+		breakdowns: [],
+		profesorName: "",
+		percentage: 0,
+	},
 	breakdowns: []
 }
 
@@ -41,10 +46,9 @@ export const laboratoryDetailsFormDefaultValues: LaboratoryDetailsContent = {
 	breakdown: []
 }
 export const breakdownDefaultProps = {
-	mode: "edit" as Modes,
-	labTotalPercentage: 0,
 	totalPercentage: 0,
-	isForDemo: false
+	isForDemo: false,
+	isLaboratory: false
 }
 
 export type CourseInstancesPercentages = {

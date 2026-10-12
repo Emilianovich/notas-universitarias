@@ -5,8 +5,7 @@ import type {
 	CourseDocument,
 	CourseInstance,
 	CourseInstanceDocument,
-	CourseInstanceToBeCreated,
-	CoursesInfo,
+	CoursesInfo, CreateCourseInstanceType,
 	UpdateCourseInstanceDto
 } from "@notas-universitarias/types"
 import { HTTPException } from "hono/http-exception"
@@ -30,7 +29,7 @@ export class CourseService {
 		this.academicPeriodRepository = new AcademicPeriodsRepository(mongoService)
 	}
 	async handleCourseCreation(
-		dto: CourseInstanceToBeCreated,
+		dto: CreateCourseInstanceType,
 		userId: ObjectId,
 		previousCourseId: string | undefined
 	) {

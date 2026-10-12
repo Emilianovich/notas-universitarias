@@ -1,11 +1,11 @@
 import {
-	gradeToLetter,
-	updateCourseInstanceFinalGrade
+	gradeToLetter, mapBreakdownsForDemo,
+	updateCourseInstanceFinalGrade,
 } from "@notas-universitarias/helpers"
 import {
 	type CourseInstance,
 	ON_SUBMIT_INVALID_MSG,
-	updateCourseInstanceSchema
+	updateCourseInstanceSchema,
 } from "@notas-universitarias/types"
 import { createFormHook } from "@tanstack/react-form"
 import NumberField from "@/components/form/tanstack-fields/NumberField.tsx"
@@ -49,10 +49,19 @@ export function useEditCourseInstanceOpts({
 		},
 		onSubmit: async ({ value }) => {
 			if (isForDemo) {
-				const { breakdown } = updateCourseInstanceSchema.parse(value)
+				const { data } = updateCourseInstanceSchema.safeParse(value)
+				if (!data) return
+				const { breakdowns, laboratory } = data
 				const courseInstance: CourseInstance = {
 					finalGrade: 0,
-					breakdown,
+					...(laboratory && {
+						laboratory: {
+							...laboratory,
+							finalGrade: 0,
+							breakdowns: mapBreakdownsForDemo(laboratory.breakdowns)
+						}
+					}),
+					breakdowns: mapBreakdownsForDemo(breakdowns),
 					profesorName: value.profesorName ?? ""
 				}
 				updateCourseInstanceFinalGrade(courseInstance)

@@ -329,3 +329,14 @@ export function copyObject<T extends object>(object: T & NonEmptyObject<T>) {
 export function copyArray<T>(array: T[]) {
 	return [...array]
 }
+
+export function mapBreakdownForDemo(breakdown : Omit<CourseBreakdown, "contribution">) {
+	return {
+		...breakdown,
+		contribution: 0,
+	}
+}
+
+export function mapBreakdownsForDemo(breakdowns : Omit<CourseBreakdown, "contribution">[]) : CourseBreakdown[] {
+	return breakdowns.map(mapBreakdownForDemo)
+}

@@ -26,25 +26,10 @@ export default function usePercentagesForEdit(
 	const totalPercentage = breakdownsPercentage + laboratoryPercentage
 	return {
 		breakdownList,
-		totalPercentage
+		totalPercentage,
+		laboratoryPercentage,
 	}
 }
-
-// export function useHandleMissingFormFields(
-// 	form: EditCourseInstanceFormType,
-// 	isForDemo: boolean
-// ) {
-// 	const { breakdownList } = usePercentagesForEdit(form)
-// 	breakdownList.forEach((currBreakdown, _i) => {
-// 		if (currBreakdown.type !== "NESTED" && currBreakdown.laboratoryDetails) {
-// 			currBreakdown.laboratoryDetails = undefined
-// 		}
-// 		if (currBreakdown.laboratoryDetails && isForDemo) {
-// 			currBreakdown.laboratoryDetails.profesorName = "Sam"
-// 			currBreakdown.laboratoryDetails.finalGrade = 0
-// 		}
-// 	})
-// }
 
 export function useFormDataForCreation(
 	form: CreateCourseInstanceFormType

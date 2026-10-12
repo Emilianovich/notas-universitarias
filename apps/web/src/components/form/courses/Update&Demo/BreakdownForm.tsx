@@ -17,29 +17,31 @@ import BreakdownEntries from "@/components/form/courses/BreakdownEntries.tsx"
 function BreakdownFormContent({
 	form,
 	totalPercentage,
+	isLaboratory
 }: BreakdownFormProps) {
 	const scrollToEnd = useRef<HTMLDivElement>(null)
-	const { AppField, AppForm } = form
+	const { AppField } = form
+	const fieldName = isLaboratory ? "breakdowns" : "laboratory.breakdowns"
 	return (
-		<AppForm>
-			<AppField name={"breakdowns"} mode={"array"}>
-				{(field) => (
-					<div className={"flex flex-col gap-8"}>
-						{field.state.value.map((breakdown, i) => {
-							return (
-								<div key={`breakdown[${i}]-ctn`}>
-									<BreakdownSharedContent
-										form={form}
-										fields={{
-											name: `breakdowns[${i}].name`,
-											percentage: `breakdowns[${i}].percentage`,
-											allowsMultipleEntries: `breakdowns[${i}].allowsMultipleEntries`
-										}}
-										confirmBtnAction={() => {
-											field.removeValue(i)
-										}}
-										modalTitle={"Eliminar evaluación"}
-									/>
+			<>
+				<AppField name={fieldName} mode={"array"}>
+					{(field) => (
+						<div className={"flex flex-col gap-8"}>
+							{field.state.value?.map((breakdown, i) => {
+								return (
+									<div key={`breakdowns[${i}]-ctn`}>
+										<BreakdownSharedContent
+											form={form}
+											fields={{
+												name: `breakdowns[${i}].name`,
+												percentage: `breakdowns[${i}].percentage`,
+												allowsMultipleEntries: `breakdowns[${i}].allowsMultipleEntries`
+											}}
+											confirmBtnAction={() => {
+												field.removeValue(i)
+											}}
+											modalTitle={"Eliminar evaluación"}
+										/>
 										<AppField
 											name={`breakdowns[${i}].entries`}
 											mode={"array"}
@@ -87,29 +89,29 @@ function BreakdownFormContent({
 											}}
 										/>
 
-								</div>
-							)
-						})}
-						{totalPercentage < 100 && (
-							<AddItem
-								title={"Agregar Evaluación"}
-								action={() => {
-									field.pushValue({
-										name: "",
-										percentage: 0,
-										allowsMultipleEntries: false,
-										entries: []
-									})
-									scrollTo(scrollToEnd)
-								}}
-							/>
-						)}
-					</div>
-				)}
-			</AppField>
-			<ScrollToBottom ref={scrollToEnd} />
-			<div ref={scrollToEnd}></div>
-		</AppForm>
+									</div>
+								)
+							})}
+							{totalPercentage < 100 && (
+								<AddItem
+									title={"Agregar Evaluación"}
+									action={() => {
+										field.pushValue({
+											name: "",
+											percentage: 0,
+											allowsMultipleEntries: false,
+											entries: []
+										})
+										scrollTo(scrollToEnd)
+									}}
+								/>
+							)}
+						</div>
+					)}
+				</AppField>
+				<ScrollToBottom ref={scrollToEnd} />
+				<div ref={scrollToEnd}></div>
+			</>
 	)
 }
 

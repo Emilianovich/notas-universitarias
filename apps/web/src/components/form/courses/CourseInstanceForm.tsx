@@ -10,7 +10,6 @@ import Button from "@/components/general/Button.tsx"
 import { ScrollToBottom } from "@/components/ui/ScrollToBottom.tsx"
 import useToast from "@/contexts/toast.ts"
 import usePercentagesForEdit, {
-	useHandleMissingFormFields
 } from "@/lib/course-form.ts"
 import { baseUrl } from "@/routes/__root.tsx"
 
@@ -79,10 +78,9 @@ export default function CourseInstanceForm(props: CourseInstanceFormProps) {
 	const { AppForm, AppField } = form
 	const {
 		breakdownList,
-		totalBreakdownPercentage,
-		totalLabDetailBreakdownPercentage
+		totalPercentage,
+		laboratoryPercentage
 	} = usePercentagesForEdit(form)
-	useHandleMissingFormFields(form, isForDemo)
 	const isDefaultValue = useSelector(
 		form.store,
 		(state) => state.isDefaultValue
@@ -117,10 +115,10 @@ export default function CourseInstanceForm(props: CourseInstanceFormProps) {
 					form={form}
 					mode={mode}
 					isForDemo={isForDemo}
-					totalPercentage={totalBreakdownPercentage}
+					totalPercentage={totalPercentage}
 					labTotalPercentage={totalLabDetailBreakdownPercentage}
 				/>
-				{totalBreakdownPercentage === 100 && (
+				{totalPercentage === 100 && (
 					<div className="w-full flex justify-center items-center">
 						<Button
 							text={isForDemo ? "Calcular nota final" : "Guardar cambios"}
