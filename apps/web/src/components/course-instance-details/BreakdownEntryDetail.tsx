@@ -9,7 +9,7 @@ export function BreakdownEntryDetail({
 }: {
 	breakdownDetail: BreakdownDetail
 }) {
-	const { breakdownName, entriesData, contribution, percentage, type } =
+	const { breakdownName, entriesData, contribution, percentage, allowsMultipleEntries } =
 		breakdownDetail
 	return (
 		<article className={"flex flex-col justify-start items-center gap-8"}>
@@ -17,15 +17,15 @@ export function BreakdownEntryDetail({
 				<h4 className={"text-primary-700 text-lg"}>{breakdownName}</h4>
 				<span
 					className={"text-primary-700 text-xs"}
-				>{`Porcentaje obtenido: ${roundNumber({ number: contribution * 100, amountOfDecimals: 2 })} de ${percentage}%`}</span>
+				>{`Porcentaje obtenido: ${roundNumber({ number: contribution * 100, amountOfDecimals: 2 })} de ${percentage * 100}%`}</span>
 			</div>
 			<div className={"flex items-center justify-center"}>
 				{entriesData.length === 0 ? (
 					<NoBreakdownEntries />
-				) : type === "STANDALONE" ? (
-					<StandaloneEntriesDetails breakdownDetail={breakdownDetail} />
-				) : (
+				) : allowsMultipleEntries ? (
 					<NotNestedEntriesDetails breakdownDetail={breakdownDetail} />
+				) : (
+					<StandaloneEntriesDetails breakdownDetail={breakdownDetail} />
 				)}
 			</div>
 		</article>

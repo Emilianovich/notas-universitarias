@@ -11,8 +11,7 @@ export default function ContributionGraph({
 	label
 }: CourseBreakdownTableData) {
 	const data = userData.map((data) => {
-		const contribution = data.contribution * 100
-		const { percentage } = data
+		const {contribution, percentage} = data
 		return {
 			...data,
 			contribution,
@@ -32,7 +31,6 @@ export default function ContributionGraph({
 			value: "value"
 		}
 	})
-	console.log(rows)
 	const breakdownData = defineChart({
 		marks: [
 			barY(rows, {
@@ -89,10 +87,10 @@ export default function ContributionGraph({
 				const { contribution, metric, remaining, name } = datum
 				const messageForRemaining =
 					remaining > 0
-						? `Te falta ${roundNumber({ number: remaining })}% para completar el porcentaje de ${name}`
+						? `Te falta ${roundNumber({ number: remaining, amountOfDecimals: 2 })}% para completar el porcentaje de ${name}`
 						: `¡Tienes todo el porcentaje de ${name}!`
 				if (metric === "remaining") return messageForRemaining
-				return `Tienes el ${roundNumber({ number: contribution })}% de ${name}`
+				return `Tienes el ${roundNumber({ number: contribution, amountOfDecimals: 2 })}% de ${name}`
 			}
 		}
 	})

@@ -4,7 +4,7 @@ import {
 	COURSE_INSTANCE_CONTRIBUTION_TITLE,
 	LAB_BREAKDOWN_TABLE_TITLE_COURSE,
 	LAB_CONTRIBUTION_GRAPH_TITLE,
-	LAB_CONTRIBUTION_TITLE
+	LAB_CONTRIBUTION_TITLE,
 } from "@notas-universitarias/types"
 import { createFileRoute } from "@tanstack/react-router"
 import { UserRound } from "lucide-react"
@@ -18,7 +18,8 @@ import Table from "@/components/ui/table/Table.tsx"
 import TableCellContainer from "@/components/ui/table/TableCellContainer.tsx"
 import useCourseInstanceData from "@/hooks/useCourseInstanceData.ts"
 import getCourseEvalFromBreakdowns, {
-	getLabEvalFromBreakdowns
+	type CourseEvalFromBreakdownsType,
+	getLaboratoryBreakdownData
 } from "@/utils/getCourseEvalFromBreakdowns.ts"
 
 export const Route = createFileRoute("/home/course-instance/$courseInstanceId")(
@@ -37,7 +38,12 @@ function RouteComponent() {
 		profesorName
 	} = useCourseInstanceData(id)
 	const courseEvalData = getCourseEvalFromBreakdowns(courseInstance)
-	const labData = getLabEvalFromBreakdowns(courseInstance)
+	const { laboratory } = courseInstance
+	let labData : CourseEvalFromBreakdownsType | undefined
+	if (laboratory) {
+		courseEvalData.push(getLaboratoryBreakdownData(laboratory))
+		labData = getCourseEvalFromBreakdowns(laboratory)
+	}
 	return (
 		<main
 			className={
@@ -110,7 +116,7 @@ function RouteComponent() {
 								</div>
 								<Table
 									headerTitles={["Evaluación", "Porcentaje"]}
-									tableBodyData={labData.labEvals}
+									tableBodyData={labData}
 									renderTableBodyData={(data) => (
 										<>
 											<TableCellContainer isHeader={false} data={data.name} />
@@ -138,21 +144,21 @@ function RouteComponent() {
 							</h3>
 							<BreakdownEntriesDetail course={courseInstance} />
 						</section>
-						{labData && (
+						{laboratory && labData && (
 							<section className={"w-full flex flex-col gap-10"}>
 								<h2 className={"text-primary-700 sm:text-lg text-2xl"}>
 									{LAB_CONTRIBUTION_GRAPH_TITLE}
 								</h2>
 								<article>
 									<ContributionGraph
-										userData={labData.labEvals}
+										userData={labData}
 										label={`Gráfica de ${LAB_CONTRIBUTION_GRAPH_TITLE}`}
 									/>
 								</article>
 								<h3 className={"text-primary-700 text-xl"}>
 									{LAB_CONTRIBUTION_TITLE}
 								</h3>
-								<BreakdownEntriesDetail course={labData.labCourseInstance} />
+								<BreakdownEntriesDetail course={laboratory} />
 							</section>
 						)}
 					</>
