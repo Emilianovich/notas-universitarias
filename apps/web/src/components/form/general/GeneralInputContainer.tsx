@@ -3,7 +3,6 @@ import ErrorMessage from "@/components/form/general/ErrorMessage.tsx"
 
 export type GeneralInputContainerProps = {
 	labelText: string
-	inputId: string
 	maxWidth: number
 	error?: string
 	isBlurred: boolean
@@ -12,22 +11,21 @@ export type GeneralInputContainerProps = {
 
 export default function GeneralInputContainer({
 	labelText,
-	inputId,
 	isBlurred,
 	error,
 	maxWidth,
 	input
 }: GeneralInputContainerProps) {
 	return (
-		<div className={`grid grid-rows-3 gap-4 relative`} style={{ maxWidth }}>
+		<div className={`grid gap-4 relative`} style={{ maxWidth, gridTemplateRows: `${error && isBlurred ? "1fr 20px" : "1fr"}` }}>
+			{/** biome-ignore lint/a11y/noLabelWithoutControl: <The ReactNode expected is an input> */}
 			<label
 				style={{ fontSize: 18, marginTop: "1em" }}
-				htmlFor={inputId}
-				className={"text-primary-700"}
+				className={"flex flex-col gap-2"}
 			>
-				{labelText}
+				<span>{labelText}</span>
+				{input}
 			</label>
-			{input}
 			{error && isBlurred && <ErrorMessage error={error} />}
 		</div>
 	)

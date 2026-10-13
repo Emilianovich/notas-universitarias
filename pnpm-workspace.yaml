@@ -9,3 +9,4 @@ allowBuilds:
 
 overrides:
   "@tanstack/router-generator": "1.167.17"
+  picomatch: "4.0.5"

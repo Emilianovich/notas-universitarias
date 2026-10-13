@@ -2,25 +2,27 @@
 	"name": "@notas-universitarias/api",
 	"type": "module",
 	"scripts": {
-		"dev": "tsx watch src/index.ts",
+		"dev": "tsx src/migrations/runMigrations.ts && tsx watch src/index.ts",
 		"build": "tsup src/index.ts --format esm --target node22 --out-dir dist --clean && pnpm build:migrations",
 		"build:migrations": "tsup src/migrations/runMigrations.ts --format esm --target node22 --out-dir dist/migrations",
 		"start": "node dist/index.js",
 		"migrate": "node dist/migrations/runMigrations.js",
 		"migrate:dev": "tsx src/migrations/runMigrations.ts",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"release": "pnpm build && docker compose -f docker/release/compose.release.yml up --build"
 	},
 	"dependencies": {
 		"@hono/node-server": "^2.0.6",
 		"@hono/zod-validator": "^0.8.0",
+		"@js-temporal/polyfill": "^0.5.1",
 		"@notas-universitarias/helpers": "workspace:*",
 		"@notas-universitarias/types": "workspace:*",
 		"argon2": "^0.44.0",
+		"dotenv": "^17.4.2",
 		"hono": "^4.12.27",
 		"mongodb": "^7.3.0",
 		"pino": "^10.3.1",
-		"zod": "^4.4.3",
-		"dotenv": "^17.4.2"
+		"zod": "^4.4.3"
 	},
 	"devDependencies": {
 		"@types/node": "^20.11.17",

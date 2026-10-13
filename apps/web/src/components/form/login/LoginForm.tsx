@@ -4,21 +4,33 @@ import {
 	loginDTO,
 	ON_SUBMIT_INVALID_MSG
 } from "@notas-universitarias/types"
-import { useForm, useSelector } from "@tanstack/react-form"
+import { createFormHook } from "@tanstack/react-form"
 import { useMutation } from "@tanstack/react-query"
 import { Link, useNavigate, useRouter } from "@tanstack/react-router"
-import Input from "@/components/form/general/Input.tsx"
-import Button from "@/components/general/Button.tsx"
+import EmailField from "@/components/form/tanstack-fields/EmailField.tsx"
+import PasswordField from "@/components/form/tanstack-fields/PasswordField.tsx"
+import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import useToast from "@/contexts/toast.ts"
+import { fieldContext, formContext } from "@/hooks/form.ts"
 import { queryClient } from "@/routes/__root.tsx"
-import { handleLogin } from "@/routes/login.tsx"
+import handleLogin from "@/routes/login.tsx"
 
 export type Redirected = {
 	wasRedirected?: "true"
 }
 
+const { useAppForm } = createFormHook({
+	fieldContext,
+	formContext,
+	fieldComponents: {
+		EmailField,
+		PasswordField
+	},
+	formComponents: {}
+})
+
 export default function LoginForm({ wasRedirected }: Redirected) {
-	const _router = useRouter()
+	const router = useRouter()
 	const { buildToast } = useToast()
 	// if (wasRedirected) {
 	// 	buildToast({
@@ -38,24 +50,20 @@ export default function LoginForm({ wasRedirected }: Redirected) {
 					content: error.errors
 				})
 			}
-			buildToast({
-				id: Date.now(),
-				type: "error",
-				content: error.message
-			})
 		},
-		onSuccess: async (_data) => {
+		onSuccess: async (result) => {
 			queryClient.clear()
 			await navigate({ to: "/home/current-period" })
-			// buildToast({
-			// 	id: Date.now(),
-			// 	type: "success",
-			// 	content: data.content
-			// })
+			const { content } = result
+			buildToast({
+				id: Date.now(),
+				type: "success",
+				content
+			})
 		}
 	})
-	const { mutate, isPending } = mutation
-	const form = useForm({
+	const { mutate } = mutation
+	const form = useAppForm({
 		defaultValues: {
 			email: "",
 			password: ""
@@ -79,97 +87,59 @@ export default function LoginForm({ wasRedirected }: Redirected) {
 			mutate(dto)
 		}
 	})
-	const { Field } = form
-	const submissionAttempts = useSelector(
-		form.store,
-		(state) => state.submissionAttempts
-	)
+	const { AppField, AppForm } = form
 	return (
-		<form
-			onSubmit={async (e) => {
-				e.preventDefault()
-				e.stopPropagation()
-				await form.handleSubmit()
-			}}
-			className={
-				"relative grid grid-rows-3 box-border p-15 w-125 items-center justify-center bg-form-bg rounded-[10px] shadow-[0px_4px_10px_2px_rgba(0,0,0,0.25)]"
-			}
-		>
-			<h1 className={"text-2xl mb-8 text-center text-primary-500"}>
-				Bienvenido de vuelta
-			</h1>
-			<Field
-				name={"email"}
-				children={(fieldApi) => {
-					const { errors, isBlurred } = fieldApi.state.meta
-					const { name, handleBlur, state, handleChange } = fieldApi
-					return (
-						<Input
-							key={name}
-							id={name}
-							label={"¿Cuál es tu correo?"}
-							type={"email"}
-							name={name}
-							value={state.value}
-							error={errors[0]?.message}
-							syncValueToState={(e) => handleChange(e.target.value)}
-							handleBlur={handleBlur}
-							isBlurred={isBlurred || submissionAttempts > 0}
-							color={"#F9FCFC"}
-							originallyPassword={false}
-							placeholder={"Ej. eminola@correo.com"}
-						/>
-					)
+		<AppForm>
+			<form
+				onSubmit={async (e) => {
+					e.preventDefault()
+					e.stopPropagation()
+					await form.handleSubmit()
 				}}
-			/>
-			<Field
-				name={"password"}
-				children={(fieldApi) => {
-					const { errors, isBlurred } = fieldApi.state.meta
-					const { name, handleBlur, state, handleChange } = fieldApi
-					return (
-						<Input
-							key={name}
-							id={name}
-							label={"¿Cuál es tu contraseña?"}
-							type={"password"}
-							name={name}
-							value={state.value}
-							error={errors[0]?.message}
-							syncValueToState={(e) => handleChange(e.target.value)}
-							handleBlur={handleBlur}
-							isBlurred={isBlurred || submissionAttempts > 0}
-							color={"#F9FCFC"}
-							originallyPassword={true}
-							placeholder={"********"}
-						/>
-					)
-				}}
-			/>
-			<div
 				className={
-					"flex flex-col gap-6 justify-center items-center w-full h-fit"
+					"relative grid grid-rows-3 box-border p-15 w-125 items-center justify-center bg-tertiary rounded-[10px] shadow-[0px_4px_10px_2px_rgba(0,0,0,0.25)]"
 				}
 			>
-				<p className={"text-primary-500"}>
-					¿No tienes cuenta?{" "}
-					<Link to={"/register"}>
-						<strong
-							className={
-								"text-primary-400 cursor-pointer font-medium hover:scale-105 hover:text-primary-500 transition-all duration-300 ease-in-out underline"
-							}
-						>
-							Regístrate
-						</strong>
-					</Link>
-				</p>
-				<Button
-					text={"Iniciar sesión"}
-					type={"submit"}
-					styleType={"primary"}
-					isDisabled={isPending}
+				<h1 className={"text-2xl mb-8 text-center"}>Bienvenido de vuelta</h1>
+
+				<AppField
+					name={"email"}
+					children={(field) => (
+						<field.EmailField
+							label={"¿Cuál es tu correo?"}
+							placeholder={"eminola@correo.com"}
+						/>
+					)}
 				/>
-			</div>
-		</form>
+				<AppField
+					name={"password"}
+					children={(field) => (
+						<field.PasswordField
+							label={"¿Cuál es tu contraseña?"}
+
+						/>
+					)}
+				/>
+				<div
+					className={
+						"flex flex-col gap-6 justify-center items-center w-full h-fit"
+					}
+				>
+					<p>
+						¿No tienes cuenta?{" "}
+						<Link to={"/register"}>
+							<strong
+								className={
+									"cursor-pointer font-medium hover:scale-105 hover:text-primary-400 transition-all duration-300 ease-in-out underline"
+								}
+							>
+								Regístrate
+							</strong>
+						</Link>
+					</p>
+					<SubmitBtn text={"Iniciar sesión"} />
+				</div>
+			</form>
+		</AppForm>
 	)
 }

@@ -10,12 +10,18 @@
 		"./db": "./src/db.ts",
 		"./helpers": "./src/helpers.ts"
 	},
+	"scripts": {
+		"test": "vitest",
+		"test:ui": "vitest --ui"
+	},
 	"dependencies": {
 		"mongodb": "^7.3.0",
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {
+		"@vitest/ui": "^4.1.11",
 		"tsup": "^8.5.1",
-		"typescript": "^5.8.3"
+		"typescript": "^5.8.3",
+		"vitest": "^4.1.11"
 	}
 }

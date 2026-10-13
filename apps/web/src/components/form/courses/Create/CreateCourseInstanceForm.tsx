@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: <following tanstack docs> */
 import { buildRequest, ServerErrorRes } from "@notas-universitarias/helpers"
 import {
 	ADD_BREAKDOWN_TEXT,
@@ -15,8 +15,8 @@ import {
 import { useForm, useSelector } from "@tanstack/react-form"
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
+import { Trash2 } from "lucide-react"
 import { useRef } from "react"
-import DropdownMenu from "@/components/form/general/DropdownMenu.tsx"
 import ErrorMessage from "@/components/form/general/ErrorMessage.tsx"
 import GeneralInputContainer from "@/components/form/general/GeneralInputContainer.tsx"
 import Input from "@/components/form/general/Input.tsx"
@@ -26,15 +26,17 @@ import NumberInput, {
 import RadioInput, {
 	type RadioInputProps
 } from "@/components/form/general/RadioInput.tsx"
+import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import { AddItem } from "@/components/general/AddItem.tsx"
-import Button from "@/components/general/Button.tsx"
+import useModal from "@/contexts/modal.ts"
 import useToast from "@/contexts/toast.ts"
 import { baseUrl } from "@/routes/__root.tsx"
 import type { InputProps } from "@/types/input.ts"
 import scrollTo from "@/utils/scroll.ts"
-import DeleteFormValue from "@/components/form/general/DeleteFormValue.tsx";
 
-const registerCourseInstance = async (dto: CourseInstanceToBeCreated) => {
+export const registerCourseInstance = async (
+	dto: CourseInstanceToBeCreated
+) => {
 	return buildRequest<string, string>({
 		baseUrl,
 		path: "/course-instances",
@@ -44,7 +46,7 @@ const registerCourseInstance = async (dto: CourseInstanceToBeCreated) => {
 	})
 }
 
-const getPreviousCoursesInfo = async () => {
+export const getPreviousCoursesInfo = async () => {
 	return buildRequest<CoursesInfo[], string>({
 		baseUrl,
 		path: "/courses",
@@ -60,6 +62,7 @@ export default function CreateCourseInstanceForm() {
 		queryKey: ["getPreviousCoursesInfo"]
 	})
 	const { buildToast } = useToast()
+	const { buildModal, closeModal } = useModal()
 	const navigate = useNavigate({
 		from: "/home/current-period/course-instance/"
 	})
@@ -157,7 +160,6 @@ export default function CreateCourseInstanceForm() {
 						return (
 							<GeneralInputContainer
 								labelText={"¿Ya diste la materia anteriormente?"}
-								inputId={name}
 								maxWidth={400}
 								isBlurred={isBlurred || submissionAttempts > 0}
 								input={
@@ -206,7 +208,6 @@ export default function CreateCourseInstanceForm() {
 							originallyPassword: false,
 							label: "¿Cómo se llama la materia?",
 							error: errors[0]?.message,
-							id: name,
 							color: "#F9FCFC",
 							placeholder: "Física I",
 							value: state.value as string
@@ -218,21 +219,12 @@ export default function CreateCourseInstanceForm() {
 			{isRegistered && (
 				<Field
 					name={"previousCourseId"}
-					children={(fieldApi) => {
-						const { errors, isBlurred } = fieldApi.state.meta
-						const { name, handleBlur, handleChange } = fieldApi
+					children={(field) => {
 						return (
-							<DropdownMenu
+							<SelectField
 								selectedItem={data.content[0].name}
 								iterableItems={data.content}
 								label={"¿Cómo se llama la materia?"}
-								name={name}
-								error={errors[0]?.message}
-								syncValueToState={(e) => handleChange(e.target.value)}
-								handleBlur={handleBlur}
-								isBlurred={isBlurred || submissionAttempts > 0}
-								color={"#F9FCFC"}
-								id={name}
 							/>
 						)
 					}}
@@ -252,7 +244,6 @@ export default function CreateCourseInstanceForm() {
 						originallyPassword: false,
 						label: "¿Cómo se llama tu profesor?",
 						error: errors[0]?.message,
-						id: name,
 						color: "#F9FCFC",
 						placeholder: "Lord Voldemort",
 						value: state.value
@@ -261,9 +252,7 @@ export default function CreateCourseInstanceForm() {
 				}}
 			/>
 			{breakdownArray.length > 0 && (
-				<h2 className={"text-primary-500 text-xl mt-4"}>
-					Evaluación del curso
-				</h2>
+				<h2 className={"text-xl mt-4"}>Evaluación del curso</h2>
 			)}
 			<Field name={"breakdown"} mode={"array"}>
 				{(fieldApi) => {
@@ -283,7 +272,6 @@ export default function CreateCourseInstanceForm() {
 														nameField
 													const inputProps: InputProps<string> = {
 														name: `${name}-${i}-name`,
-														id: `${name}-${i}-name`,
 														value: state.value,
 														type: "text",
 														syncValueToState: (e) =>
@@ -301,21 +289,27 @@ export default function CreateCourseInstanceForm() {
 													)
 												}}
 											</Field>
-											<DeleteFormValue
-												className={"absolute top-4 left-110"}
-												confirmButton={{
-													styleType: "modal-primary",
-													action: () => {
-														fieldApi.removeValue(i)
-													},
-													text: "Eliminar",
-													type: "button"
+											<Trash2
+												className={
+													"text-red-700 cursor-pointer hover:scale-110 transition-all duration-300 ease-in-out absolute top-4 left-110"
+												}
+												onClick={() => {
+													buildModal({
+														modalTitle: "Eliminar evaluación",
+														confirmButton: {
+															type: "modal-primary",
+															action: () => {
+																fieldApi.removeValue(i)
+																closeModal()
+															},
+															text: "Sí, eliminar"
+														},
+														closeButtonTitle: "No, me arrepentí",
+														modalContent:
+															"Eliminarás completamente la evaluación. No podrás recuperar el progreso que tenías"
+													})
 												}}
-												closeButtonTitle={"No, me arrepentí"}
-												modalTitle={"Eliminar evaluación"}
-												modalText={"Eliminarás completamente la evaluación. No podrás recuperar el progreso que tenías"}
 											/>
-
 										</div>
 										<Field
 											name={`breakdown[${i}].percentage`}
@@ -327,7 +321,6 @@ export default function CreateCourseInstanceForm() {
 													percentageField
 												const numberInputProps: NumberInputProps = {
 													name: `${name}-${i}-percentage`,
-													id: `${name}-${i}-percentage`,
 													value: state.value.toString(),
 													syncValueToState: (e) =>
 														handleChange(Number(e.currentTarget.value)),
@@ -364,9 +357,7 @@ export default function CreateCourseInstanceForm() {
 												}
 												return (
 													<div className={"flex flex-col gap-2"}>
-														<h2 className={"text-primary-500 text-xl"}>
-															{ADD_BREAKDOWN_TEXT}
-														</h2>
+														<h2 className={"text-xl"}>{ADD_BREAKDOWN_TEXT}</h2>
 														<RadioInput
 															value={"STANDALONE"}
 															labelText={STANDALONE_LABEL}
@@ -425,7 +416,6 @@ export default function CreateCourseInstanceForm() {
 																					isBlurred || submissionAttempts > 0
 																				}
 																				color={"#F9FCFC"}
-																				id={`breakdown[${i}].laboratoryDetails.profesorName`}
 																				originallyPassword={false}
 																			/>
 																		)
@@ -445,19 +435,30 @@ export default function CreateCourseInstanceForm() {
 																								className={"relative"}
 																								key={`labDetails${labIndex}`}
 																							>
-																								<DeleteFormValue
-																									className={"absolute top-4 left-110"}
-																									confirmButton={{
-																										styleType: "modal-primary",
-																										action: () => {
-																											fieldApi.removeValue(i)
-																										},
-																										text: "Eliminar",
-																										type: "button"
+																								<Trash2
+																									className={
+																										"text-red-700 cursor-pointer hover:scale-110 transition-all duration-300 ease-in-out absolute top-4 left-110"
+																									}
+																									onClick={() => {
+																										buildModal({
+																											modalTitle:
+																												"Eliminar evaluación de laboratorio",
+																											confirmButton: {
+																												type: "modal-primary",
+																												action: () => {
+																													fieldApi.removeValue(
+																														i
+																													)
+																													closeModal()
+																												},
+																												text: "Sí, eliminar"
+																											},
+																											closeButtonTitle:
+																												"No, me arrepentí",
+																											modalContent:
+																												"Eliminarás completamente la evaluación. No podrás recuperar el progreso que tenías"
+																										})
 																									}}
-																									closeButtonTitle={"No, me arrepentí"}
-																									modalTitle={"Eliminar evaluación de laboratorio"}
-																									modalText={"Eliminarás completamente la evaluación. No podrás recuperar el progreso que tenías"}
 																								/>
 																								<Field
 																									name={`breakdown[${i}].laboratoryDetails.breakdown[${labIndex}].name`}
@@ -479,7 +480,6 @@ export default function CreateCourseInstanceForm() {
 																										const inputProps: InputProps<string> =
 																											{
 																												name: `${name}-${i}-name`,
-																												id: `${name}-${i}-name`,
 																												value:
 																													state.value as string,
 																												type: "text",
@@ -532,7 +532,6 @@ export default function CreateCourseInstanceForm() {
 																										const numberInputProps: NumberInputProps =
 																											{
 																												name: `${name}-${i}-percentage`,
-																												id: `${name}-${i}-percentage`,
 																												value:
 																													state.value?.toString() as string,
 																												syncValueToState: (e) =>
@@ -593,9 +592,7 @@ export default function CreateCourseInstanceForm() {
 																												}
 																											>
 																												<h2
-																													className={
-																														"text-primary-500 text-xl"
-																													}
+																													className={"text-xl"}
 																												>
 																													{ADD_BREAKDOWN_TEXT}
 																												</h2>
@@ -672,12 +669,7 @@ export default function CreateCourseInstanceForm() {
 			</Field>
 			{totalPercentage === 100 && (
 				<div className={"sm:mt-4 w-full flex items-center justify-center"}>
-					<Button
-						text={"Guardar materia"}
-						type={"submit"}
-						styleType={"primary"}
-						isDisabled={false}
-					/>
+					<SubmitBtn text={"Guardar materia"} />
 				</div>
 			)}
 			<div ref={scrollToRef}></div>

@@ -1,11 +1,6 @@
-import type { UpdateCourseInstanceDto } from "@notas-universitarias/types"
 import { createFileRoute } from "@tanstack/react-router"
-import { UpdateCourseInstanceForm } from "@/components/form/courses/Update&Demo/UpdateCourseInstanceForm.tsx"
-
-const defaultValues: UpdateCourseInstanceDto = {
-	profesorName: "Tú mismo",
-	breakdown: []
-}
+import CourseInstanceForm from "@/components/form/courses/CourseInstanceForm.tsx"
+import { defaultValues } from "@/components/form/courses/types/types.ts"
 
 export const Route = createFileRoute("/_landing/demo")({
 	component: RouteComponent,
@@ -15,7 +10,8 @@ export const Route = createFileRoute("/_landing/demo")({
 function RouteComponent() {
 	return (
 		<main>
-			<UpdateCourseInstanceForm
+			<CourseInstanceForm
+				mode={"edit"}
 				defaultValues={defaultValues}
 				isForDemo={true}
 			/>

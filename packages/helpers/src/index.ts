@@ -162,11 +162,18 @@ export const addDate = ({ date, amount, units }: DatesParams): number => {
 }
 export const roundNumber = ({
 	number,
-	amountOfDecimals = 2
+	amountOfDecimals
 }: {
 	number: number
-	amountOfDecimals?: number
-}): number => Number(number.toFixed(amountOfDecimals))
+	amountOfDecimals: number
+}): number => {
+	if (!Number.isInteger(amountOfDecimals) || amountOfDecimals < 0) {
+		throw new RangeError("The amount must be a non-negative integer")
+	}
+	const shifted = Number(`${number}e${amountOfDecimals}`)
+	const rounded = Math.round(shifted)
+	return Number(`${rounded}e-${amountOfDecimals}`)
+}
 
 export function getValueOver100({
 	rawScore,
@@ -178,7 +185,9 @@ export function getValueOver100({
 	return (rawScore / maxScore) * 100
 }
 
-function getEntriesAverageGrade(entries: CourseBreakdownEntry[]): number {
+export function getEntriesAverageGrade(
+	entries: CourseBreakdownEntry[]
+): number {
 	if (!entries.length) return 0
 	const gradeAverage: number[] = []
 	entries.forEach((entry) => {
@@ -189,43 +198,40 @@ function getEntriesAverageGrade(entries: CourseBreakdownEntry[]): number {
 		gradeAverage.length
 	)
 }
-
-function getBreakdownContribution(breakdown: CourseBreakdown) {
+export function computeBreakdownContribution(breakdown: CourseBreakdown) {
 	if (!breakdown.entries.length) {
 		breakdown.contribution = 0
 	}
 	const entryAverage = getEntriesAverageGrade(breakdown.entries)
-	breakdown.contribution = (breakdown.percentage * entryAverage) / 100
+	breakdown.contribution = breakdown.percentage * (entryAverage / 100)
 }
 
-function getCourseInstanceBreakdownContribution(breakdown: CourseBreakdown) {
-	if (breakdown.type !== "NESTED") {
-		getBreakdownContribution(breakdown)
-		return
-	}
-	if (breakdown.laboratoryDetails) {
-		breakdown.laboratoryDetails.breakdown.forEach((detail) => {
-			getBreakdownContribution(detail)
-		})
-		breakdown.laboratoryDetails.finalGrade =
-			breakdown.laboratoryDetails.breakdown
-				.map((instance) => instance.contribution)
-				.reduce((currentContribution, acc) => currentContribution + acc, 0)
-		breakdown.contribution =
-			breakdown.laboratoryDetails.finalGrade * breakdown.percentage
-	}
+export function computeCourseInstanceFinalGrade(instance: CourseInstance) {
+	instance.finalGrade = instance.breakdowns
+		.map((currInstance) => currInstance.contribution)
+		.reduce((currentContribution, acc) => currentContribution + acc, 0)
 }
-
 export function updateCourseInstanceFinalGrade(
 	courseInstance: CourseInstance
 ): void {
-	courseInstance.breakdown.forEach((breakdown) => {
-		getCourseInstanceBreakdownContribution(breakdown)
+	let labContribution = 0
+	const { laboratory } = courseInstance
+	if (laboratory) {
+		const { breakdowns: labBreakdowns } = laboratory
+		labBreakdowns.forEach((breakdown) => {
+			computeBreakdownContribution(breakdown)
+		})
+		computeCourseInstanceFinalGrade(laboratory)
+		const { finalGrade: labFinalGrade, percentage } = laboratory
+		labContribution = labFinalGrade * percentage
+	}
+	courseInstance.breakdowns.forEach((breakdown) => {
+		computeBreakdownContribution(breakdown)
+		computeCourseInstanceFinalGrade(courseInstance)
 	})
+	courseInstance.finalGrade += labContribution
 	courseInstance.finalGrade = roundNumber({
-		number: courseInstance.breakdown
-			.map((instance) => instance.contribution)
-			.reduce((currentContribution, acc) => currentContribution + acc, 0),
+		number: courseInstance.finalGrade,
 		amountOfDecimals: 4
 	})
 }
@@ -234,16 +240,18 @@ export function updateCourseAverageGrade(course: Course): void {
 	course.courseInstances.forEach((instance) => {
 		updateCourseInstanceFinalGrade(instance)
 	})
+	const { courseInstances } = course
 	course.averageGrade = roundNumber({
 		number:
-			course.courseInstances
+			courseInstances
 				.map((instance) => instance.finalGrade)
 				.reduce((currentFinalGrade, acc) => currentFinalGrade + acc, 0) /
-			course.courseInstances.length,
+			courseInstances.length,
 		amountOfDecimals: 4
 	})
 }
 
+// TODO add zod validation to res
 export async function buildRequest<T, U>({
 	method,
 	path,
@@ -252,43 +260,20 @@ export async function buildRequest<T, U>({
 	baseUrl
 }: RequestBuilder): Promise<SuccessRes<T>> {
 	const url = `${baseUrl}${path}`
-	if (!includeCredentials) {
-		if (method === "POST") {
-			const req = await fetch(url, {
-				method,
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify(reqBody)
-			})
-			return getResponse<U>(req)
-		} else {
-			return getResponse<U>(await fetch(url))
-		}
-	} else {
-		if (method === "GET") {
-			const req = await fetch(url, {
-				credentials: "include"
-			})
-			return getResponse<U>(req)
-		} else if (method === "DELETE") {
-			const req = await fetch(url, {
-				credentials: "include",
-				method: "DELETE"
-			})
-			return getResponse<U>(req)
-		} else {
-			const req = await fetch(url, {
-				method,
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify(reqBody),
-				credentials: "include"
-			})
-			return getResponse<U>(req)
-		}
-	}
+	 const req = await fetch(url, {
+		 method,
+		 credentials: includeCredentials ? "include" : "omit",
+		 headers: {
+		 	...(reqBody && {
+				 "Content-Type": "application/json"
+			}),
+			 "Accept": "application/json"
+		 },
+	 	...(reqBody && {
+			 body: JSON.stringify(reqBody),
+		})
+	 })
+	return getResponse<U>(req)
 }
 
 export class ServerErrorRes<T> extends Error {
@@ -313,4 +298,23 @@ export function getLastElementFromArray<T>(array: T[]) {
 
 export function isArrayEmpty<T>(array: T[]) {
 	return array.length === 0
+}
+type NonEmptyObject<T extends object> = keyof T extends never ? never : T
+export function copyObject<T extends object>(object: T & NonEmptyObject<T>) {
+	return { ...object }
+}
+
+export function copyArray<T>(array: T[]) {
+	return [...array]
+}
+
+export function mapBreakdownForDemo(breakdown : Omit<CourseBreakdown, "contribution">) {
+	return {
+		...breakdown,
+		contribution: 0,
+	}
+}
+
+export function mapBreakdownsForDemo(breakdowns : Omit<CourseBreakdown, "contribution">[]) : CourseBreakdown[] {
+	return breakdowns.map(mapBreakdownForDemo)
 }

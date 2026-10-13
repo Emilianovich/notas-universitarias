@@ -1,18 +1,22 @@
 import { buildRequest, ServerErrorRes } from "@notas-universitarias/helpers"
 import {
 	createAcademicPeriodsDTO,
-	type DataAfterRegister
+	type DataAfterRegister,
+	ON_SUBMIT_INVALID_MSG
 } from "@notas-universitarias/types"
 import { useForm, useSelector } from "@tanstack/react-form"
 import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import Input from "@/components/form/general/Input.tsx"
+import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import Button from "@/components/general/Button.tsx"
 import useToast from "@/contexts/toast.ts"
+import { baseUrl } from "@/routes/__root.tsx"
 import type { RegisterFormProps } from "@/types/input.ts"
 
 const handleRegisterAftermath = async (payload: DataAfterRegister) => {
 	return buildRequest<string, string>({
+		baseUrl,
 		method: "POST",
 		reqBody: payload,
 		path: "/auth/register-after-creation",
@@ -71,7 +75,7 @@ export default function CreateAcademicPeriodForm({
 			buildToast({
 				id: Date.now(),
 				type: "error",
-				content: `Asegúrate llenar todos los campos y cumplir con todas las validaciones`
+				content: ON_SUBMIT_INVALID_MSG
 			})
 		}
 	})
@@ -188,12 +192,7 @@ export default function CreateAcademicPeriodForm({
 						}
 					}}
 				/>
-				<Button
-					text={"Guardar información"}
-					type={"submit"}
-					styleType={"primary"}
-					isDisabled={false}
-				/>
+				<SubmitBtn text={"Guardar información"} />
 			</div>
 		</form>
 	)
