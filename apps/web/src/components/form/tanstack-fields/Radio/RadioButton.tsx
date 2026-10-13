@@ -14,6 +14,7 @@ export function RadioButton<T>({
 	const field = useFieldContext<T>()
 	const { handleBlur, handleChange } = field
 	const { value: fieldValue } = field.state
+	const isChecked = value === fieldValue
 	return (
 		<label className={"flex justify-start items-center gap-4 w-100"}>
 			<input
@@ -22,7 +23,8 @@ export function RadioButton<T>({
 				name={radioGroupName}
 				onChange={() => handleChange(value)}
 				onBlur={handleBlur}
-				checked={value === fieldValue}
+				checked={isChecked}
+				className={`border ${isChecked ? "border-primary-400" : "border-primary-500"}`}
 			/>
 			<span className={"text-primary-600"}>{labelText}</span>
 		</label>

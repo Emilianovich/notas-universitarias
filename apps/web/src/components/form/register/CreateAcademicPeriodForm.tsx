@@ -4,15 +4,18 @@ import {
 	type DataAfterRegister,
 	ON_SUBMIT_INVALID_MSG
 } from "@notas-universitarias/types"
-import { useForm, useSelector } from "@tanstack/react-form"
+import {createFormHook} from "@tanstack/react-form"
 import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
-import Input from "@/components/form/general/Input.tsx"
 import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import Button from "@/components/general/Button.tsx"
 import useToast from "@/contexts/toast.ts"
 import { baseUrl } from "@/routes/__root.tsx"
 import type { RegisterFormProps } from "@/types/input.ts"
+import {fieldContext, formContext} from "@/hooks/form.ts";
+import TextField from "@/components/form/tanstack-fields/TextField.tsx";
+import DateField from "@/components/form/tanstack-fields/DateField.tsx";
+import {SharedAcademicPeriodForm} from "@/components/form/academic-periods/SharedAcademicPeriodForm.tsx";
 
 const handleRegisterAftermath = async (payload: DataAfterRegister) => {
 	return buildRequest<string, string>({
@@ -23,6 +26,16 @@ const handleRegisterAftermath = async (payload: DataAfterRegister) => {
 		includeCredentials: true
 	})
 }
+
+export const { useAppForm } = createFormHook({
+	fieldContext,
+	formContext,
+	fieldComponents: {
+		TextField,
+		DateField
+	},
+	formComponents: { SubmitBtn }
+})
 
 export default function CreateAcademicPeriodForm({
 	registerState,
@@ -54,7 +67,7 @@ export default function CreateAcademicPeriodForm({
 		}
 	})
 	const { mutate } = mutation
-	const form = useForm({
+	const form = useAppForm({
 		defaultValues: {
 			name: "",
 			startDate: "",
@@ -79,121 +92,58 @@ export default function CreateAcademicPeriodForm({
 			})
 		}
 	})
-	const { Field } = form
-	const submissionAttempts = useSelector(
-		form.store,
-		(state) => state.submissionAttempts
-	)
+	const { AppForm  } = form
 	return (
-		<form
-			onSubmit={async (e) => {
-				e.preventDefault()
-				e.stopPropagation()
-				await form.handleSubmit()
-			}}
-			className={
-				"bg-form-bg grid grid-rows-[auto_auto_auto_1fr] gap-2 justify-center items-center relative"
-			}
-		>
-			<Field
-				name={"name"}
-				children={(fieldApi) => {
-					const { errors, isBlurred } = fieldApi.state.meta
-					const { name, handleBlur, state, handleChange } = fieldApi
-					return (
-						<Input
-							key={name}
-							id={name}
-							label={"Nombre de tu periodo académico actual"}
-							type={"text"}
-							name={name}
-							value={state.value}
-							error={errors[0]?.message}
-							syncValueToState={(e) => handleChange(e.target.value)}
-							handleBlur={handleBlur}
-							isBlurred={isBlurred || submissionAttempts > 0}
-							color={"#F9FCFC"}
-							originallyPassword={false}
-							placeholder={"Semestre I 2026"}
-						/>
-					)
+		<AppForm>
+			<form
+				onSubmit={async (e) => {
+					e.preventDefault()
+					e.stopPropagation()
+					await form.handleSubmit()
 				}}
-			/>
-			<Field
-				name={"startDate"}
-				children={(fieldApi) => {
-					const { errors, isBlurred } = fieldApi.state.meta
-					const { name, handleBlur, state, handleChange } = fieldApi
-					return (
-						<Input
-							key={name}
-							id={name}
-							label={"Fecha de inicio de tu periodo académico actual"}
-							type={"date"}
-							name={name}
-							value={state.value}
-							error={errors[0]?.message}
-							syncValueToState={(e) => handleChange(e.target.value)}
-							handleBlur={handleBlur}
-							isBlurred={isBlurred || submissionAttempts > 0}
-							color={"#F9FCFC"}
-							originallyPassword={false}
-							placeholder={"2026/04/24"}
-						/>
-					)
-				}}
-			/>
-			<Field
-				name={"endDate"}
-				children={(fieldApi) => {
-					const { errors, isBlurred } = fieldApi.state.meta
-					const { name, handleBlur, state, handleChange } = fieldApi
-					return (
-						<Input
-							key={name}
-							id={name}
-							label={"Fecha final de tu periodo académico actual"}
-							type={"date"}
-							name={name}
-							value={state.value}
-							error={errors[0]?.message}
-							syncValueToState={(e) => handleChange(e.target.value)}
-							handleBlur={handleBlur}
-							isBlurred={isBlurred || submissionAttempts > 0}
-							color={"#F9FCFC"}
-							originallyPassword={false}
-							placeholder={"2026/07/17"}
-						/>
-					)
-				}}
-			/>
-			<div className={"w-full flex justify-between justify-self-center"}>
-				<Button
-					text={"Hacer más tarde"}
-					type={"button"}
-					styleType={"secondary"}
-					isDisabled={false}
-					clickAction={async () => {
-						if (registerState.afterRegisterData.settings) {
-							const data: DataAfterRegister = {
-								settings: registerState.afterRegisterData.settings
-							}
-							mutate(data)
-						} else {
-							setGlobalFormState({ ...registerState, progress: 99 })
-							buildToast({
-								id: Date.now(),
-								type: "info",
-								content: "Redirigiéndote al login..."
-							})
-							setTimeout(async () => {
-								await navigate({ to: "/login" })
-							}, 1500)
-						}
+				className={
+					"bg-form-bg grid grid-rows-[auto_auto_auto_1fr] gap-10 justify-center items-center relative"
+				}
+			>
+				<SharedAcademicPeriodForm
+					form={form}
+					fields={{
+						name: "name",
+						startDate: "startDate",
+						endDate: "endDate"
 					}}
+					textFieldLabel={"Nombre de tu periodo académico actual"}
+					startDateLabel={"Fecha de inicio de tu periodo académico actual"}
+					endDateLabel={"Fecha de inicio de tu periodo académico actual"}
 				/>
-				<SubmitBtn text={"Guardar información"} />
-			</div>
-		</form>
+				<div className={"w-full flex justify-between justify-self-center"}>
+					<Button
+						text={"Hacer más tarde"}
+						type={"button"}
+						styleType={"secondary"}
+						isDisabled={false}
+						clickAction={async () => {
+							if (registerState.afterRegisterData.settings) {
+								const data: DataAfterRegister = {
+									settings: registerState.afterRegisterData.settings
+								}
+								mutate(data)
+							} else {
+								setGlobalFormState({ ...registerState, progress: 99 })
+								buildToast({
+									id: Date.now(),
+									type: "info",
+									content: "Redirigiéndote al login..."
+								})
+								setTimeout(async () => {
+									await navigate({ to: "/login" })
+								}, 1500)
+							}
+						}}
+					/>
+					<SubmitBtn text={"Guardar información"} />
+				</div>
+			</form>
+		</AppForm>
 	)
 }

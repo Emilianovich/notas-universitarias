@@ -2,12 +2,14 @@ import { type ReactNode, useState } from "react"
 
 export function SettingsContainer({
 	title,
-	children
+	children,
+	className,
 }: {
 	title: string
 	children: ReactNode
 	btnText: string
 	btnAction: () => Promise<void>
+	className?: string
 }) {
 	const [disabled, setDisabled] = useState(true)
 	const imgAlt = disabled
@@ -15,7 +17,7 @@ export function SettingsContainer({
 		: "Icono de un lápiz para cancelar la edición"
 	const imgSrc = disabled ? "/editing-pencil.svg" : "/pencil-cancel-edit.svg"
 	return (
-		<section className={"ml-4 w-full flex flex-col gap-4 p-4"}>
+		<section className={`${className} ml-4 w-full flex flex-col gap-4 p-4`}>
 			<div className={"flex gap-4 sm:w-[60%] sm:justify-between lg:w-[30%]"}>
 				<h2 className={"text-primary-500 font-bold sm:text-xl md:text-2xl"}>
 					{title}

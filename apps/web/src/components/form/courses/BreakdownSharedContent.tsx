@@ -52,9 +52,10 @@ export const BreakdownSharedContent = withFieldGroup({
 							"Eliminarás completamente la evaluación. No podrás recuperar el progreso que tenías"
 						}
 						confirmButton={{
-							type: "modal-primary",
+							styleType: "modal-primary",
 							text: "Sí, eliminar",
-							action: confirmBtnAction
+							action: confirmBtnAction,
+							type: "button"
 						}}
 						closeButtonTitle={"No, me arrepentí"}
 					/>

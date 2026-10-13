@@ -92,7 +92,7 @@ export default function UserSettingsForm({
 					name={"fontFamily"}
 					children={(field) => {
 						return (
-							<div className={"flex flex-col"}>
+							<div className={"flex flex-col gap-8"}>
 								<field.Select
 									labelText={"Estilo de fuente"}
 									items={[...allowedFontFamilies]}
@@ -122,7 +122,7 @@ export default function UserSettingsForm({
 					name={"petName"}
 					children={(field) => {
 						return (
-							<div className={"flex flex-col"}>
+							<div className={"flex flex-col gap-8"}>
 								<field.Select
 									labelText={"Mascota"}
 									items={[...allowedPets]}
@@ -147,7 +147,7 @@ export default function UserSettingsForm({
 							})
 						}}
 					/>
-					<SubmitBtn text={"Guardar configuraciones"} />
+					<SubmitBtn text={"Guardar"} />
 				</div>
 			</form>
 		</AppForm>

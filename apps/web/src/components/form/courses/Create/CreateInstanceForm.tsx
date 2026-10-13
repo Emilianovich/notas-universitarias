@@ -189,7 +189,7 @@ export default function CreateInstanceForm() {
 								/>
 							)}
 						/>
-						{!isArrayEmpty(laboratory.breakdowns) && (<h2 className={"text-xl mt-4"}>Evaluación del curso de laboratorio</h2>)}
+						{!isArrayEmpty(laboratory.breakdowns) && (<h2 className={"text-xl mt-4 text-primary-500 font-bold"}>Evaluación del curso de laboratorio</h2>)}
 						<AppField name={"laboratory.breakdowns"} mode={"array"}>
 							{(laboratoryBreakdownField) => (
 								<div className={"flex flex-col gap-8"}>
@@ -227,7 +227,7 @@ export default function CreateInstanceForm() {
 					</>
 				)}
 				{breakdownList.length > 0 && (
-					<h2 className={"text-xl mt-4"}>Evaluación del curso</h2>
+					<h2 className={"text-xl mt-4 text-primary-500 font-bold"}>Evaluación del curso</h2>
 				)}
 				<AppField name={"breakdowns"} mode={"array"}>
 					{(field) => (

@@ -169,7 +169,6 @@ function RouteComponent() {
 								return (
 									<field.TextField
 										label={"Tu apodo"}
-										inputId={field.name}
 										placeholder={"Ej. Eminola"}
 									/>
 								)
@@ -182,7 +181,6 @@ function RouteComponent() {
 									<field.EmailField
 										label={"Tu correo"}
 										placeholder={"eminola@correo.com"}
-										inputId={field.name}
 									/>
 								)
 							}}
@@ -190,7 +188,6 @@ function RouteComponent() {
 						<div className={"flex gap-4 relative w-150"}>
 							<Input
 								key={name}
-								id={name}
 								label={"Tu contraseña"}
 								type={"password"}
 								name={name}
@@ -210,7 +207,7 @@ function RouteComponent() {
 							/>
 							<div
 								className={
-									"absolute top-1/2 -translate-y-1/2 right-0 xl:-right-10"
+									"absolute top-1/2 right-0 xl:-right-10 bottom-0"
 								}
 							>
 								<Button
@@ -230,6 +227,7 @@ function RouteComponent() {
 						title={"Preferencias"}
 						btnText={"Guardar Preferencias"}
 						btnAction={async () => console.log("Hi")}
+						className={"mt-8"}
 					>
 						<AppField
 							name={"fontFamily"}

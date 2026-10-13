@@ -4,15 +4,14 @@ import {
 	createAcademicPeriodsDTO,
 	ON_SUBMIT_INVALID_MSG
 } from "@notas-universitarias/types"
-import { createFormHook, revalidateLogic } from "@tanstack/react-form"
+import { revalidateLogic } from "@tanstack/react-form"
 import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
-import DateField from "@/components/form/tanstack-fields/DateField.tsx"
 import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
-import TextField from "@/components/form/tanstack-fields/TextField.tsx"
 import useToast from "@/contexts/toast.ts"
-import { fieldContext, formContext } from "@/hooks/form.ts"
 import { baseUrl } from "@/routes/__root.tsx"
+import {useAppForm} from "@/components/form/register/CreateAcademicPeriodForm.tsx";
+import {SharedAcademicPeriodForm} from "@/components/form/academic-periods/SharedAcademicPeriodForm.tsx";
 
 const createNewAcademicPeriod = async (dto: CreateAcademicPeriodsDto) => {
 	return buildRequest<string, string>({
@@ -24,15 +23,6 @@ const createNewAcademicPeriod = async (dto: CreateAcademicPeriodsDto) => {
 	})
 }
 
-const { useAppForm } = createFormHook({
-	fieldContext,
-	formContext,
-	fieldComponents: {
-		TextField,
-		DateField
-	},
-	formComponents: {}
-})
 
 export default function AcademicPeriodForm() {
 	const { buildToast } = useToast()
@@ -88,7 +78,7 @@ export default function AcademicPeriodForm() {
 			})
 		}
 	})
-	const { AppField, AppForm } = form
+	const { AppForm } = form
 	return (
 		<AppForm>
 			<form
@@ -98,38 +88,19 @@ export default function AcademicPeriodForm() {
 					await form.handleSubmit()
 				}}
 				className={
-					"grid grid-rows-[auto_auto_auto_70px] gap-2 justify-center items-center relative"
+					"grid grid-rows-[auto_auto_auto_70px] gap-10 justify-center items-center relative"
 				}
 			>
-				<AppField
-					name={"name"}
-					children={(field) => (
-						<field.TextField
-							label={"Nombre del nuevo periodo académico"}
-							placeholder={"Semestre I 2026"}
-							inputId={field.name}
-						/>
-					)}
-				/>
-				<AppField
-					name={"startDate"}
-					children={(field) => (
-						<field.DateField
-							label={"Fecha de inicio del periodo académico"}
-							inputId={field.name}
-							placeholder={"2026/04/24"}
-						/>
-					)}
-				/>
-				<AppField
-					name={"endDate"}
-					children={(field) => (
-						<field.DateField
-							label={"Fecha final del periodo académico"}
-							inputId={field.name}
-							placeholder={"2026/07/17"}
-						/>
-					)}
+				<SharedAcademicPeriodForm
+					form={form}
+					fields={{
+						name: "name",
+						startDate: "startDate",
+						endDate: "endDate"
+					}}
+					textFieldLabel={"Nombre del nuevo periodo académico"}
+					startDateLabel={"Fecha de inicio del periodo académico"}
+					endDateLabel={"Fecha final del periodo académico"}
 				/>
 				<div
 					className={

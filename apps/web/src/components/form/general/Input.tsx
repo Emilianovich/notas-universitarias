@@ -12,7 +12,6 @@ export default function Input({
 	value,
 	handleBlur,
 	isBlurred,
-	color,
 	label,
 	originallyPassword,
 	placeholder

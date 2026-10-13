@@ -23,7 +23,7 @@ export default function GeneralInputContainer({
 				style={{ fontSize: 18, marginTop: "1em" }}
 				className={"flex flex-col gap-2"}
 			>
-				<span>{labelText}</span>
+				<span className={"text-primary-500"}>{labelText}</span>
 				{input}
 			</label>
 			{error && isBlurred && <ErrorMessage error={error} />}

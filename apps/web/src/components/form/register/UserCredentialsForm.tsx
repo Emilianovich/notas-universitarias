@@ -105,7 +105,7 @@ export default function UserCredentialsForm({
 					await form.handleSubmit()
 				}}
 				className={
-					"grid grid-rows-[auto_auto_auto_50px_1fr] gap-2 justify-center items-center relative"
+					"grid grid-rows-[auto_auto_auto_50px_1fr] gap-8 justify-center items-center relative"
 				}
 			>
 				<AppField
@@ -114,7 +114,6 @@ export default function UserCredentialsForm({
 						<field.TextField
 							placeholder={"Ej. Eminola"}
 							label={"¿Cómo te llaman?"}
-							inputId={field.name}
 						/>
 					)}
 				/>
@@ -123,7 +122,6 @@ export default function UserCredentialsForm({
 					children={(field) => (
 						<field.EmailField
 							label={"¿Cuál es tu correo?"}
-							inputId={field.name}
 							placeholder={"Ej. eminola@correo.com"}
 						/>
 					)}
@@ -133,7 +131,6 @@ export default function UserCredentialsForm({
 					children={(field) => (
 						<field.PasswordField
 							label={"¿Cuál es tu contraseña?"}
-							inputId={field.name}
 						/>
 					)}
 				/>
@@ -142,7 +139,7 @@ export default function UserCredentialsForm({
 						"flex flex-col gap-4 justify-center items-center w-full h-fit"
 					}
 				>
-					<p>
+					<p className={"text-primary-700"}>
 						¿Ya tienes cuenta?{" "}
 						<Link to={"/login"}>
 							<strong
