@@ -1,17 +1,18 @@
-import type { CreateCourseInstanceOpts } from "@/components/form/courses/types/types.ts"
-import useToast from "@/contexts/toast.ts"
 import {
 	type CourseBreakdownToBeCreated,
-	CreateCourseInstanceSchema, type CreateCourseInstanceType,
+	CreateCourseInstanceSchema,
+	type CreateCourseInstanceType,
 	ON_SUBMIT_INVALID_MSG
 } from "@notas-universitarias/types"
 import { createFormHook } from "@tanstack/react-form"
-import { fieldContext, formContext } from "@/hooks/form.ts"
-import TextField from "@/components/form/tanstack-fields/TextField.tsx"
-import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
+import type { CreateCourseInstanceOpts } from "@/components/form/courses/types/types.ts"
 import NumberField from "@/components/form/tanstack-fields/NumberField.tsx"
-import RadioGroup from "@/components/form/tanstack-fields/Radio/RadioGroup.tsx";
-import SelectField from "@/components/form/tanstack-fields/Select/SelectField.tsx";
+import RadioGroup from "@/components/form/tanstack-fields/Radio/RadioGroup.tsx"
+import SelectField from "@/components/form/tanstack-fields/Select/SelectField.tsx"
+import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
+import TextField from "@/components/form/tanstack-fields/TextField.tsx"
+import useToast from "@/contexts/toast.ts"
+import { fieldContext, formContext } from "@/hooks/form.ts"
 
 export const { useAppForm } = createFormHook({
 	fieldContext,

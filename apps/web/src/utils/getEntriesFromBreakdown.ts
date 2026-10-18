@@ -13,7 +13,12 @@ export type BreakdownDetail = {
 export default function getEntriesFromBreakdown(course: CourseInstance) {
 	const breakdownDetail: BreakdownDetail[] = []
 	course.breakdowns.forEach((breakdown) => {
-		const {contribution, name: breakdownName, percentage, allowsMultipleEntries} = breakdown
+		const {
+			contribution,
+			name: breakdownName,
+			percentage,
+			allowsMultipleEntries
+		} = breakdown
 		const entriesData: CourseBreakdownEntry[] = []
 		breakdown.entries.forEach((entry) => {
 			entriesData.push({

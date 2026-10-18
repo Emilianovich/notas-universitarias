@@ -97,17 +97,13 @@ function RouteComponent() {
 					<AppField
 						name={"password"}
 						children={(field) => (
-							<field.PasswordField
-								label={"Tu nueva contraseña"}
-							/>
+							<field.PasswordField label={"Tu nueva contraseña"} />
 						)}
 					/>
 					<AppField
 						name={"confirmPassword"}
 						children={(field) => (
-							<field.PasswordField
-								label={"Confirma tu nueva contraseña"}
-							/>
+							<field.PasswordField label={"Confirma tu nueva contraseña"} />
 						)}
 					/>
 					<div

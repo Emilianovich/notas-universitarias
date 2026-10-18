@@ -1,5 +1,8 @@
 import { describe, expect, test } from "vitest"
-import {CreateCourseInstanceSchema, CreateCourseInstanceType} from "./createCourseInstances"
+import {
+	CreateCourseInstanceSchema,
+	type CreateCourseInstanceType
+} from "./createCourseInstances"
 
 const validBreakdown = {
 	name: "Examen final",
@@ -7,12 +10,12 @@ const validBreakdown = {
 	allowsMultipleEntries: false
 }
 
-const baseCourseInstance : CreateCourseInstanceType = {
+const baseCourseInstance: CreateCourseInstanceType = {
 	isRegistered: false,
 	name: "Programación I",
 	profesorName: "Ana Rodríguez",
 	breakdowns: [validBreakdown],
-	hasLaboratory: false,
+	hasLaboratory: false
 }
 
 const testCases = [
@@ -146,7 +149,8 @@ const testCases = [
 		expected: false
 	},
 	{
-		description: "12. Rejects schema when hasLaboratory is true and no laboratory is specified",
+		description:
+			"12. Rejects schema when hasLaboratory is true and no laboratory is specified",
 		fixture: {
 			...baseCourseInstance,
 			hasLaboratory: true,
@@ -155,7 +159,7 @@ const testCases = [
 					...validBreakdown,
 					percentage: 80
 				}
-			],
+			]
 		},
 		expected: false
 	},
@@ -164,7 +168,7 @@ const testCases = [
 		fixture: {
 			...baseCourseInstance,
 			hasLaboratory: false,
-			breakdowns: [],
+			breakdowns: []
 		},
 		expected: false
 	}

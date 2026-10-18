@@ -30,7 +30,7 @@ const { useAppForm } = createFormHook({
 })
 
 export default function LoginForm({ wasRedirected }: Redirected) {
-	const router = useRouter()
+	const _router = useRouter()
 	const { buildToast } = useToast()
 	// if (wasRedirected) {
 	// 	buildToast({
@@ -100,7 +100,9 @@ export default function LoginForm({ wasRedirected }: Redirected) {
 					"relative grid grid-rows-3 gap-8 box-border p-15 w-125 items-center justify-center bg-tertiary rounded-[10px] shadow-[0px_4px_10px_2px_rgba(0,0,0,0.25)]"
 				}
 			>
-				<h1 className={"text-3xl text-primary-500 mb-8 text-center"}>Bienvenido de vuelta</h1>
+				<h1 className={"text-3xl text-primary-500 mb-8 text-center"}>
+					Bienvenido de vuelta
+				</h1>
 
 				<AppField
 					name={"email"}
@@ -114,10 +116,7 @@ export default function LoginForm({ wasRedirected }: Redirected) {
 				<AppField
 					name={"password"}
 					children={(field) => (
-						<field.PasswordField
-							label={"¿Cuál es tu contraseña?"}
-
-						/>
+						<field.PasswordField label={"¿Cuál es tu contraseña?"} />
 					)}
 				/>
 				<div

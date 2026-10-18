@@ -1,7 +1,7 @@
 import { useSelector } from "@tanstack/react-form"
 import type {
 	CreateCourseInstanceFormType,
-	EditCourseInstanceFormType,
+	EditCourseInstanceFormType
 } from "@/components/form/courses/types/types.ts"
 
 export default function usePercentagesForEdit(
@@ -16,9 +16,11 @@ export default function usePercentagesForEdit(
 		0
 	)
 	const laboratory = useSelector(form.store, (state) => state.values.laboratory)
+	let laboratoryBreakdownPercentage = 0
 	let laboratoryPercentage = 0
 	if (laboratory) {
-		laboratoryPercentage = laboratory.breakdowns.reduce(
+		laboratoryPercentage = laboratory.percentage
+		laboratoryBreakdownPercentage = laboratory.breakdowns.reduce(
 			(previousVal, currentVal) => previousVal + currentVal.percentage,
 			0
 		)
@@ -27,13 +29,11 @@ export default function usePercentagesForEdit(
 	return {
 		breakdownList,
 		totalPercentage,
-		laboratoryPercentage,
+		laboratoryPercentage: laboratoryBreakdownPercentage
 	}
 }
 
-export function useFormDataForCreation(
-	form: CreateCourseInstanceFormType
-) {
+export function useFormDataForCreation(form: CreateCourseInstanceFormType) {
 	const isRegistered = useSelector(
 		form.store,
 		(state) => state.values.isRegistered
@@ -52,7 +52,7 @@ export function useFormDataForCreation(
 	)
 	const laboratory = useSelector(form.store, (state) => state.values.laboratory)
 	let laboratoryPercentage = 0
-	let laboratoryTotalPercentage : number = 0
+	let laboratoryTotalPercentage: number = 0
 	if (laboratory) {
 		laboratoryPercentage = laboratory.percentage
 		laboratoryTotalPercentage = laboratory.breakdowns.reduce(

@@ -1,7 +1,7 @@
-import type { ChangeEvent } from "react"
-import { useFieldContext, useFormContext } from "@/hooks/form.ts"
 import { useSelector } from "@tanstack/react-form"
+import type { ChangeEvent } from "react"
 import GeneralInputContainer from "@/components/form/general/GeneralInputContainer.tsx"
+import { useFieldContext, useFormContext } from "@/hooks/form.ts"
 
 type SelectFieldProps<T> = {
 	items: T[]

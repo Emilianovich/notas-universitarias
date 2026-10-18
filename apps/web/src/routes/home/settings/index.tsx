@@ -9,27 +9,27 @@ import Input from "@/components/form/general/Input.tsx"
 import { SettingsContainer } from "@/components/form/settings/SettingsContainer.tsx"
 import EmailField from "@/components/form/tanstack-fields/EmailField.tsx"
 import PasswordField from "@/components/form/tanstack-fields/PasswordField.tsx"
+import {
+	appThemeOptions,
+	fontFamilyOptions,
+	petNameOptions
+} from "@/components/form/tanstack-fields/Select/option-functions.ts"
+import SelectField from "@/components/form/tanstack-fields/Select/SelectField.tsx"
 import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import TextField from "@/components/form/tanstack-fields/TextField.tsx"
 import Button from "@/components/general/Button.tsx"
 import LoadingComponent from "@/components/loading-components/current-period/LoadingComponent.tsx"
 import PreviewPet from "@/components/ui/PreviewPet.tsx"
 import PreviewText from "@/components/ui/PreviewText.tsx"
+import { allowedThemes } from "@/constants/app-themes.ts"
+import { allowedFontFamilies } from "@/constants/font-families.ts"
+import { allowedPets } from "@/constants/pet-names.ts"
 import { findPetByName } from "@/contexts/pet.ts"
 import useSettings from "@/contexts/settings.ts"
 import useToast from "@/contexts/toast.ts"
 import { fieldContext, formContext } from "@/hooks/form.ts"
 import authMiddleware from "@/middlewares/auth.ts"
 import { baseUrl } from "@/routes/__root.tsx"
-import SelectField from "@/components/form/tanstack-fields/Select/SelectField.tsx"
-import {
-	fontFamilyOptions,
-	petNameOptions,
-	appThemeOptions
-} from "@/components/form/tanstack-fields/Select/option-functions.ts"
-import {allowedFontFamilies} from "@/constants/font-families.ts";
-import {allowedThemes} from "@/constants/app-themes.ts";
-import {allowedPets} from "@/constants/pet-names.ts";
 
 export const Route = createFileRoute("/home/settings/")({
 	component: RouteComponent,
@@ -205,11 +205,7 @@ function RouteComponent() {
 								originallyPassword={true}
 								error={"Shhh"}
 							/>
-							<div
-								className={
-									"absolute top-1/2 right-0 xl:-right-10 bottom-0"
-								}
-							>
+							<div className={"absolute top-1/2 right-0 xl:-right-10 bottom-0"}>
 								<Button
 									// TODO buscar mejor nombre para este botón
 									text={"Actualizar contraseña"}

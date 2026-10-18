@@ -4,7 +4,7 @@ import {
 	COURSE_INSTANCE_CONTRIBUTION_TITLE,
 	LAB_BREAKDOWN_TABLE_TITLE_COURSE,
 	LAB_CONTRIBUTION_GRAPH_TITLE,
-	LAB_CONTRIBUTION_TITLE,
+	LAB_CONTRIBUTION_TITLE
 } from "@notas-universitarias/types"
 import { createFileRoute } from "@tanstack/react-router"
 import { UserRound } from "lucide-react"
@@ -39,7 +39,7 @@ function RouteComponent() {
 	} = useCourseInstanceData(id)
 	const courseEvalData = getCourseEvalFromBreakdowns(courseInstance)
 	const { laboratory } = courseInstance
-	let labData : CourseEvalFromBreakdownsType | undefined
+	let labData: CourseEvalFromBreakdownsType | undefined
 	if (laboratory) {
 		courseEvalData.push(getLaboratoryBreakdownData(laboratory))
 		labData = getCourseEvalFromBreakdowns(laboratory)

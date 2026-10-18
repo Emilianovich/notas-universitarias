@@ -1,9 +1,9 @@
-import type { Collection, Db, ObjectId } from "mongodb"
 import type {
 	CourseBreakdown,
 	CourseInstance,
 	Laboratory
 } from "@notas-universitarias/types"
+import type { Collection, Db, ObjectId } from "mongodb"
 import type { MongoService } from "../../modules/db/MongoService.js"
 import { CourseInstancesRepository } from "../../repositories/courseInstances.js"
 import type { MigrationObject } from "../index.js"

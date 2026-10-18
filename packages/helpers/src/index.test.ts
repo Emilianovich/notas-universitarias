@@ -1,3 +1,8 @@
+import type {
+	Course,
+	CourseBreakdownEntry,
+	CourseInstance
+} from "@notas-universitarias/types"
 import { describe, expect, test } from "vitest"
 import {
 	computeBreakdownContribution,
@@ -7,11 +12,6 @@ import {
 	updateCourseAverageGrade,
 	updateCourseInstanceFinalGrade
 } from "./index"
-import {
-	Course,
-	CourseBreakdownEntry,
-	CourseInstance
-} from "@notas-universitarias/types"
 
 const courseInstances: CourseInstance[] = [
 	{

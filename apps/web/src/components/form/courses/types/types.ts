@@ -1,28 +1,21 @@
 import type {
 	CourseBreakdown,
 	CourseInstance,
+	CreateCourseInstanceType,
 	SuccessRes,
 	UpdateCourseInstanceDto
 } from "@notas-universitarias/types"
-import type React from "react"
-import type { BreakdownForm } from "@/components/form/courses/Update&Demo/BreakdownForm.tsx"
 import type { UseMutationResult } from "@tanstack/react-query"
-import { useEditCourseInstanceOpts } from "@/components/form/courses/hooks/useEditCourseInstanceOpts.ts"
+import type React from "react"
 import type useCreateCourseInstanceOpts from "@/components/form/courses/hooks/useCreateCourseInstanceOpts.ts"
-
-export type Modes = "create" | "edit"
+import type { useEditCourseInstanceOpts } from "@/components/form/courses/hooks/useEditCourseInstanceOpts.ts"
+import type { BreakdownForm } from "@/components/form/courses/Update&Demo/BreakdownForm.tsx"
 
 export type BreakdownFormProps = React.ComponentProps<typeof BreakdownForm>
 
-export type LabDetailsBreakdownFormProps = BreakdownFormProps & { i: number }
-
 export const defaultValues: UpdateCourseInstanceDto = {
 	profesorName: "Tú mismo",
-	laboratory: {
-		breakdowns: [],
-		profesorName: "",
-		percentage: 0,
-	},
+	laboratory: undefined,
 	breakdowns: []
 }
 
@@ -108,7 +101,8 @@ export type EditCourseInstanceFormType = ReturnType<
 export type CreateCourseInstanceOpts = {
 	mutation: UseMutationResult<
 		SuccessRes<string>,
-		Error
+		Error,
+		CreateCourseInstanceType
 	>
 	error?: string
 }

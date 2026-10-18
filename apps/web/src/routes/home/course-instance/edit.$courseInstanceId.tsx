@@ -1,5 +1,6 @@
+import { prepareCourseInstanceForDisplay } from "@notas-universitarias/helpers"
 import { createFileRoute } from "@tanstack/react-router"
-import { Suspense } from "react"
+import { Suspense, useMemo } from "react"
 import CourseInstanceForm from "@/components/form/courses/CourseInstanceForm.tsx"
 import ErrorMessage from "@/components/form/general/ErrorMessage.tsx"
 import LoadingComponent from "@/components/loading-components/current-period/LoadingComponent.tsx"
@@ -14,6 +15,10 @@ export const Route = createFileRoute(
 function RouteComponent() {
 	const id = Route.useParams().courseInstanceId
 	const { courseInstance, courseName, error } = useCourseInstanceData(id)
+	const preparedCourseInstance = useMemo(() => {
+		prepareCourseInstanceForDisplay(courseInstance)
+		return courseInstance
+	}, [courseInstance])
 	return (
 		<main
 			className={
@@ -31,10 +36,9 @@ function RouteComponent() {
 					<>
 						<h1 className={"text-4xl text-primary-500 mt-4"}>{courseName}</h1>
 						<CourseInstanceForm
-							defaultValues={courseInstance}
+							defaultValues={preparedCourseInstance}
 							isForDemo={false}
 							courseInstanceId={id}
-							mode={"edit"}
 						/>
 					</>
 				)}

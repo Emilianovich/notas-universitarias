@@ -1,7 +1,10 @@
 import { describe, expect, test } from "vitest"
-import {CourseBreakdownSchemaType, updateCourseInstanceSchema} from "./updateCourseInstances"
+import {
+	type CourseBreakdownSchemaType,
+	updateCourseInstanceSchema
+} from "./updateCourseInstances"
 
-const validBreakdown : CourseBreakdownSchemaType = {
+const validBreakdown: CourseBreakdownSchemaType = {
 	name: "Final Exam",
 	percentage: 100,
 	allowsMultipleEntries: false,

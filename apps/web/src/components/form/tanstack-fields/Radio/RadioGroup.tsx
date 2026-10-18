@@ -1,10 +1,11 @@
+import { useSelector } from "@tanstack/react-form"
+import ErrorMessage from "@/components/form/general/ErrorMessage.tsx"
 import {
 	RadioButton,
 	type RadioButtonProps
 } from "@/components/form/tanstack-fields/Radio/RadioButton.tsx"
 import { useFieldContext, useFormContext } from "@/hooks/form.ts"
-import { useSelector } from "@tanstack/react-form"
-import ErrorMessage from "@/components/form/general/ErrorMessage.tsx"
+
 type RadioGroupProps<T> = {
 	radios: RadioButtonProps<T>[]
 	radioGroupName: string
@@ -27,7 +28,9 @@ export default function RadioGroup<T>({
 			className={`grid gap-4 w-full p-2 ${canDisplayError ? "border border-red-400" : ""}`}
 			role="radiogroup"
 			aria-labelledby={radioGroupName}
-			style={{ gridTemplateRows: `${canDisplayError && isBlurred ? "1fr 20px" : "1fr"}` }}
+			style={{
+				gridTemplateRows: `${canDisplayError && isBlurred ? "1fr 20px" : "1fr"}`
+			}}
 		>
 			{radios.map((radio) => {
 				return <RadioButton key={crypto.randomUUID()} {...radio} />

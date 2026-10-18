@@ -5,13 +5,9 @@ import {
 	NOT_NESTED_LABEL,
 	STANDALONE_LABEL
 } from "@notas-universitarias/types"
-import type { FieldApi } from "@tanstack/react-form"
 import ErrorMessage from "@/components/form/general/ErrorMessage.tsx"
-import RadioInput, {
-	type RadioInputProps
-} from "@/components/form/general/RadioInput.tsx"
-import { useFieldContext } from "@/hooks/form.ts"
 import { RadioButton } from "@/components/form/tanstack-fields/Radio/RadioButton.tsx"
+import { useFieldContext } from "@/hooks/form.ts"
 
 export type BreakdownTypeGroupProps =
 	| {

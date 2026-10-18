@@ -1,10 +1,9 @@
 import { Trash2 } from "lucide-react"
-import useModal, {type ConfirmModalBtn, type ModalProps} from "@/contexts/modal.ts"
-import GenericModalContentCtn from "@/components/ui/modal/GenericModalContentCtn.tsx";
-import scrollTo from "@/utils/scroll.ts";
+import GenericModalContentCtn from "@/components/ui/modal/GenericModalContentCtn.tsx"
+import useModal, { type ConfirmModalBtn } from "@/contexts/modal.ts"
 
 type DeleteFormValueProps = {
-	className: string,
+	className: string
 	confirmButton: ConfirmModalBtn
 	closeButtonTitle: string
 	modalTitle: string
@@ -15,7 +14,7 @@ export default function DeleteFormValue({
 	modalTitle,
 	confirmButton,
 	closeButtonTitle,
-	modalText,
+	modalText
 }: DeleteFormValueProps) {
 	const { buildModal } = useModal()
 	const { styleType, text, action: deleteFn, type } = confirmButton
@@ -25,18 +24,20 @@ export default function DeleteFormValue({
 			onClick={() => {
 				buildModal({
 					modalTitle,
-					Content: <GenericModalContentCtn
-						text={modalText}
-						closeBtnTitle={closeButtonTitle}
-						confirmButton={{
-							styleType,
-							action: () => {
-								deleteFn()
-							},
-							text,
-							type,
-						}}
-					/>,
+					Content: (
+						<GenericModalContentCtn
+							text={modalText}
+							closeBtnTitle={closeButtonTitle}
+							confirmButton={{
+								styleType,
+								action: () => {
+									deleteFn()
+								},
+								text,
+								type
+							}}
+						/>
+					)
 				})
 			}}
 		/>

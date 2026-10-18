@@ -1,24 +1,51 @@
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
-import  {
-	useFormDataForCreation
-} from "@/lib/course-form.ts"
-import useCreateCourseInstanceOpts from "@/components/form/courses/hooks/useCreateCourseInstanceOpts.ts"
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
-import {isArrayEmpty, ServerErrorRes} from "@notas-universitarias/helpers"
-import { useRef } from "react"
+
 import {
-	getPreviousCoursesInfo,
-	registerCourseInstance
-} from "@/components/form/courses/Create/CreateCourseInstanceForm.tsx"
-import useToast from "@/contexts/toast.ts"
+	buildRequest,
+	isArrayEmpty,
+	ServerErrorRes
+} from "@notas-universitarias/helpers"
+import {
+	ADDING_LAB_BREAKDOWN,
+	type CoursesInfo,
+	type CreateCourseInstanceType,
+	type CreatingLaboratoryType
+} from "@notas-universitarias/types"
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
-import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
+import { useRef } from "react"
 import { BreakdownSharedContent } from "@/components/form/courses/BreakdownSharedContent.tsx"
+import useCreateCourseInstanceOpts from "@/components/form/courses/hooks/useCreateCourseInstanceOpts.ts"
+import FieldText from "@/components/form/general/FieldText.tsx"
+import {
+	genericBooleanRadios,
+	getRadioGroup
+} from "@/components/form/tanstack-fields/Radio/GetRadioGroup.ts"
+import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import { AddItem } from "@/components/general/AddItem.tsx"
+import useToast from "@/contexts/toast.ts"
+import { useFormDataForCreation } from "@/lib/course-form.ts"
+import { baseUrl } from "@/routes/__root.tsx"
 import scrollTo from "@/utils/scroll.ts"
-import {genericBooleanRadios, getRadioGroup} from "@/components/form/tanstack-fields/Radio/GetRadioGroup.ts";
-import {ADDING_LAB_BREAKDOWN, type CreatingLaboratoryType} from "@notas-universitarias/types";
-import FieldText from "@/components/form/general/FieldText.tsx";
+
+export const registerCourseInstance = async (dto: CreateCourseInstanceType) => {
+	return buildRequest<string, string>({
+		baseUrl,
+		path: "/course-instances",
+		includeCredentials: true,
+		method: "POST",
+		reqBody: dto
+	})
+}
+
+export const getPreviousCoursesInfo = async () => {
+	return buildRequest<CoursesInfo[], string>({
+		baseUrl,
+		path: "/courses",
+		method: "GET",
+		includeCredentials: true
+	})
+}
 
 export default function CreateInstanceForm() {
 	const { data } = useSuspenseQuery({
@@ -33,18 +60,20 @@ export default function CreateInstanceForm() {
 		mutationFn: registerCourseInstance,
 		onError: (error) => {
 			if (error instanceof ServerErrorRes) {
+				const { errors: content } = error
 				buildToast({
 					id: Date.now(),
 					type: "error",
-					content: error.errors
+					content
 				})
 			}
 		},
 		onSuccess: async (data) => {
+			const { content } = data
 			buildToast({
 				id: Date.now(),
 				type: "success",
-				content: data.content
+				content
 			})
 			await navigate({ to: "/home/current-period" })
 		}
@@ -62,7 +91,9 @@ export default function CreateInstanceForm() {
 	const classes = "flex flex-col"
 	const prevInstanceName = useRef<string | undefined>(undefined)
 	const prevInstanceId = useRef<string | undefined>(undefined)
-	const prevLaboratoryVal = useRef<CreatingLaboratoryType | undefined>(undefined)
+	const prevLaboratoryVal = useRef<CreatingLaboratoryType | undefined>(
+		undefined
+	)
 	return (
 		<AppForm>
 			<form
@@ -81,9 +112,13 @@ export default function CreateInstanceForm() {
 								if (value) {
 									prevInstanceName.current = form.getFieldValue("name")
 									form.setFieldValue("name", undefined)
-									form.setFieldValue("previousCourseId", prevInstanceId.current ?? data.content[0]._id.toString())
+									form.setFieldValue(
+										"previousCourseId",
+										prevInstanceId.current ?? data.content[0]._id.toString()
+									)
 								} else {
-									prevInstanceId.current = form.getFieldValue("previousCourseId")
+									prevInstanceId.current =
+										form.getFieldValue("previousCourseId")
 									form.setFieldValue("previousCourseId", undefined)
 									form.setFieldValue("name", prevInstanceName.current ?? "")
 								}
@@ -120,9 +155,9 @@ export default function CreateInstanceForm() {
 							<field.SelectField
 								items={data.content}
 								labelText={"¿Cómo se llama la materia?"}
-								setOptionsText={item => item.name}
-								setOptionKeys={item => item._id.toString()}
-								setOptionsValues={item => item._id.toString()}
+								setOptionsText={(item) => item.name}
+								setOptionKeys={(item) => item._id.toString()}
+								setOptionsValues={(item) => item._id.toString()}
 							/>
 						)}
 					/>
@@ -153,20 +188,25 @@ export default function CreateInstanceForm() {
 					listeners={{
 						onChange: ({ value }) => {
 							if (value) {
-								form.setFieldValue("laboratory", prevLaboratoryVal.current ?? {
-									profesorName: "",
-									percentage: 0,
-									breakdowns: [{
-										name: "",
+								form.setFieldValue(
+									"laboratory",
+									prevLaboratoryVal.current ?? {
+										profesorName: "",
 										percentage: 0,
-										allowsMultipleEntries: false
-									}]
-								})
+										breakdowns: [
+											{
+												name: "",
+												percentage: 0,
+												allowsMultipleEntries: false
+											}
+										]
+									}
+								)
 							} else {
 								prevLaboratoryVal.current = form.getFieldValue("laboratory")
 								form.setFieldValue("laboratory", undefined)
 							}
-						},
+						}
 					}}
 				/>
 				{laboratory && (
@@ -189,7 +229,11 @@ export default function CreateInstanceForm() {
 								/>
 							)}
 						/>
-						{!isArrayEmpty(laboratory.breakdowns) && (<h2 className={"text-xl mt-4 text-primary-500 font-bold"}>Evaluación del curso de laboratorio</h2>)}
+						{!isArrayEmpty(laboratory.breakdowns) && (
+							<h2 className={"text-xl mt-4 text-primary-500 font-bold"}>
+								Evaluación del curso de laboratorio
+							</h2>
+						)}
 						<AppField name={"laboratory.breakdowns"} mode={"array"}>
 							{(laboratoryBreakdownField) => (
 								<div className={"flex flex-col gap-8"}>
@@ -207,27 +251,27 @@ export default function CreateInstanceForm() {
 											</div>
 										)
 									})}
-									{laboratoryTotalPercentage < 100 ?(
-											<AddItem
-												title={ADDING_LAB_BREAKDOWN}
-												action={() => {
-													laboratoryBreakdownField.pushValue({
-														name: "",
-														percentage: 0,
-														allowsMultipleEntries: false
-													})
-												}}
-											/>
-
+									{laboratoryTotalPercentage < 100 ? (
+										<AddItem
+											title={ADDING_LAB_BREAKDOWN}
+											action={() => {
+												laboratoryBreakdownField.pushValue({
+													name: "",
+													percentage: 0,
+													allowsMultipleEntries: false
+												})
+											}}
+										/>
 									) : null}
-
 								</div>
 							)}
 						</AppField>
 					</>
 				)}
 				{breakdownList.length > 0 && (
-					<h2 className={"text-xl mt-4 text-primary-500 font-bold"}>Evaluación del curso</h2>
+					<h2 className={"text-xl mt-4 text-primary-500 font-bold"}>
+						Evaluación del curso
+					</h2>
 				)}
 				<AppField name={"breakdowns"} mode={"array"}>
 					{(field) => (

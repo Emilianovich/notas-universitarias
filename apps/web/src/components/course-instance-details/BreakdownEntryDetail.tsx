@@ -9,8 +9,13 @@ export function BreakdownEntryDetail({
 }: {
 	breakdownDetail: BreakdownDetail
 }) {
-	const { breakdownName, entriesData, contribution, percentage, allowsMultipleEntries } =
-		breakdownDetail
+	const {
+		breakdownName,
+		entriesData,
+		contribution,
+		percentage,
+		allowsMultipleEntries
+	} = breakdownDetail
 	return (
 		<article className={"flex flex-col justify-start items-center gap-8"}>
 			<div className={"flex justify-between items-center w-full"}>

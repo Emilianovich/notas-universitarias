@@ -129,9 +129,7 @@ export default function UserCredentialsForm({
 				<AppField
 					name={"password"}
 					children={(field) => (
-						<field.PasswordField
-							label={"¿Cuál es tu contraseña?"}
-						/>
+						<field.PasswordField label={"¿Cuál es tu contraseña?"} />
 					)}
 				/>
 				<div

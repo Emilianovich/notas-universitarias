@@ -1,18 +1,19 @@
-import {copyObject, updateCourseAverageGrade} from "@notas-universitarias/helpers"
+import { updateCourseAverageGrade } from "@notas-universitarias/helpers"
 import type {
 	AcademicPeriodDocument,
 	Course,
 	CourseDocument,
 	CourseInstance,
 	CourseInstanceDocument,
-	CoursesInfo, CreateCourseInstanceType,
+	CoursesInfo,
+	CreateCourseInstanceType,
 	UpdateCourseInstanceDto
 } from "@notas-universitarias/types"
 import { HTTPException } from "hono/http-exception"
 import type { FindCursor, ObjectId, WithId } from "mongodb"
 
 import getValidObjectId, {
-	mapCreateCourseInstanceToDTO, prepareCourseInstance
+	mapCreateCourseInstanceToDTO
 } from "../../helpers/helpers.js"
 import type { MongoService } from "../../modules/db/MongoService.js"
 import { AcademicPeriodsRepository } from "../../repositories/academicPeriods.js"
@@ -150,7 +151,7 @@ export class CourseService {
 			throw new HTTPException(404, {
 				message: "Usted no tiene una materia registrada con ese id"
 			})
-		const { _id, ...courseInstance} = copyCourseInstance
+		const { _id, ...courseInstance } = copyCourseInstance
 		return { courseInstance, courseInstanceDoc, courseName }
 	}
 

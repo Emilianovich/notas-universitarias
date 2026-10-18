@@ -1,8 +1,9 @@
 import type {
 	CourseBreakdown,
 	CourseInstance,
-	CourseInstanceDocument, CreateCourseInstanceType,
-	CreatingCourseInstanceBreakdown, Laboratory,
+	CourseInstanceDocument,
+	CreateCourseInstanceType,
+	CreatingCourseInstanceBreakdown,
 	UpdateCourseInstanceDto,
 	UpdateUserDTO,
 	UserDocument
@@ -55,9 +56,9 @@ export function mapCreateCourseInstanceToDTO(
 			laboratory: {
 				...laboratory,
 				finalGrade: 0,
-				breakdowns: laboratory.breakdowns.map(mapBreakdownSchemaToDto),
-			},
-		}),
+				breakdowns: laboratory.breakdowns.map(mapBreakdownSchemaToDto)
+			}
+		})
 	}
 }
 
@@ -97,13 +98,15 @@ export function mapUpdateUserDtoToUserDocument(
 	}
 }
 
-export function prepareBreakdowns(breakdown: CourseBreakdown) : CourseBreakdown {
+export function prepareBreakdowns(breakdown: CourseBreakdown): CourseBreakdown {
 	breakdown.percentage *= 100
 	breakdown.contribution *= 100
 	return breakdown
 }
-export function prepareCourseInstance(instance: CourseInstance) : CourseInstance {
-	const { laboratory, profesorName, finalGrade }  = instance
+export function prepareCourseInstance(
+	instance: CourseInstance
+): CourseInstance {
+	const { laboratory, profesorName, finalGrade } = instance
 	const breakdowns = instance.breakdowns.map(prepareBreakdowns)
 	if (laboratory) {
 		laboratory.breakdowns.forEach(prepareBreakdowns)
@@ -114,8 +117,8 @@ export function prepareCourseInstance(instance: CourseInstance) : CourseInstance
 		breakdowns,
 		...(laboratory && {
 			laboratory: {
-				...laboratory,
-			},
-		}),
+				...laboratory
+			}
+		})
 	}
 }

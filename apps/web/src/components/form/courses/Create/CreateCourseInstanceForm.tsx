@@ -219,7 +219,7 @@ export default function CreateCourseInstanceForm() {
 			{isRegistered && (
 				<Field
 					name={"previousCourseId"}
-					children={(field) => {
+					children={(_field) => {
 						return (
 							<SelectField
 								selectedItem={data.content[0].name}

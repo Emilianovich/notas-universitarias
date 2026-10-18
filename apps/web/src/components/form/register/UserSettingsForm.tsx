@@ -9,22 +9,22 @@ import {
 } from "@notas-universitarias/types/dtos"
 import { createFormHook, useSelector } from "@tanstack/react-form"
 import defaultSettings from "@/components/context-providers/default-settings.ts"
+import {
+	appThemeOptions,
+	fontFamilyOptions,
+	petNameOptions
+} from "@/components/form/tanstack-fields/Select/option-functions.ts"
+import SelectField from "@/components/form/tanstack-fields/Select/SelectField.tsx"
 import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import Button from "@/components/general/Button.tsx"
 import PreviewPet from "@/components/ui/PreviewPet.tsx"
 import PreviewText from "@/components/ui/PreviewText.tsx"
+import { allowedThemes } from "@/constants/app-themes.ts"
+import { allowedFontFamilies } from "@/constants/font-families.ts"
+import { allowedPets } from "@/constants/pet-names.ts"
 import useToast from "@/contexts/toast.ts"
 import { fieldContext, formContext } from "@/hooks/form.ts"
 import type { RegisterFormProps } from "@/types/input.ts"
-import SelectField from "@/components/form/tanstack-fields/Select/SelectField.tsx"
-import {
-	fontFamilyOptions,
-	petNameOptions,
-	appThemeOptions
-} from "@/components/form/tanstack-fields/Select/option-functions.ts"
-import {allowedFontFamilies} from "@/constants/font-families.ts";
-import {allowedThemes} from "@/constants/app-themes.ts";
-import {allowedPets} from "@/constants/pet-names.ts";
 
 const { useAppForm } = createFormHook({
 	fieldContext,

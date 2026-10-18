@@ -2,13 +2,15 @@ import type {
 	Course,
 	CourseBreakdown,
 	CourseBreakdownEntry,
+	CourseBreakdownSchemaType,
 	CourseInstance,
 	GradeLetter,
 	PersonFullName,
 	RemoveElementType,
 	RemoveSpecificStrings,
 	RequestBuilder,
-	SuccessRes
+	SuccessRes,
+	UpdateCourseInstanceDto
 } from "@notas-universitarias/types"
 
 export function stringToArray(someString: string): string[] {
@@ -260,19 +262,19 @@ export async function buildRequest<T, U>({
 	baseUrl
 }: RequestBuilder): Promise<SuccessRes<T>> {
 	const url = `${baseUrl}${path}`
-	 const req = await fetch(url, {
-		 method,
-		 credentials: includeCredentials ? "include" : "omit",
-		 headers: {
-		 	...(reqBody && {
-				 "Content-Type": "application/json"
+	const req = await fetch(url, {
+		method,
+		credentials: includeCredentials ? "include" : "omit",
+		headers: {
+			...(reqBody && {
+				"Content-Type": "application/json"
 			}),
-			 "Accept": "application/json"
-		 },
-	 	...(reqBody && {
-			 body: JSON.stringify(reqBody),
+			Accept: "application/json"
+		},
+		...(reqBody && {
+			body: JSON.stringify(reqBody)
 		})
-	 })
+	})
 	return getResponse<U>(req)
 }
 
@@ -308,13 +310,33 @@ export function copyArray<T>(array: T[]) {
 	return [...array]
 }
 
-export function mapBreakdownForDemo(breakdown : Omit<CourseBreakdown, "contribution">) {
+export function mapBreakdownForDemo(
+	breakdown: Omit<CourseBreakdown, "contribution">
+) {
 	return {
 		...breakdown,
-		contribution: 0,
+		contribution: 0
 	}
 }
 
-export function mapBreakdownsForDemo(breakdowns : Omit<CourseBreakdown, "contribution">[]) : CourseBreakdown[] {
+export function mapBreakdownsForDemo(
+	breakdowns: Omit<CourseBreakdown, "contribution">[]
+): CourseBreakdown[] {
 	return breakdowns.map(mapBreakdownForDemo)
+}
+
+function prepareBreakdownPercentages(breakdowns: CourseBreakdownSchemaType[]) {
+	breakdowns.forEach((breakdown) => {
+		breakdown.percentage *= 10
+	})
+}
+export function prepareCourseInstanceForDisplay(
+	instance: UpdateCourseInstanceDto
+) {
+	const { laboratory } = instance
+	if (laboratory) {
+		laboratory.percentage *= 10
+		prepareBreakdownPercentages(laboratory.breakdowns)
+	}
+	prepareBreakdownPercentages(instance.breakdowns)
 }

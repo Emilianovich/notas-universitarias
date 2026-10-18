@@ -4,18 +4,18 @@ import {
 	type DataAfterRegister,
 	ON_SUBMIT_INVALID_MSG
 } from "@notas-universitarias/types"
-import {createFormHook} from "@tanstack/react-form"
+import { createFormHook } from "@tanstack/react-form"
 import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
+import { SharedAcademicPeriodForm } from "@/components/form/academic-periods/SharedAcademicPeriodForm.tsx"
+import DateField from "@/components/form/tanstack-fields/DateField.tsx"
 import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
+import TextField from "@/components/form/tanstack-fields/TextField.tsx"
 import Button from "@/components/general/Button.tsx"
 import useToast from "@/contexts/toast.ts"
+import { fieldContext, formContext } from "@/hooks/form.ts"
 import { baseUrl } from "@/routes/__root.tsx"
 import type { RegisterFormProps } from "@/types/input.ts"
-import {fieldContext, formContext} from "@/hooks/form.ts";
-import TextField from "@/components/form/tanstack-fields/TextField.tsx";
-import DateField from "@/components/form/tanstack-fields/DateField.tsx";
-import {SharedAcademicPeriodForm} from "@/components/form/academic-periods/SharedAcademicPeriodForm.tsx";
 
 const handleRegisterAftermath = async (payload: DataAfterRegister) => {
 	return buildRequest<string, string>({
@@ -92,7 +92,7 @@ export default function CreateAcademicPeriodForm({
 			})
 		}
 	})
-	const { AppForm  } = form
+	const { AppForm } = form
 	return (
 		<AppForm>
 			<form

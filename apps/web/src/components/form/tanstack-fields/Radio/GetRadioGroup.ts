@@ -1,5 +1,5 @@
+import { NOT_NESTED_LABEL, STANDALONE_LABEL } from "@notas-universitarias/types"
 import type { RadioButtonProps } from "@/components/form/tanstack-fields/Radio/RadioButton.tsx"
-import {NOT_NESTED_LABEL, STANDALONE_LABEL} from "@notas-universitarias/types";
 
 type RadiosArrayType<T> = {
 	labelText: string
@@ -7,9 +7,9 @@ type RadiosArrayType<T> = {
 }[]
 export const getRadioGroup = <T>(
 	radioGroupName: string,
-	radios: RadiosArrayType<T>,
+	radios: RadiosArrayType<T>
 ): RadioButtonProps<T>[] => {
-	return radios.map((radio) : RadioButtonProps<T> => {
+	return radios.map((radio): RadioButtonProps<T> => {
 		const { labelText, value } = radio
 		return {
 			radioGroupName,
@@ -17,10 +17,10 @@ export const getRadioGroup = <T>(
 			value
 		}
 	})
-
 }
 
-export const allowsMultiplesEntriesRadios : RadiosArrayType<boolean> = [{
+export const allowsMultiplesEntriesRadios: RadiosArrayType<boolean> = [
+	{
 		labelText: STANDALONE_LABEL,
 		value: false
 	},
@@ -30,10 +30,11 @@ export const allowsMultiplesEntriesRadios : RadiosArrayType<boolean> = [{
 	}
 ]
 
-export const genericBooleanRadios : RadiosArrayType<boolean> = [{
-	labelText: "Sí",
-	value: true
-},
+export const genericBooleanRadios: RadiosArrayType<boolean> = [
+	{
+		labelText: "Sí",
+		value: true
+	},
 	{
 		labelText: "No",
 		value: false

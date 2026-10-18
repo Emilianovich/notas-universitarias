@@ -1,5 +1,5 @@
-import type { MigrationObject } from "../index.js"
 import type { Db } from "mongodb"
+import type { MigrationObject } from "../index.js"
 
 export const migration: MigrationObject = {
 	name: "001-update-font-families",

@@ -7,11 +7,11 @@ import {
 import { revalidateLogic } from "@tanstack/react-form"
 import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
+import { SharedAcademicPeriodForm } from "@/components/form/academic-periods/SharedAcademicPeriodForm.tsx"
+import { useAppForm } from "@/components/form/register/CreateAcademicPeriodForm.tsx"
 import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import useToast from "@/contexts/toast.ts"
 import { baseUrl } from "@/routes/__root.tsx"
-import {useAppForm} from "@/components/form/register/CreateAcademicPeriodForm.tsx";
-import {SharedAcademicPeriodForm} from "@/components/form/academic-periods/SharedAcademicPeriodForm.tsx";
 
 const createNewAcademicPeriod = async (dto: CreateAcademicPeriodsDto) => {
 	return buildRequest<string, string>({
@@ -22,7 +22,6 @@ const createNewAcademicPeriod = async (dto: CreateAcademicPeriodsDto) => {
 		includeCredentials: true
 	})
 }
-
 
 export default function AcademicPeriodForm() {
 	const { buildToast } = useToast()

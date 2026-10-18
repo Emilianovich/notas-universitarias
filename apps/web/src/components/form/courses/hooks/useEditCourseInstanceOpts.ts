@@ -1,30 +1,36 @@
 import {
-	gradeToLetter, mapBreakdownsForDemo,
-	updateCourseInstanceFinalGrade,
+	gradeToLetter,
+	mapBreakdownsForDemo,
+	roundNumber,
+	updateCourseInstanceFinalGrade
 } from "@notas-universitarias/helpers"
 import {
 	type CourseInstance,
 	ON_SUBMIT_INVALID_MSG,
-	updateCourseInstanceSchema,
+	type UpdateCourseInstanceDto,
+	updateCourseInstanceSchema
 } from "@notas-universitarias/types"
-import { createFormHook } from "@tanstack/react-form"
+import { createFormHook, formOptions } from "@tanstack/react-form"
+import {
+	defaultValues,
+	type EditCourseInstanceOpts
+} from "@/components/form/courses/types/types.ts"
 import NumberField from "@/components/form/tanstack-fields/NumberField.tsx"
+import RadioGroup from "@/components/form/tanstack-fields/Radio/RadioGroup.tsx"
+import SelectField from "@/components/form/tanstack-fields/Select/SelectField.tsx"
 import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
 import TextField from "@/components/form/tanstack-fields/TextField.tsx"
 import useToast from "@/contexts/toast.ts"
 import { fieldContext, formContext } from "@/hooks/form.ts"
-import type { EditCourseInstanceOpts } from "@/components/form/courses/types/types.ts"
-import { RadioButton } from "@/components/form/tanstack-fields/Radio/RadioButton.tsx"
-import SelectField from "@/components/form/tanstack-fields/Select/SelectField.tsx";
 
-export const { useAppForm } = createFormHook({
+export const { useAppForm, withForm } = createFormHook({
 	fieldContext,
 	formContext,
 	fieldComponents: {
 		TextField,
 		NumberField,
-		RadioField: RadioButton,
-		Select: SelectField
+		RadioGroup,
+		SelectField
 	},
 	formComponents: { SubmitBtn }
 })
@@ -35,6 +41,7 @@ export function useEditCourseInstanceOpts({
 	isForDemo
 }: EditCourseInstanceOpts) {
 	const { buildToast } = useToast()
+	// prepareCourseInstanceForDisplay(defaultValues)
 	return useAppForm({
 		validators: {
 			onBlur: updateCourseInstanceSchema
@@ -65,7 +72,10 @@ export function useEditCourseInstanceOpts({
 					profesorName: value.profesorName ?? ""
 				}
 				updateCourseInstanceFinalGrade(courseInstance)
-				const finalGrade = Number((courseInstance.finalGrade * 100).toFixed(2))
+				const finalGrade = roundNumber({
+					number: courseInstance.finalGrade * 100,
+					amountOfDecimals: 2
+				})
 				buildToast({
 					id: Date.now(),
 					type: "info",
@@ -77,3 +87,10 @@ export function useEditCourseInstanceOpts({
 		}
 	})
 }
+
+export const editCourseInstanceOpts = (
+	defaultValuesAsProps: UpdateCourseInstanceDto | undefined
+) =>
+	formOptions({
+		defaultValues: defaultValuesAsProps ?? defaultValues
+	})

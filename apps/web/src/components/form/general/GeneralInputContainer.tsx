@@ -17,7 +17,13 @@ export default function GeneralInputContainer({
 	input
 }: GeneralInputContainerProps) {
 	return (
-		<div className={`grid gap-4 relative`} style={{ maxWidth, gridTemplateRows: `${error && isBlurred ? "1fr 20px" : "1fr"}` }}>
+		<div
+			className={`grid gap-4 relative`}
+			style={{
+				maxWidth,
+				gridTemplateRows: `${error && isBlurred ? "1fr 20px" : "1fr"}`
+			}}
+		>
 			{/** biome-ignore lint/a11y/noLabelWithoutControl: <The ReactNode expected is an input> */}
 			<label
 				style={{ fontSize: 18, marginTop: "1em" }}

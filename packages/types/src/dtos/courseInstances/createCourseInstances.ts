@@ -89,8 +89,14 @@ export const CreateCourseInstanceSchema = z
 		breakdowns: z.array(CreateBreakdownSchema)
 	})
 	.superRefine((self, ctx) => {
-		const { isRegistered, breakdowns, previousCourseId, laboratory, name, hasLaboratory } =
-			self
+		const {
+			isRegistered,
+			breakdowns,
+			previousCourseId,
+			laboratory,
+			name,
+			hasLaboratory
+		} = self
 		if (isRegistered && !previousCourseId) {
 			ctx.addIssue({
 				code: "custom",
@@ -131,14 +137,16 @@ export const CreateCourseInstanceSchema = z
 			ctx.addIssue({
 				code: "custom",
 				path: ["laboratory"],
-				message: "Como la materia tiene parte de laboratorio, tiene que especificar sus detalles"
+				message:
+					"Como la materia tiene parte de laboratorio, tiene que especificar sus detalles"
 			})
 		}
 		if (!hasLaboratory && laboratory) {
 			ctx.addIssue({
 				code: "custom",
 				path: ["laboratory"],
-				message: "Como no especificó que la materia tiene parte de laboratorio, no tiene que especificar sus detalles"
+				message:
+					"Como no especificó que la materia tiene parte de laboratorio, no tiene que especificar sus detalles"
 			})
 		}
 		if (!isTotalPercentageValid(breakdowns, laboratory)) {
@@ -149,4 +157,6 @@ export const CreateCourseInstanceSchema = z
 		}
 	})
 
-export type CreateCourseInstanceType = z.infer<typeof CreateCourseInstanceSchema>
+export type CreateCourseInstanceType = z.infer<
+	typeof CreateCourseInstanceSchema
+>

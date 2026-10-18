@@ -3,7 +3,7 @@ import { type ReactNode, useState } from "react"
 export function SettingsContainer({
 	title,
 	children,
-	className,
+	className
 }: {
 	title: string
 	children: ReactNode

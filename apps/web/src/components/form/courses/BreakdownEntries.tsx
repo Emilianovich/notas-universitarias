@@ -1,6 +1,6 @@
 import type { CourseBreakdownEntry } from "@notas-universitarias/types"
-import DeleteFormValue from "@/components/form/general/DeleteFormValue.tsx"
 import { withFieldGroup } from "@/components/form/courses/BreakdownSharedContent.tsx"
+import DeleteFormValue from "@/components/form/general/DeleteFormValue.tsx"
 
 const defaultValues: CourseBreakdownEntry = {
 	name: "",
@@ -37,40 +37,38 @@ const BreakdownEntries = withFieldGroup({
 					/>
 				)}
 				<div className={"flex w-full justify-evenly items-center"}>
-						<>
-							<AppField
-								name={`rawScore`}
-								children={(rawScoreField) => (
-									<rawScoreField.NumberField
-										label={"Puntaje Obtenido"}
-										placeholder={""}
-									/>
-								)}
+					<AppField
+						name={`rawScore`}
+						children={(rawScoreField) => (
+							<rawScoreField.NumberField
+								label={"Puntaje Obtenido"}
+								placeholder={""}
 							/>
-							<AppField
-								name={`maxScore`}
-								children={(maxScoreField) => (
-									<maxScoreField.NumberField
-										label={"Puntaje Máximo"}
-										placeholder={""}
-									/>
-								)}
+						)}
+					/>
+					<AppField
+						name={`maxScore`}
+						children={(maxScoreField) => (
+							<maxScoreField.NumberField
+								label={"Puntaje Máximo"}
+								placeholder={""}
 							/>
-							<DeleteFormValue
-								className={""}
-								modalTitle={modalTitle}
-								modalContent={
-									"Si aceptas, estarás eliminando permanentemente esta nota"
-								}
-								confirmButton={{
-									type: "modal-primary",
-									text: "Sí, eliminar nota",
-									action: confirmBtnAction
-								}}
-								closeButtonTitle={"No, me arrepentí"}
-							/>
-						</>
-
+						)}
+					/>
+					<DeleteFormValue
+						className={""}
+						modalTitle={modalTitle}
+						modalText={
+							"Si aceptas, estarás eliminando permanentemente esta nota"
+						}
+						confirmButton={{
+							styleType: "modal-primary",
+							type: "button",
+							text: "Sí, eliminar nota",
+							action: confirmBtnAction
+						}}
+						closeButtonTitle={"No, me arrepentí"}
+					/>
 				</div>
 			</div>
 		)

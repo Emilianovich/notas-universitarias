@@ -1,20 +1,23 @@
+import { createFormHook } from "@tanstack/react-form"
 import { breakdownSharedContentDefaultValues } from "@/components/form/courses/types/types.ts"
 import DeleteFormValue from "@/components/form/general/DeleteFormValue.tsx"
-import { createFormHook } from "@tanstack/react-form"
-import TextField from "@/components/form/tanstack-fields/TextField.tsx"
 import NumberField from "@/components/form/tanstack-fields/NumberField.tsx"
-import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
-import { fieldContext, formContext } from "@/hooks/form.ts"
+import {
+	allowsMultiplesEntriesRadios,
+	getRadioGroup
+} from "@/components/form/tanstack-fields/Radio/GetRadioGroup.ts"
 import RadioGroup from "@/components/form/tanstack-fields/Radio/RadioGroup.tsx"
-import {allowsMultiplesEntriesRadios, getRadioGroup} from "@/components/form/tanstack-fields/Radio/GetRadioGroup.ts"
-import SelectField from "@/components/form/tanstack-fields/Select/SelectField.tsx";
+import SelectField from "@/components/form/tanstack-fields/Select/SelectField.tsx"
+import SubmitBtn from "@/components/form/tanstack-fields/SubmitBtn.tsx"
+import TextField from "@/components/form/tanstack-fields/TextField.tsx"
+import { fieldContext, formContext } from "@/hooks/form.ts"
 
-export const { withForm, withFieldGroup } = createFormHook({
+export const { withFieldGroup } = createFormHook({
 	fieldComponents: {
 		TextField,
 		NumberField,
-		SelectField,
-		RadioGroup
+		RadioGroup,
+		SelectField
 	},
 	formComponents: { SubmitBtn },
 	fieldContext,
@@ -25,13 +28,9 @@ export const BreakdownSharedContent = withFieldGroup({
 	defaultValues: breakdownSharedContentDefaultValues,
 	props: {
 		modalTitle: "",
-		confirmBtnAction: () => console.log("This is the modal confirm action"),
+		confirmBtnAction: () => console.log("This is the modal confirm action")
 	},
-	render: function Render({
-		group,
-		modalTitle,
-		confirmBtnAction,
-	}) {
+	render: function Render({ group, modalTitle, confirmBtnAction }) {
 		const { AppField } = group
 		return (
 			<div className={"border flex flex-col gap-8"}>
@@ -48,7 +47,7 @@ export const BreakdownSharedContent = withFieldGroup({
 					<DeleteFormValue
 						className={"absolute top-4 left-110"}
 						modalTitle={modalTitle}
-						modalContent={
+						modalText={
 							"Eliminarás completamente la evaluación. No podrás recuperar el progreso que tenías"
 						}
 						confirmButton={{
@@ -77,7 +76,10 @@ export const BreakdownSharedContent = withFieldGroup({
 						return (
 							<typeField.RadioGroup
 								radioGroupName={radioGroupName}
-								radios={getRadioGroup(radioGroupName, allowsMultiplesEntriesRadios)}
+								radios={getRadioGroup(
+									radioGroupName,
+									allowsMultiplesEntriesRadios
+								)}
 							/>
 						)
 					}}

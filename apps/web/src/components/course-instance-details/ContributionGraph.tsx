@@ -11,7 +11,7 @@ export default function ContributionGraph({
 	label
 }: CourseBreakdownTableData) {
 	const data = userData.map((data) => {
-		const {contribution, percentage} = data
+		const { contribution, percentage } = data
 		return {
 			...data,
 			contribution,

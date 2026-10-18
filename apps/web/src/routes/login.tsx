@@ -1,16 +1,11 @@
-import {
-	createSuccessApiRes,
-	type LoginDTO,
-	loginDTO
-} from "@notas-universitarias/types"
+import { buildRequest } from "@notas-universitarias/helpers"
+import type { LoginDTO } from "@notas-universitarias/types"
 import { createFileRoute } from "@tanstack/react-router"
 import { z } from "zod"
 import ToastProvider from "@/components/context-providers/toast-provider.tsx"
 import LoginForm from "@/components/form/login/LoginForm.tsx"
 import Content from "@/components/general/Content"
-import RequestBuilder from "@/lib/builder.ts"
-import {buildRequest} from "@notas-universitarias/helpers";
-import {baseUrl} from "@/routes/__root.tsx";
+import { baseUrl } from "@/routes/__root.tsx"
 
 const redirectedSchema = z.object({
 	wasRedirected: z.enum(["true"]).optional()
@@ -35,7 +30,7 @@ export const handleLogin = async (dto: LoginDTO) => {
 		method: "POST",
 		reqBody: dto,
 		includeCredentials: true,
-		path: "/auth/login",
+		path: "/auth/login"
 	})
 }
 

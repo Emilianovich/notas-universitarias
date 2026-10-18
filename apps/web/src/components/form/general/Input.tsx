@@ -1,8 +1,8 @@
 import { INPUT_MAX_WIDTH } from "@notas-universitarias/types"
+import { Eye, EyeClosed } from "lucide-react"
 import { useState } from "react"
 import GeneralInputContainer from "@/components/form/general/GeneralInputContainer.tsx"
 import type { InputProps, PasswordImageProps } from "@/types/input.ts"
-import { Eye, EyeClosed } from "lucide-react"
 
 export default function Input({
 	name,
