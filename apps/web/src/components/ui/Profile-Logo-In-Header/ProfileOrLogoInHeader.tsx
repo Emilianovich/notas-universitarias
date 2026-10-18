@@ -1,7 +1,7 @@
 import { useNavigate } from "@tanstack/react-router"
 import IconButton from "@/components/ui/IconButton.tsx"
+import GenericModalContentCtn from "@/components/ui/modal/GenericModalContentCtn.tsx"
 import useModal from "@/contexts/modal.ts"
-import GenericModalContentCtn from "@/components/ui/modal/GenericModalContentCtn.tsx";
 
 export type ProfileOrLogoInHeaderProps =
 	| {
@@ -25,26 +25,31 @@ export function ProfileOrLogoInHeader({
 }: ProfileOrLogoInHeaderProps) {
 	const { buildModal } = useModal()
 	const navigate = useNavigate()
-	const action = async () => navigate({
+	const action = async () =>
+		navigate({
 			to: src === "/profile.svg" ? "/home/settings" : "/"
 		})
-return (
+	return (
 		<div className={`absolute ${direction}-8 top-1/2 -translate-y-1/2`}>
 			<IconButton
 				className={className}
 				action={() => {
 					buildModal({
 						modalTitle: "Navegar a la landing page",
-						Content: <GenericModalContentCtn
-									text={"Irás a la landing page. Para regresar tu perfil agrega /home/settings al final de tu URL actual"}
-									closeBtnTitle={"No navegar"}
-									confirmButton={{
-										text: "Navegar",
-										type: "button",
-										styleType: "primary",
-										action,
-									}}
-								/>
+						Content: (
+							<GenericModalContentCtn
+								text={
+									"Irás a la landing page. Para regresar tu perfil agrega /home/settings al final de tu URL actual"
+								}
+								closeBtnTitle={"No navegar"}
+								confirmButton={{
+									text: "Navegar",
+									type: "button",
+									styleType: "primary",
+									action
+								}}
+							/>
+						)
 					})
 				}}
 				img={{

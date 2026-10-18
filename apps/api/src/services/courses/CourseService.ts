@@ -1,15 +1,12 @@
-import {
-	roundNumber,
-	updateCourseAverageGrade
-} from "@notas-universitarias/helpers"
+import { updateCourseAverageGrade } from "@notas-universitarias/helpers"
 import type {
 	AcademicPeriodDocument,
 	Course,
 	CourseDocument,
 	CourseInstance,
 	CourseInstanceDocument,
-	CourseInstanceToBeCreated,
 	CoursesInfo,
+	CreateCourseInstanceType,
 	UpdateCourseInstanceDto
 } from "@notas-universitarias/types"
 import { HTTPException } from "hono/http-exception"
@@ -33,7 +30,7 @@ export class CourseService {
 		this.academicPeriodRepository = new AcademicPeriodsRepository(mongoService)
 	}
 	async handleCourseCreation(
-		dto: CourseInstanceToBeCreated,
+		dto: CreateCourseInstanceType,
 		userId: ObjectId,
 		previousCourseId: string | undefined
 	) {
@@ -113,6 +110,7 @@ export class CourseService {
 		)
 	}
 	// NOTE: courseInstances do not have a userId so its necessary a validation to ensure it belongs to logged user
+	// NOTE: frontend needs to prepare courseInstance for presentation
 	async getCourseInstance(
 		courseInstanceId: ObjectId,
 		userId: ObjectId
@@ -153,23 +151,7 @@ export class CourseService {
 			throw new HTTPException(404, {
 				message: "Usted no tiene una materia registrada con ese id"
 			})
-		const { _id, ...rest } = copyCourseInstance
-		const { ...courseInstance } = rest
-		// TODO REVIEW: consider moving fully to client
-		courseInstance.breakdown.forEach((breakdown) => {
-			breakdown.percentage = roundNumber({
-				number: breakdown.percentage * 100,
-				amountOfDecimals: 2
-			})
-			if (breakdown.laboratoryDetails) {
-				breakdown.laboratoryDetails.breakdown.forEach((detail) => {
-					detail.percentage = roundNumber({
-						number: detail.percentage * 100,
-						amountOfDecimals: 2
-					})
-				})
-			}
-		})
+		const { _id, ...courseInstance } = copyCourseInstance
 		return { courseInstance, courseInstanceDoc, courseName }
 	}
 
@@ -213,11 +195,10 @@ export class CourseService {
 		const updatedPeriodCourseInstances: CourseInstanceDocument[] = []
 		academicPeriod.courseInstances.forEach(
 			(instance: CourseInstanceDocument) => {
-				const { _id, ...rest } = instance
+				const { _id } = instance
 				if (!_id?.equals(updatedCourseInstance._id)) {
 					updatedPeriodCourseInstances.push({
-						_id,
-						...rest
+						...instance
 					})
 				} else {
 					updatedPeriodCourseInstances.push({

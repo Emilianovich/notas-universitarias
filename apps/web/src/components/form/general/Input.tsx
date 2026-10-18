@@ -1,3 +1,5 @@
+import { INPUT_MAX_WIDTH } from "@notas-universitarias/types"
+import { Eye, EyeClosed } from "lucide-react"
 import { useState } from "react"
 import GeneralInputContainer from "@/components/form/general/GeneralInputContainer.tsx"
 import type { InputProps, PasswordImageProps } from "@/types/input.ts"
@@ -10,9 +12,7 @@ export default function Input({
 	value,
 	handleBlur,
 	isBlurred,
-	color,
 	label,
-	id,
 	originallyPassword,
 	placeholder
 }: InputProps<string>) {
@@ -21,17 +21,14 @@ export default function Input({
 	>(type)
 	const borderColor =
 		error && isBlurred ? "border border-red-400" : "transparent"
-	const maxWidth = 400
 	return (
 		<GeneralInputContainer
 			labelText={label}
-			inputId={id}
-			maxWidth={maxWidth}
+			maxWidth={INPUT_MAX_WIDTH}
 			isBlurred={isBlurred}
 			input={
 				<div className={"relative"}>
 					<input
-						id={id}
 						name={name}
 						type={currentInputType}
 						onChange={syncValueToState}
@@ -58,18 +55,15 @@ export default function Input({
 }
 
 function PasswordImage({ isOpen, changeType }: PasswordImageProps) {
-	const imageSrc = isOpen ? "/eye-open.svg" : "/eye-closed.svg"
-	const alt = isOpen
-		? "Eye opened for visible password"
-		: "Eye closed for not visible password"
+	const styles =
+		"w-7.5 h-6 absolute right-8 top-1/2 -translate-y-1/2 hover:scale-95 cursor-pointer text-primary-300"
 	return (
-		<img
-			src={imageSrc}
-			alt={alt}
-			className={
-				"w-7.5 h-6 absolute right-8 top-1/2 -translate-y-1/2 hover:scale-95 cursor-pointer"
-			}
-			onClick={changeType}
-		/>
+		<>
+			{isOpen ? (
+				<Eye className={styles} onClick={changeType} />
+			) : (
+				<EyeClosed className={styles} onClick={changeType} />
+			)}
+		</>
 	)
 }

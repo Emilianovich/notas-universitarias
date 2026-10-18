@@ -1,28 +1,31 @@
-import type { CourseInstance } from "@notas-universitarias/types"
+import { updateCourseInstanceFinalGrade } from "@notas-universitarias/helpers"
+import type { CourseInstance, Laboratory } from "@notas-universitarias/types"
 
 export type CourseBreakdownTableData = {
 	label: string
 	userData: ReturnType<typeof getCourseEvalFromBreakdowns>
 }
+
+export type CourseEvalFromBreakdownsType = ReturnType<
+	typeof getCourseEvalFromBreakdowns
+>
 export default function getCourseEvalFromBreakdowns(course: CourseInstance) {
-	return course.breakdown.map((breakdown) => {
+	return course.breakdowns.map((breakdown) => {
 		return {
 			name: breakdown.name,
-			percentage: breakdown.percentage,
-			contribution: breakdown.contribution
+			percentage: breakdown.percentage * 100,
+			contribution: breakdown.contribution * 100
 		}
 	})
 }
 
-export function getLabEvalFromBreakdowns(course: CourseInstance) {
-	const labCourse = course.breakdown.find(
-		(breakdown) => breakdown.type === "NESTED"
-	)
-	if (!labCourse) return undefined
+export function getLaboratoryBreakdownData(lab: Laboratory) {
+	const { percentage } = lab
+	updateCourseInstanceFinalGrade(lab)
+	const contribution = percentage * lab.finalGrade
 	return {
-		labEvals: getCourseEvalFromBreakdowns(
-			labCourse?.laboratoryDetails as CourseInstance
-		),
-		labCourseInstance: labCourse?.laboratoryDetails as CourseInstance
+		name: "Laboratorio",
+		percentage: percentage * 100,
+		contribution
 	}
 }

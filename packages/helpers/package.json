@@ -6,11 +6,17 @@
 	"exports": {
 		".": "./src/index.ts"
 	},
+	"scripts": {
+		"test": "vitest",
+		"test:ui": "vitest --ui"
+	},
 	"dependencies": {
 		"@notas-universitarias/types": "workspace:*"
 	},
 	"devDependencies": {
+		"@vitest/ui": "4.1.9",
 		"tsup": "^8.5.1",
-		"typescript": "^5.8.3"
+		"typescript": "^5.8.3",
+		"vitest": "^4.1.9"
 	}
 }

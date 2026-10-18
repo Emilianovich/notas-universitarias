@@ -15,7 +15,6 @@ export default function NumberInput({
 	isBlurred,
 	color,
 	label,
-	id,
 	placeholder
 }: Omit<InputProps<string>, "originallyPassword" | "type">) {
 	const borderColor =
@@ -24,7 +23,6 @@ export default function NumberInput({
 		<GeneralInputContainer
 			error={error}
 			labelText={label}
-			inputId={id}
 			maxWidth={500}
 			isBlurred={isBlurred}
 			input={

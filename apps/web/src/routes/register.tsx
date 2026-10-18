@@ -46,7 +46,7 @@ function RouteComponent() {
 					>
 						{!isFirstDone && (
 							<>
-								<h1 className={"mt-5 text-2xl text-center text-primary-500"}>
+								<h1 className={"mt-5 text-3xl text-center text-primary-500"}>
 									Cuéntanos sobre ti
 								</h1>
 								<UserCredentialsForm

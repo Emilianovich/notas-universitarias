@@ -31,6 +31,8 @@ export const LAB_CONTRIBUTION_TITLE =
 export const NO_BREAKDOWN_ENTRIES = "Aún no hay calificaciones registradas"
 export const CTX_MENU_SEE_PROGRESS_TEXT = "Ver progreso"
 export const CTX_MENU_EDIT_COURSE = "Editar"
+export const INPUT_MAX_WIDTH = 400
+export const ADDING_LAB_BREAKDOWN = "Agregar una evaluación de laboratorio"
 export type SuccessRes<T> = BaseRes & { content: T }
 export * from "./db.js"
 export * from "./document-schemas/index.js"

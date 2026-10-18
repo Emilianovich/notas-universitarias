@@ -1,4 +1,4 @@
-import type {JSX} from "react"
+import type { JSX } from "react"
 import { createContext, useContext } from "react"
 
 export type ModalButton = {
@@ -16,7 +16,6 @@ export type ModalProps = {
 	modalTitle: string
 	Content: JSX.Element
 }
-
 
 export type ModalContextComponentProps = ModalProps & {
 	isOpen: boolean

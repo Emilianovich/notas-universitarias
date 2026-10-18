@@ -15,7 +15,7 @@ async function runMigrations() {
 				(userMigration) => userMigration.name === migration.name
 			)
 			if (!hasBeenRun) {
-				await migration.up(mongoService.db)
+				await migration.up(mongoService.db, mongoService)
 				const { name } = migration
 				await migrationRepository.insertOne({ name, ranAt: new Date() })
 			}
@@ -31,4 +31,5 @@ runMigrations()
 	})
 	.catch((error) => {
 		log("error", error)
+		throw error
 	})

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
-import CreateCourseInstanceForm from "@/components/form/courses/Create/CreateCourseInstanceForm.tsx"
+import CreateInstanceForm from "@/components/form/courses/Create/CreateInstanceForm.tsx"
 
 export const Route = createFileRoute("/home/current-period/course-instance/")({
 	component: RouteComponent
@@ -11,7 +11,7 @@ function RouteComponent() {
 			<h1 className={"sm:text-3xl lg:text-4xl text-primary-600 mt-4"}>
 				Registra una materia
 			</h1>
-			<CreateCourseInstanceForm />
+			<CreateInstanceForm />
 		</main>
 	)
 }

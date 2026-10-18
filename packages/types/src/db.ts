@@ -9,14 +9,20 @@ export type CourseBreakdown = {
 	percentage: number
 	contribution: number
 	entries: CourseBreakdownEntry[]
-	laboratoryDetails?: CourseInstance
-	type: BreakdownCategory
+	allowsMultipleEntries: boolean
 }
 
-export type CourseInstance = {
+export type BaseCourseInstance = {
 	profesorName: string
 	finalGrade: number
-	breakdown: CourseBreakdown[]
+	breakdowns: CourseBreakdown[]
+}
+export type Laboratory = BaseCourseInstance & {
+	percentage: number
+}
+
+export type CourseInstance = BaseCourseInstance & {
+	laboratory?: Laboratory
 }
 
 export type Course = {
@@ -26,12 +32,6 @@ export type Course = {
 }
 
 export type BreakdownCategory = "STANDALONE" | "NESTED" | "NOT-NESTED"
-
-export type AcademicPeriod = {
-	name: string
-	startDate: Date
-	endDate: Date
-}
 
 export type ValidCollections =
 	| "users"
