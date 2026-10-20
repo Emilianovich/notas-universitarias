@@ -16,6 +16,9 @@ import { useNavigate } from "@tanstack/react-router"
 import { useRef } from "react"
 import { BreakdownSharedContent } from "@/components/form/courses/BreakdownSharedContent.tsx"
 import useCreateCourseInstanceOpts from "@/components/form/courses/hooks/useCreateCourseInstanceOpts.ts"
+import AddItemCtn from "@/components/form/courses/ui/AddItemCtn.tsx"
+import BreakdownCtn from "@/components/form/courses/ui/BreakdownCtn.tsx"
+import BreakdownDropdown from "@/components/form/courses/ui/BreakdownDropdown.tsx"
 import FieldText from "@/components/form/general/FieldText.tsx"
 import {
 	genericBooleanRadios,
@@ -83,10 +86,10 @@ export default function CreateInstanceForm() {
 	const { AppForm, AppField } = form
 	const {
 		isRegistered,
-		breakdownList,
 		totalBreakdownPercentage,
 		laboratoryTotalPercentage,
-		laboratory
+		laboratory,
+		breakdownsPercentage
 	} = useFormDataForCreation(form)
 	const classes = "flex flex-col"
 	const prevInstanceName = useRef<string | undefined>(undefined)
@@ -230,82 +233,94 @@ export default function CreateInstanceForm() {
 							)}
 						/>
 						{!isArrayEmpty(laboratory.breakdowns) && (
-							<h2 className={"text-xl mt-4 text-primary-500 font-bold"}>
-								Evaluación del curso de laboratorio
-							</h2>
+							<BreakdownDropdown
+								isLaboratory
+								currentPercentage={laboratoryTotalPercentage}
+								addedClasses={"mt-4"}
+								percentageInCourse={laboratory.percentage}
+							>
+								<AppField name={"laboratory.breakdowns"} mode={"array"}>
+									{(laboratoryBreakdownField) => (
+										<div className={"flex flex-col gap-8 p-4"}>
+											{laboratoryBreakdownField.state.value?.map((_, i) => {
+												return (
+													<BreakdownCtn key={`breakdowns[${i}]-ctn`}>
+														<BreakdownSharedContent
+															form={form}
+															fields={`laboratory.breakdowns[${i}]`}
+															confirmBtnAction={() => {
+																laboratoryBreakdownField.removeValue(i)
+															}}
+															modalTitle={"Eliminar evaluación de laboratorio"}
+														/>
+													</BreakdownCtn>
+												)
+											})}
+											{laboratoryTotalPercentage < 100 ? (
+												<AddItemCtn>
+													<AddItem
+														title={ADDING_LAB_BREAKDOWN}
+														action={() => {
+															laboratoryBreakdownField.pushValue({
+																name: "",
+																percentage: 0,
+																allowsMultipleEntries: false
+															})
+														}}
+													/>
+												</AddItemCtn>
+											) : null}
+										</div>
+									)}
+								</AppField>
+							</BreakdownDropdown>
 						)}
-						<AppField name={"laboratory.breakdowns"} mode={"array"}>
-							{(laboratoryBreakdownField) => (
-								<div className={"flex flex-col gap-8"}>
-									{laboratoryBreakdownField.state.value?.map((_, i) => {
-										return (
-											<div key={`breakdowns[${i}]-ctn`}>
-												<BreakdownSharedContent
-													form={form}
-													fields={`laboratory.breakdowns[${i}]`}
-													confirmBtnAction={() => {
-														laboratoryBreakdownField.removeValue(i)
-													}}
-													modalTitle={"Eliminar evaluación de laboratorio"}
-												/>
-											</div>
-										)
-									})}
-									{laboratoryTotalPercentage < 100 ? (
+					</>
+				)}
+
+				<BreakdownDropdown
+					addedClasses={`mt-4 `}
+					currentPercentage={totalBreakdownPercentage}
+					percentageInCourse={breakdownsPercentage}
+					isLaboratory={false}
+				>
+					<AppField name={"breakdowns"} mode={"array"}>
+						{(field) => (
+							<div className={"flex flex-col gap-8"}>
+								{field.state.value.map((_, i) => {
+									return (
+										<BreakdownCtn key={`breakdowns[${i}]-ctn`}>
+											<BreakdownSharedContent
+												form={form}
+												fields={`breakdowns[${i}]`}
+												confirmBtnAction={() => {
+													field.removeValue(i)
+												}}
+												modalTitle={"Eliminar evaluación"}
+											/>
+										</BreakdownCtn>
+									)
+								})}
+								{totalBreakdownPercentage < 100 && (
+									<AddItemCtn>
 										<AddItem
-											title={ADDING_LAB_BREAKDOWN}
+											title={"Agregar Evaluación"}
 											action={() => {
-												laboratoryBreakdownField.pushValue({
+												field.pushValue({
 													name: "",
 													percentage: 0,
 													allowsMultipleEntries: false
 												})
+												scrollTo(scrollToRef)
 											}}
 										/>
-									) : null}
-								</div>
-							)}
-						</AppField>
-					</>
-				)}
-				{breakdownList.length > 0 && (
-					<h2 className={"text-xl mt-4 text-primary-500 font-bold"}>
-						Evaluación del curso
-					</h2>
-				)}
-				<AppField name={"breakdowns"} mode={"array"}>
-					{(field) => (
-						<div className={"flex flex-col gap-8"}>
-							{field.state.value.map((_, i) => {
-								return (
-									<div key={`breakdowns[${i}]-ctn`}>
-										<BreakdownSharedContent
-											form={form}
-											fields={`breakdowns[${i}]`}
-											confirmBtnAction={() => {
-												field.removeValue(i)
-											}}
-											modalTitle={"Eliminar evaluación"}
-										/>
-									</div>
-								)
-							})}
-							{totalBreakdownPercentage < 100 && (
-								<AddItem
-									title={"Agregar Evaluación"}
-									action={() => {
-										field.pushValue({
-											name: "",
-											percentage: 0,
-											allowsMultipleEntries: false
-										})
-										scrollTo(scrollToRef)
-									}}
-								/>
-							)}
-						</div>
-					)}
-				</AppField>
+									</AddItemCtn>
+								)}
+							</div>
+						)}
+					</AppField>
+				</BreakdownDropdown>
+
 				{totalBreakdownPercentage === 100 && (
 					<div className={"sm:mt-4 w-full flex items-center justify-center"}>
 						<SubmitBtn text={"Guardar materia"} />

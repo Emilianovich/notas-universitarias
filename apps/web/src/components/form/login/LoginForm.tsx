@@ -97,7 +97,7 @@ export default function LoginForm({ wasRedirected }: Redirected) {
 					await form.handleSubmit()
 				}}
 				className={
-					"relative grid grid-rows-3 gap-8 box-border p-15 w-125 items-center justify-center bg-tertiary rounded-[10px] shadow-[0px_4px_10px_2px_rgba(0,0,0,0.25)]"
+					"relative grid grid-rows-3 gap-8 box-border p-15 w-125 items-center justify-center bg-tertiary rounded-2xl shadow-lg border border-primary-300/30"
 				}
 			>
 				<h1 className={"text-3xl text-primary-500 mb-8 text-center"}>

@@ -67,7 +67,8 @@ export default function CourseInstanceForm(props: CourseInstanceFormProps) {
 	})
 	const form = useEditCourseInstanceOpts({ defaultValues, isForDemo, mutation })
 	const { AppForm, AppField } = form
-	const { breakdownList, totalPercentage } = usePercentagesForEdit(form)
+	const { totalPercentage, laboratoryPercentage, breakdownsPercentage } =
+		usePercentagesForEdit(form)
 	const isDefaultValue = useSelector(
 		form.store,
 		(state) => state.isDefaultValue
@@ -83,7 +84,11 @@ export default function CourseInstanceForm(props: CourseInstanceFormProps) {
 				className="w-full flex flex-col gap-4 p-4"
 			>
 				{isForDemo ? (
-					<h1 className={"mt-4 text-4xl font-bold text-center"}>Demo</h1>
+					<h1
+						className={"mt-4 text-4xl font-bold text-center text-primary-500"}
+					>
+						Demo
+					</h1>
 				) : (
 					<AppField
 						name={"profesorName"}
@@ -97,7 +102,7 @@ export default function CourseInstanceForm(props: CourseInstanceFormProps) {
 				)}
 				{defaultValues.laboratory && (
 					<>
-						<span className={"text-primary-500 text-xl"}>Evaluación de Laboratorio</span>
+						{/*<span className={"text-primary-500 text-xl"}>Evaluación de Laboratorio</span>*/}
 						<AppField
 							name={"laboratory.profesorName"}
 							children={(field) => (
@@ -121,17 +126,16 @@ export default function CourseInstanceForm(props: CourseInstanceFormProps) {
 							isForDemo={isForDemo}
 							totalPercentage={totalPercentage}
 							isLaboratory={true}
+							percentageInCourse={laboratoryPercentage}
 						/>
 					</>
-				)}
-				{breakdownList.length > 0 && (
-					<h2 className={"text-xl mt-4 text-primary-500"}>Evaluación del curso</h2>
 				)}
 				<BreakdownForm
 					form={form}
 					isForDemo={isForDemo}
 					totalPercentage={totalPercentage}
 					isLaboratory={false}
+					percentageInCourse={breakdownsPercentage}
 				/>
 				{totalPercentage === 100 && (
 					<div className="w-full flex justify-center items-center">

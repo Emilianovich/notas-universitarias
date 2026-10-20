@@ -24,7 +24,7 @@ const BreakdownEntries = withFieldGroup({
 	}) {
 		const { AppField } = group
 		return (
-			<div className={"border border-primary-300"}>
+			<div className={"p-4 relative"}>
 				{hasNameField && (
 					<AppField
 						name={"name"}
@@ -55,21 +55,19 @@ const BreakdownEntries = withFieldGroup({
 							/>
 						)}
 					/>
-					<DeleteFormValue
-						className={""}
-						modalTitle={modalTitle}
-						modalText={
-							"Si aceptas, estarás eliminando permanentemente esta nota"
-						}
-						confirmButton={{
-							styleType: "modal-primary",
-							type: "button",
-							text: "Sí, eliminar nota",
-							action: confirmBtnAction
-						}}
-						closeButtonTitle={"No, me arrepentí"}
-					/>
 				</div>
+				<DeleteFormValue
+					className={"absolute top-4 right-10"}
+					modalTitle={modalTitle}
+					modalText={"Si aceptas, estarás eliminando permanentemente esta nota"}
+					confirmButton={{
+						styleType: "modal-primary",
+						type: "button",
+						text: "Sí, eliminar nota",
+						action: confirmBtnAction
+					}}
+					closeButtonTitle={"No, me arrepentí"}
+				/>
 			</div>
 		)
 	}

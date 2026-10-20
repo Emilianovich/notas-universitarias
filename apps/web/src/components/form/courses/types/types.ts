@@ -41,7 +41,8 @@ export const laboratoryDetailsFormDefaultValues: LaboratoryDetailsContent = {
 export const breakdownDefaultProps = {
 	totalPercentage: 0,
 	isForDemo: false,
-	isLaboratory: false
+	isLaboratory: false,
+	percentageInCourse: 0
 }
 
 export type CourseInstancesPercentages = {

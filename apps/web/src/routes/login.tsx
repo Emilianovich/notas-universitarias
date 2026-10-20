@@ -5,6 +5,7 @@ import { z } from "zod"
 import ToastProvider from "@/components/context-providers/toast-provider.tsx"
 import LoginForm from "@/components/form/login/LoginForm.tsx"
 import Content from "@/components/general/Content"
+import LoginBackground from "@/components/ui/backgrounds/LoginBackground.tsx"
 import { baseUrl } from "@/routes/__root.tsx"
 
 const redirectedSchema = z.object({
@@ -37,8 +38,11 @@ export const handleLogin = async (dto: LoginDTO) => {
 function RouteComponent() {
 	const { wasRedirected } = Route.useSearch()
 	return (
-		<Content bodyClasses={"bg-secondary"}>
+		<Content
+			bodyClasses={"relative isolate min-h-screen overflow-hidden bg-tertiary"}
+		>
 			<ToastProvider>
+				<LoginBackground />
 				<main className={"w-screen h-screen flex justify-center items-center"}>
 					<LoginForm wasRedirected={wasRedirected} />
 				</main>
