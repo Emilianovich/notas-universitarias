@@ -29,7 +29,8 @@ export default function usePercentagesForEdit(
 	return {
 		breakdownList,
 		totalPercentage,
-		laboratoryPercentage: laboratoryBreakdownPercentage
+		laboratoryPercentage: laboratoryBreakdownPercentage,
+		breakdownsPercentage,
 	}
 }
 
@@ -65,6 +66,7 @@ export function useFormDataForCreation(form: CreateCourseInstanceFormType) {
 		isRegistered,
 		breakdownList: breakdownArray,
 		totalBreakdownPercentage: totalPercentage,
+		breakdownsPercentage,
 		laboratory,
 		submissionAttempts,
 		laboratoryTotalPercentage

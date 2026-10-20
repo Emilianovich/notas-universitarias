@@ -33,19 +33,19 @@ export const BreakdownSharedContent = withFieldGroup({
 	render: function Render({ group, modalTitle, confirmBtnAction }) {
 		const { AppField } = group
 		return (
-			<div className={"border flex flex-col gap-8"}>
+			<div className={"flex flex-col gap-8"}>
 				<div className={"relative"}>
 					<AppField
 						name={`name`}
 						children={(nameField) => (
 							<nameField.TextField
-								label={"¿Cómo se llama la evaluación?"}
+								label={"Nombre de la evaluación"}
 								placeholder={"Asistencia"}
 							/>
 						)}
 					/>
 					<DeleteFormValue
-						className={"absolute top-4 left-110"}
+						className={"absolute top-4 right-10"}
 						modalTitle={modalTitle}
 						modalText={
 							"Eliminarás completamente la evaluación. No podrás recuperar el progreso que tenías"
@@ -63,7 +63,7 @@ export const BreakdownSharedContent = withFieldGroup({
 					name={`percentage`}
 					children={(percentageField) => (
 						<percentageField.NumberField
-							label={"¿Cuál es el porcentaje de la evaluación?"}
+							label={"Porcentaje de la evaluación"}
 							placeholder={"21"}
 						/>
 					)}

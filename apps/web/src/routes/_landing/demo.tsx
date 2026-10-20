@@ -11,7 +11,6 @@ function RouteComponent() {
 	return (
 		<main>
 			<CourseInstanceForm
-				mode={"edit"}
 				defaultValues={defaultValues}
 				isForDemo={true}
 			/>

@@ -60,6 +60,7 @@
 	--color-chart-remaining: #dde5e5;
 	--color-chart-axis: #035151;
 	--color-chart-tick: #4f6868;
+	--radius-inherit: inherit;
 }
 
 .dark {
@@ -197,6 +198,15 @@ input[type="radio"] {
 
 input:checked {
 	background-color: var(--color-primary-700);
+}
+
+input[type="number"] {
+	appearance: textfield;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+	appearance: none;
+	margin: 0;
 }
 
 .custom-tooltip {
