@@ -59,9 +59,7 @@ const BreakdownEntries = withFieldGroup({
 				<DeleteFormValue
 					className={"absolute top-4 right-10"}
 					modalTitle={modalTitle}
-					modalText={
-						"Si aceptas, estarás eliminando permanentemente esta nota"
-					}
+					modalText={"Si aceptas, estarás eliminando permanentemente esta nota"}
 					confirmButton={{
 						styleType: "modal-primary",
 						type: "button",

@@ -30,7 +30,7 @@ export default function usePercentagesForEdit(
 		breakdownList,
 		totalPercentage,
 		laboratoryPercentage: laboratoryBreakdownPercentage,
-		breakdownsPercentage,
+		breakdownsPercentage
 	}
 }
 

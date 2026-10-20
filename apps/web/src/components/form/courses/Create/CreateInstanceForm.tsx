@@ -16,6 +16,9 @@ import { useNavigate } from "@tanstack/react-router"
 import { useRef } from "react"
 import { BreakdownSharedContent } from "@/components/form/courses/BreakdownSharedContent.tsx"
 import useCreateCourseInstanceOpts from "@/components/form/courses/hooks/useCreateCourseInstanceOpts.ts"
+import AddItemCtn from "@/components/form/courses/ui/AddItemCtn.tsx"
+import BreakdownCtn from "@/components/form/courses/ui/BreakdownCtn.tsx"
+import BreakdownDropdown from "@/components/form/courses/ui/BreakdownDropdown.tsx"
 import FieldText from "@/components/form/general/FieldText.tsx"
 import {
 	genericBooleanRadios,
@@ -27,9 +30,6 @@ import useToast from "@/contexts/toast.ts"
 import { useFormDataForCreation } from "@/lib/course-form.ts"
 import { baseUrl } from "@/routes/__root.tsx"
 import scrollTo from "@/utils/scroll.ts"
-import BreakdownDropdown from "@/components/form/courses/ui/BreakdownDropdown.tsx";
-import BreakdownCtn from "@/components/form/courses/ui/BreakdownCtn.tsx";
-import AddItemCtn from "@/components/form/courses/ui/AddItemCtn.tsx";
 
 export const registerCourseInstance = async (dto: CreateCourseInstanceType) => {
 	return buildRequest<string, string>({
@@ -233,7 +233,12 @@ export default function CreateInstanceForm() {
 							)}
 						/>
 						{!isArrayEmpty(laboratory.breakdowns) && (
-							<BreakdownDropdown isLaboratory currentPercentage={laboratoryTotalPercentage} addedClasses={"mt-4"} percentageInCourse={laboratory.percentage}>
+							<BreakdownDropdown
+								isLaboratory
+								currentPercentage={laboratoryTotalPercentage}
+								addedClasses={"mt-4"}
+								percentageInCourse={laboratory.percentage}
+							>
 								<AppField name={"laboratory.breakdowns"} mode={"array"}>
 									{(laboratoryBreakdownField) => (
 										<div className={"flex flex-col gap-8 p-4"}>
@@ -273,45 +278,48 @@ export default function CreateInstanceForm() {
 					</>
 				)}
 
-					<BreakdownDropdown addedClasses={`mt-4 `} currentPercentage={totalBreakdownPercentage} percentageInCourse={breakdownsPercentage} isLaboratory={false} >
-						<AppField name={"breakdowns"} mode={"array"}>
-							{(field) => (
-								<div className={"flex flex-col gap-8"}>
-									{field.state.value.map((_, i) => {
-										return (
-											<BreakdownCtn key={`breakdowns[${i}]-ctn`}>
-												<BreakdownSharedContent
-													form={form}
-													fields={`breakdowns[${i}]`}
-													confirmBtnAction={() => {
-														field.removeValue(i)
-													}}
-													modalTitle={"Eliminar evaluación"}
-												/>
-											</BreakdownCtn>
-										)
-									})}
-									{totalBreakdownPercentage < 100 && (
-										<AddItemCtn>
-											<AddItem
-												title={"Agregar Evaluación"}
-												action={() => {
-													field.pushValue({
-														name: "",
-														percentage: 0,
-														allowsMultipleEntries: false
-													})
-													scrollTo(scrollToRef)
+				<BreakdownDropdown
+					addedClasses={`mt-4 `}
+					currentPercentage={totalBreakdownPercentage}
+					percentageInCourse={breakdownsPercentage}
+					isLaboratory={false}
+				>
+					<AppField name={"breakdowns"} mode={"array"}>
+						{(field) => (
+							<div className={"flex flex-col gap-8"}>
+								{field.state.value.map((_, i) => {
+									return (
+										<BreakdownCtn key={`breakdowns[${i}]-ctn`}>
+											<BreakdownSharedContent
+												form={form}
+												fields={`breakdowns[${i}]`}
+												confirmBtnAction={() => {
+													field.removeValue(i)
 												}}
+												modalTitle={"Eliminar evaluación"}
 											/>
-										</AddItemCtn>
-									)}
-								</div>
-
-							)}
-						</AppField>
-					</BreakdownDropdown>
-
+										</BreakdownCtn>
+									)
+								})}
+								{totalBreakdownPercentage < 100 && (
+									<AddItemCtn>
+										<AddItem
+											title={"Agregar Evaluación"}
+											action={() => {
+												field.pushValue({
+													name: "",
+													percentage: 0,
+													allowsMultipleEntries: false
+												})
+												scrollTo(scrollToRef)
+											}}
+										/>
+									</AddItemCtn>
+								)}
+							</div>
+						)}
+					</AppField>
+				</BreakdownDropdown>
 
 				{totalBreakdownPercentage === 100 && (
 					<div className={"sm:mt-4 w-full flex items-center justify-center"}>

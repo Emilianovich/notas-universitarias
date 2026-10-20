@@ -34,7 +34,13 @@ function RouteComponent() {
 					<ErrorMessage error={"No se encontró la materia especificada"} />
 				) : (
 					<>
-						<h1 className={"text-4xl text-primary-500 mt-4 absolute top-4 left-1/2 -translate-x-1/2"}>{courseName}</h1>
+						<h1
+							className={
+								"text-4xl text-primary-500 mt-4 absolute top-4 left-1/2 -translate-x-1/2"
+							}
+						>
+							{courseName}
+						</h1>
 						<section className={"w-full absolute top-16"}>
 							<CourseInstanceForm
 								defaultValues={preparedCourseInstance}

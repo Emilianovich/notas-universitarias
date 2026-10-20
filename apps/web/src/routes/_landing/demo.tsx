@@ -10,10 +10,7 @@ export const Route = createFileRoute("/_landing/demo")({
 function RouteComponent() {
 	return (
 		<main>
-			<CourseInstanceForm
-				defaultValues={defaultValues}
-				isForDemo={true}
-			/>
+			<CourseInstanceForm defaultValues={defaultValues} isForDemo={true} />
 		</main>
 	)
 }

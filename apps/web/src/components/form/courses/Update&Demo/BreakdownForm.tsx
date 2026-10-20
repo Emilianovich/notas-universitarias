@@ -8,11 +8,11 @@ import {
 	breakdownDefaultProps,
 	defaultValues
 } from "@/components/form/courses/types/types.ts"
+import BreakdownCtn from "@/components/form/courses/ui/BreakdownCtn.tsx"
+import BreakdownDropdown from "@/components/form/courses/ui/BreakdownDropdown.tsx"
 import { AddItem } from "@/components/general/AddItem.tsx"
 import { ScrollToBottom } from "@/components/ui/ScrollToBottom.tsx"
 import scrollTo from "@/utils/scroll.ts"
-import BreakdownCtn from "@/components/form/courses/ui/BreakdownCtn.tsx";
-import BreakdownDropdown from "@/components/form/courses/ui/BreakdownDropdown.tsx";
 
 function BreakdownFormContent({
 	form,
@@ -24,7 +24,11 @@ function BreakdownFormContent({
 	const { AppField } = form
 	const fieldName = isLaboratory ? "laboratory.breakdowns" : "breakdowns"
 	return (
-		<BreakdownDropdown currentPercentage={totalPercentage} isLaboratory={isLaboratory} percentageInCourse={percentageInCourse}>
+		<BreakdownDropdown
+			currentPercentage={totalPercentage}
+			isLaboratory={isLaboratory}
+			percentageInCourse={percentageInCourse}
+		>
 			<AppField name={fieldName} mode={"array"}>
 				{(field) => (
 					<div className={"flex flex-col gap-8"}>
@@ -53,7 +57,9 @@ function BreakdownFormContent({
 														return (
 															<div
 																key={`breakdown-${i}-entry-${entryIndex}`}
-																className={"border border-primary-300 rounded-2xl"}
+																className={
+																	"border border-primary-300 rounded-2xl"
+																}
 															>
 																<BreakdownEntries
 																	form={form}

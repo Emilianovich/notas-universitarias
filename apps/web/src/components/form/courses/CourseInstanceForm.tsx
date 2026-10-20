@@ -67,7 +67,8 @@ export default function CourseInstanceForm(props: CourseInstanceFormProps) {
 	})
 	const form = useEditCourseInstanceOpts({ defaultValues, isForDemo, mutation })
 	const { AppForm, AppField } = form
-	const { totalPercentage, laboratoryPercentage, breakdownsPercentage } = usePercentagesForEdit(form)
+	const { totalPercentage, laboratoryPercentage, breakdownsPercentage } =
+		usePercentagesForEdit(form)
 	const isDefaultValue = useSelector(
 		form.store,
 		(state) => state.isDefaultValue
@@ -83,7 +84,11 @@ export default function CourseInstanceForm(props: CourseInstanceFormProps) {
 				className="w-full flex flex-col gap-4 p-4"
 			>
 				{isForDemo ? (
-					<h1 className={"mt-4 text-4xl font-bold text-center text-primary-500"}>Demo</h1>
+					<h1
+						className={"mt-4 text-4xl font-bold text-center text-primary-500"}
+					>
+						Demo
+					</h1>
 				) : (
 					<AppField
 						name={"profesorName"}
