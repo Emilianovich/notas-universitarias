@@ -39,11 +39,12 @@ export default function SettingsProvider({
 		queryKey: ["userPreferences"],
 		queryFn: getUserPreferences
 	})
-	const { fontFamily, theme, petName } = data.content.user.preferences
+	const { fontFamily, theme, petName, disablePet } = data.content.user.preferences
 	const [userSettings, setUserSettings] = useState<SettingsProviderProps>({
 		fontFamily,
 		theme,
-		pet: findPetByName(petName) ?? Spike
+		pet: findPetByName(petName) ?? Spike,
+		disablePet
 	})
 	const changeUserSettings = (newSettings: UserSettings) => {
 		setUserSettings({ ...newSettings })

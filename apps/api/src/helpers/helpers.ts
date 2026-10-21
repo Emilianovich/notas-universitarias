@@ -93,7 +93,8 @@ export function mapUpdateUserDtoToUserDocument(
 		preferences: {
 			petName: dto.petName ?? currentUser.preferences.petName,
 			theme: dto.theme ?? currentUser.preferences.theme,
-			fontFamily: dto.fontFamily ?? currentUser.preferences.fontFamily
+			fontFamily: dto.fontFamily ?? currentUser.preferences.fontFamily,
+			disablePet: dto.disablePet ?? currentUser.preferences.disablePet
 		}
 	}
 }

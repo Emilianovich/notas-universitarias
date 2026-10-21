@@ -1,6 +1,5 @@
 import type {
 	AppTheme,
-	CreateAcademicPeriodsDto,
 	CreateUserDTO,
 	FontFamily,
 	PetName,
@@ -13,9 +12,7 @@ import type { ObjectId } from "mongodb"
 
 import { mapUpdateUserDtoToUserDocument } from "../../helpers/helpers.js"
 import type { MongoService } from "../../modules/db/MongoService.js"
-import { AcademicPeriodsRepository } from "../../repositories/academicPeriods.js"
 import { UsersRepository } from "../../repositories/users.js"
-import { log } from "../logging/LogService.js"
 
 type UserToCompare = {
 	name: string
@@ -27,10 +24,8 @@ type UserToCompare = {
 
 export class UserService {
 	private readonly userRepository: UsersRepository
-	private readonly academicPeriodRepository: AcademicPeriodsRepository
 	constructor(mongoService: MongoService) {
 		this.userRepository = new UsersRepository(mongoService)
-		this.academicPeriodRepository = new AcademicPeriodsRepository(mongoService)
 	}
 	async getUser(
 		userId: ObjectId
@@ -45,28 +40,13 @@ export class UserService {
 	}
 	async createUser(dto: CreateUserDTO): Promise<string> {
 		const user = await this.userRepository.findByEmail(dto.email)
-		const { name, startDate, endDate } = dto
 		if (user)
 			throw new HTTPException(400, {
 				message: "Ya existe un usuario con ese correo"
 			})
 		dto.email = dto.email.toLowerCase()
 		dto.password = await argon2.hash(dto.password, { type: argon2.argon2id })
-		const academicPeriod: CreateAcademicPeriodsDto = {
-			name,
-			startDate: new Date(startDate).toString(),
-			endDate: new Date(endDate).toString()
-		}
-		try {
-			const userId = (await this.userRepository.insertOne(dto)).insertedId
-			await this.academicPeriodRepository.insertOne(academicPeriod, userId)
-		} catch (_err) {
-			log("error", _err, "/users/register")
-			throw new HTTPException(500, {
-				message:
-					"Ocurrió un error al tratar de registrar el periodo académico actual"
-			})
-		}
+		await this.userRepository.insertOne(dto)
 		return dto.username
 	}
 	async updateUser(userId: ObjectId, dto: UpdateUserDTO): Promise<void> {
@@ -89,14 +69,16 @@ export class UserService {
 			email: dto.email,
 			fontFamily: dto.fontFamily,
 			petName: dto.petName,
-			theme: dto.theme
+			theme: dto.theme,
+			disablePet: dto.disablePet
 		}
 		const user = {
 			name: currentUser.name,
 			email: currentUser.email,
 			fontFamily: currentUser.preferences.fontFamily,
 			petName: currentUser.preferences.petName,
-			theme: currentUser.preferences.theme
+			theme: currentUser.preferences.theme,
+			disablePet: currentUser.preferences.disablePet
 		}
 		const equalValues: string[] = []
 		for (const key in userToCompare) {

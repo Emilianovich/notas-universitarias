@@ -1,6 +1,8 @@
 import { type ReactNode, useState } from "react"
 import Pet from "@/components/general/Pet.tsx"
 import usePet, { PetContext } from "@/contexts/pet.ts"
+import useSettings from "@/contexts/settings"
+import defaultSettings from "./default-settings"
 
 const numberOfCategories = 5
 const numberOfFacts = 15
@@ -149,12 +151,13 @@ export const facts: PetFacts[] = [
 
 export default function PetProvider({ children }: { children: ReactNode }) {
 	const [isHovered, setIsHovered] = useState(false)
+	const { disablePet } = useSettings() ?? defaultSettings
 	const togglePetHover = () => {
 		setIsHovered(!isHovered)
 	}
 	return (
 		<PetContext.Provider value={{ isHovered, togglePetHover }}>
-			<Pet />
+			{!disablePet && <Pet />}
 			{children}
 		</PetContext.Provider>
 	)

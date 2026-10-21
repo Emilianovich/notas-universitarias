@@ -21,7 +21,8 @@ export class UsersRepository extends Repository<UserDocument> {
 		const defaultPreferences: UserPreferences = {
 			fontFamily: "Arima",
 			petName: "Spike",
-			theme: "light"
+			theme: "light",
+			disablePet: false
 		}
 		return this.getCollection().insertOne({
 			name: username,

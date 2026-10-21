@@ -149,6 +149,7 @@ export type SettingsProviderProps = {
 	fontFamily: FontFamily
 	theme: AppTheme
 	pet: Pet
+	disablePet: boolean
 }
 
 export type SettingsContextType = SettingsProviderProps & {
