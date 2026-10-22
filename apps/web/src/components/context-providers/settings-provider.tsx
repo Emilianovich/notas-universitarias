@@ -1,5 +1,5 @@
 import { buildRequest } from "@notas-universitarias/helpers"
-import type { UserPreferences } from "@notas-universitarias/types"
+import type { AppTheme, UserPreferences } from "@notas-universitarias/types"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { type ReactNode, useEffect, useMemo, useState } from "react"
 import { findPetByName } from "@/contexts/pet.ts"
@@ -9,8 +9,9 @@ import {
 	Spike,
 	type UserSettings
 } from "@/contexts/settings.ts"
-import { changeUserTheme } from "@/hooks/changeUserTheme.ts"
+import { writePreferencesToStorage } from "@/hooks/changeUserTheme.ts"
 import { baseUrl } from "@/routes/__root.tsx"
+import { allowedThemes } from "@/constants/app-themes"
 
 type User = {
 	user: {
@@ -27,6 +28,14 @@ export const getUserPreferences = async () => {
 		path: "/users",
 		method: "GET"
 	})
+}
+
+// TODO consider throwing an exception if not a valid theme
+const setNewAppTheme = (theme: AppTheme) => {
+	if (!allowedThemes.has(theme)) return
+	const { documentElement } = document
+	documentElement.classList.remove(...allowedThemes)
+	documentElement.classList.add(theme)
 }
 
 // TODO: you should be able to read files
@@ -57,27 +66,16 @@ export default function SettingsProvider({
 	 * Read user settings
 	 * Check if HTML Element has the current theme. If not replace previous and add current theme
 	 * Update localStorage with new theme
-	 * */
+	 */
 	useEffect(() => {
-		const { fontFamily, theme, pet } = userSettings
+		const { fontFamily, theme, pet, disablePet } = userSettings
 		if (!theme) return
-		const { documentElement } = document
-		if (theme === "dark") {
-			documentElement.classList.add("dark")
-			if (documentElement.classList.contains("light")) {
-				documentElement.classList.remove("light")
-			}
-		} else {
-			documentElement.classList.add("light")
-			if (documentElement.classList.contains("dark")) {
-				documentElement.classList.remove("dark")
-			}
-		}
-		changeUserTheme({
-			document: documentElement,
+		setNewAppTheme(theme)
+		writePreferencesToStorage({
 			theme,
 			fontFamily,
-			petName: pet.name
+			petName: pet.name,
+			disablePet
 		})
 	}, [userSettings])
 	return (

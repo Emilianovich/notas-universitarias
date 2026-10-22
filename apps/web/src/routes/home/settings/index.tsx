@@ -137,7 +137,8 @@ function RouteComponent() {
 					changeUserSettings({
 						theme: value.theme,
 						pet,
-						fontFamily: value.fontFamily
+						fontFamily: value.fontFamily,
+						disablePet: value.disablePet
 					})
 				}
 			})
