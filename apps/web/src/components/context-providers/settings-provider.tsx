@@ -58,8 +58,11 @@ export default function SettingsProvider({
 	const changeUserSettings = (newSettings: UserSettings) => {
 		setUserSettings({ ...newSettings })
 	}
+	const changeAppTheme = (theme: AppTheme) => {
+		setUserSettings({ ...userSettings, theme })
+	}
 	const value = useMemo(
-		() => ({ ...userSettings, changeUserSettings }),
+		() => ({ ...userSettings, changeUserSettings, changeAppTheme }),
 		[userSettings]
 	)
 	/*

@@ -154,6 +154,7 @@ export type SettingsProviderProps = {
 
 export type SettingsContextType = SettingsProviderProps & {
 	changeUserSettings: (data: UserSettings) => void
+	changeAppTheme: (theme: AppTheme) => void
 }
 
 export const SettingsContext = createContext<SettingsContextType | null>(null)

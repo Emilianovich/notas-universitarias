@@ -25,7 +25,7 @@ import { allowedThemes } from "@/constants/app-themes.ts"
 import { allowedFontFamilies } from "@/constants/font-families.ts"
 import { allowedPets } from "@/constants/pet-names.ts"
 import { findPetByName } from "@/contexts/pet.ts"
-import useSettings from "@/contexts/settings.ts"
+import useSettings from "@/contexts/settings"
 import useToast from "@/contexts/toast.ts"
 import { fieldContext, formContext } from "@/hooks/form.ts"
 import authMiddleware from "@/middlewares/auth.ts"
@@ -88,7 +88,7 @@ function RouteComponent() {
 	const { buildToast } = useToast()
 	// @ts-expect-error
 	// NOTE: this is only used in authenticated routes
-	const { changeUserSettings } = useSettings()
+	const { changeUserSettings, changeAppTheme } = useSettings()
 	const navigate = useNavigate({ from: "/home/settings/" })
 	const mutation = useMutation({
 		mutationFn: updateUserSettings,
@@ -256,6 +256,11 @@ function RouteComponent() {
 										{...appThemeOptions}
 									/>
 								)
+							}}
+							listeners={{
+								onChange: ({value}) => {
+									changeAppTheme(value)
+								}
 							}}
 						/>
 						<AppField
