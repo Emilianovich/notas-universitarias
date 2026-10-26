@@ -6,12 +6,14 @@
 :root {
 	scroll-behavior: smooth;
 }
+
 @layer base {
 	* {
 		margin: 0;
 		padding: 0;
 	}
 }
+
 @font-face {
 	font-family: "Chalkboard SE";
 	src: url("/fonts/chalkboardse.otf") format("opentype");
@@ -88,6 +90,84 @@
 	--color-chart-tick: #8fb3b3;
 }
 
+.sepia {
+	/* Evita el filtro .sepia de Tailwind sobre la página y las imágenes. */
+	filter: none;
+	--color-primary-300: #70543e;
+	--color-primary-400: #59412f;
+	--color-primary-500: #302b26;
+	--color-primary-600: #443b32;
+	--color-primary-700: #594e42;
+	--color-secondary: #e7dfd2;
+	--color-tertiary: #f2eee5;
+	--color-red-400: #983f38;
+	--color-red-700: #752e29;
+	--color-blue-600: #365b73;
+	--color-input: #fcfaf5;
+	--color-form-bg: #f7f3eb;
+	--color-success-bg: #e2e8d9;
+	--color-success: #435b35;
+	--color-error-bg: #f0dfd9;
+	--color-error: #8b3832;
+	--color-info-bg: #e0e7e9;
+	--color-info: #365b73;
+	--color-chart-contribution: #70543e;
+	--color-chart-remaining: #b9ad9b;
+	--color-chart-axis: #756653;
+	--color-chart-tick: #594e42;
+}
+
+.high-contrast {
+	/* Texto claro y acentos sobre superficies carbón diferenciadas. */
+	--color-primary-300: #64d8dd;
+	--color-primary-400: #a0edf0;
+	--color-primary-500: #ffffff;
+	--color-primary-600: #e3eaed;
+	--color-primary-700: #c6d2d8;
+	--color-secondary: #192329;
+	--color-tertiary: #080c10;
+	--color-red-400: #ffb4ab;
+	--color-red-700: #ffd5cf;
+	--color-blue-600: #b8d0ff;
+	--color-input: #141d23;
+	--color-form-bg: #10171c;
+	--color-success-bg: #132b23;
+	--color-success: #94e4bc;
+	--color-error-bg: #321d23;
+	--color-error: #ffb4ab;
+	--color-info-bg: #1b263b;
+	--color-info: #b8d0ff;
+	--color-chart-contribution: #64d8dd;
+	--color-chart-remaining: #74838e;
+	--color-chart-axis: #9cabb5;
+	--color-chart-tick: #c6d2d8;
+}
+
+/* Bordes visibles para las tablas que usan border-black/20. */
+:where(.sepia, .high-contrast) .border-black\/20 {
+	border-color: var(--color-chart-axis);
+}
+
+/* Delimita los campos incluso cuando la sombra negra no es visible. */
+:where(.sepia, .high-contrast):is(input:not([type="radio"]), select, textarea) {
+	box-shadow: 0 0 0 1px var(--color-primary-300);
+}
+
+/* Bordes neutros para reservar el acento a las acciones y el foco. */
+:where(.high-contrast) :is(input:not([type="radio"]), select, textarea) {
+	box-shadow: 0 0 0 1px var(--color-chart-axis);
+}
+
+:where(.sepia, .high-contrast):is(input, select, textarea, button, a):focus-visible {
+	outline: 2px solid var(--color-primary-300);
+	outline-offset: 3px;
+}
+
+/* Mantiene legibles las secciones sin interacción. */
+:where(.high-contrast) [inert] {
+	opacity: 0.8;
+}
+
 .main-body {
 	min-height: 100vh;
 	display: grid;
@@ -141,6 +221,7 @@ main {
 	from {
 		opacity: 1;
 	}
+
 	to {
 		opacity: 0;
 	}
@@ -154,6 +235,7 @@ main {
 	from {
 		transform: translate(-110%, 0);
 	}
+
 	to {
 		transform: translate(0, 0);
 	}
@@ -162,6 +244,7 @@ main {
 .toast-fade-in-animation {
 	animation: toast-fade-in 300ms ease-in-out;
 }
+
 /*grid w-[90%] items-center justify-center*/
 .modal-wrapper {
 	@apply flex flex-col justify-evenly gap-10 h-full;
@@ -203,6 +286,7 @@ input:checked {
 input[type="number"] {
 	appearance: textfield;
 }
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
 	appearance: none;

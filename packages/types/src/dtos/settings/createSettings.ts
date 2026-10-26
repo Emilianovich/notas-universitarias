@@ -27,8 +27,8 @@ export const createUserPreferencesSchema = z.strictObject({
 		}
 	),
 
-	theme: z.enum(["dark", "light"], {
-		error: "Se requiere un tema válido ('dark' o 'light')"
+	theme: z.enum(["dark", "light", "high-contrast", "sepia"], {
+		error: "Se requiere un tema válido ('dark', 'light', 'high-contrast', 'sepia')"
 	}),
 
 	petName: z.enum(["Spike", "Leon", "Tom", "Nita", "Mila"], {

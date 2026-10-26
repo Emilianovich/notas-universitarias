@@ -44,6 +44,7 @@ export type UserPreferences = {
 	fontFamily: FontFamily
 	theme: AppTheme
 	petName: PetName
+	disablePet: boolean
 }
 export type FontFamily =
 	| "Arima"
@@ -63,7 +64,7 @@ export type FontFamily =
 	| "Chalkboard SE"
 	| "Fredoka"
 	| "Erzieherisch"
-export type AppTheme = "dark" | "light"
+export type AppTheme = "dark" | "light" | "high-contrast" | "sepia"
 export type PetName = "Spike" | "Leon" | "Tom" | "Nita" | "Mila"
 export type CurrentAcademicPeriod = {
 	name: string

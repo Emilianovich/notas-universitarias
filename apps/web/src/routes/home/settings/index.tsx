@@ -25,11 +25,14 @@ import { allowedThemes } from "@/constants/app-themes.ts"
 import { allowedFontFamilies } from "@/constants/font-families.ts"
 import { allowedPets } from "@/constants/pet-names.ts"
 import { findPetByName } from "@/contexts/pet.ts"
-import useSettings from "@/contexts/settings.ts"
+import useSettings from "@/contexts/settings"
 import useToast from "@/contexts/toast.ts"
 import { fieldContext, formContext } from "@/hooks/form.ts"
 import authMiddleware from "@/middlewares/auth.ts"
 import { baseUrl } from "@/routes/__root.tsx"
+import RadioGroup from "@/components/form/tanstack-fields/Radio/RadioGroup"
+import { genericBooleanRadios, getRadioGroup } from "@/components/form/tanstack-fields/Radio/GetRadioGroup"
+import FieldText from "@/components/form/general/FieldText"
 
 export const Route = createFileRoute("/home/settings/")({
 	component: RouteComponent,
@@ -68,7 +71,8 @@ const { useAppForm } = createFormHook({
 		TextField,
 		EmailField,
 		PasswordField,
-		Select: SelectField
+		Select: SelectField,
+		RadioGroup
 	},
 	formComponents: {}
 })
@@ -80,11 +84,11 @@ function RouteComponent() {
 	})
 	const { user } = data.content
 	const { name, email, preferences } = user
-	const { petName, theme, fontFamily } = preferences
+	const { petName, theme, fontFamily, disablePet } = preferences
 	const { buildToast } = useToast()
 	// @ts-expect-error
 	// NOTE: this is only used in authenticated routes
-	const { changeUserSettings } = useSettings()
+	const { changeUserSettings, changeAppTheme } = useSettings()
 	const navigate = useNavigate({ from: "/home/settings/" })
 	const mutation = useMutation({
 		mutationFn: updateUserSettings,
@@ -116,7 +120,8 @@ function RouteComponent() {
 			email,
 			fontFamily,
 			theme,
-			petName
+			petName,
+			disablePet
 		},
 		onSubmitInvalid: () => {
 			buildToast({
@@ -132,7 +137,8 @@ function RouteComponent() {
 					changeUserSettings({
 						theme: value.theme,
 						pet,
-						fontFamily: value.fontFamily
+						fontFamily: value.fontFamily,
+						disablePet: value.disablePet
 					})
 				}
 			})
@@ -251,6 +257,11 @@ function RouteComponent() {
 									/>
 								)
 							}}
+							listeners={{
+								onChange: ({value}) => {
+									changeAppTheme(value)
+								}
+							}}
 						/>
 						<AppField
 							name={"petName"}
@@ -263,6 +274,20 @@ function RouteComponent() {
 											{...petNameOptions}
 										/>
 										<PreviewPet petName={selectedPetName} />
+									</div>
+								)
+							}}
+						/>
+						<AppField
+							name={"disablePet"}
+							children={(field) => {
+								return (
+									<div className="flex flex-col gap-2 items-start justify-start">
+										<FieldText text={"¿Deseas desactivar a tu mascota?"} />
+										<field.RadioGroup
+											radioGroupName={field.name}
+											radios={getRadioGroup(field.name, genericBooleanRadios)}
+										/>
 									</div>
 								)
 							}}

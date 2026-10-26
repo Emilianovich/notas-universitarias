@@ -21,7 +21,18 @@ export const petNameOptions: OptionFunctions<PetName> = {
 export const appThemeOptions: OptionFunctions<AppTheme> = {
 	setOptionsValues: (theme) => theme,
 	setOptionsText: (theme) => {
-		return theme === "dark" ? "Oscuro" : theme === "light" ? "Claro" : theme
+		switch (theme) {
+			case "dark":
+				return "Oscuro"
+			case "light":
+				return "Claro"
+			case "high-contrast":
+				return "Contraste alto"
+			case "sepia":
+				return "Pastel" 	
+			default:
+				return theme
+		}
 	},
 	setOptionKeys: (theme) => theme
 }
